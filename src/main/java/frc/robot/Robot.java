@@ -13,6 +13,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.opencv.core.Mat;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Climb_Jack;
@@ -25,6 +31,7 @@ import frc.robot.subsystems.Climb_Jack;
  * project.
  */
 public class Robot extends TimedRobot {
+
 
   public static OI m_oi;
   public static Drive m_drive;
@@ -44,6 +51,14 @@ public class Robot extends TimedRobot {
 
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+
+    CameraServer cameraServer = CameraServer.getInstance();
+    UsbCamera camera = cameraServer.startAutomaticCapture();
+ 
+    // Set the resolution
+    camera.setResolution(160, 120);
+    camera.setFPS(30);
+
   }
 
   /**
