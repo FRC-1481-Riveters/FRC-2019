@@ -1,0 +1,82 @@
+Intake / Place
+	Hatch (I/P)
+	Cargo (just place) - two seat motors on the same shaft to pivot - both 
+	have encoders
+
+
+
+Suction to grab cargo and hatches
+	Solenoid to direct vacuum to cargo
+	Solenoid to direct vacuum to hatch
+
+	Step 1: Super Suction Arm (SSA)
+	2 seat motors with encoders cause the arm to pivot up & down 
+	to position placement of the hatch / cargo the solenoid will direct 
+	the vacuum to 3 suction cups for the hatch or 1 large
+	suction cup for the cargo.
+
+	starting position:
+		intake arm folded in, on top of that (starting)
+	intake clearing position
+
+	loading positions: 2
+		cargo
+		hatch
+	unloading positions: 4
+		cargo 1
+		cargo 2
+		hatch 1
+		hatch 2
+
+	NOTE: Cargo/hatch 3 will be achieved after elevator
+
+
+	step 2
+		inputs: 
+			joystick/buttons from controller 
+				4 buttons 
+				2 for arm to move up/down
+				2 for Solenoid, one for hatch, one for Cargo
+				Joystick for emergency manual jog
+				
+			encoders
+				say exact position needed for arm
+		outputs: the arm moves up or down to set positions, jog to positions,
+		vacuums to load/unload hatch and unload cargo 
+	
+	step 3
+		presented code to Sydney, Elyse, and Mr Hansen on 1/24/19
+	
+	step 4
+		complete
+
+	step 5
+		JogExtendHazmatCommand
+		JogRetractHazmatCommand
+		FullyExtendHazmatCommand
+		FullyRetractHazmatCommand
+		hatchSuctionLoadCommand
+		hatchSuctionUnloadCommand
+		cargoSuctionLoadCommand
+		cargoSuctionUnloadCommand
+		hatchExtend1HazmatCommand
+		hatchExtend2HazmatCommand
+		cargoExtend1HazmatCommand
+		cargoExtend2HazmatCommand
+		cargoGoToLoadHazmatCommand
+		hatchGoToLoadHazmatCommand
+		extendToStartHazmatCommand
+
+	step 6
+		assumptions
+			use arm at hatchEncoderCount1 during sandstorm to place hatch
+			arm used during teleop to load and unload hatch and to load and unload cargo
+				loads cargo after gathered by intake arm
+
+		JogExtendHazmatCommand
+			if (suctionArmJoystick is toggled upward)
+			then (move from wherever until whenever joystick is no longer toggled)
+
+		JogRetractHazmatCommand	
+			if (suctionArmJoystick is toggled downward)
+			then (move from wherever until whenever joystick is no longer toggled)

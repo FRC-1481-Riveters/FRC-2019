@@ -8,7 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-//import edu.wpi.first.wpilibj.buttons.*;
+import edu.wpi.first.wpilibj.buttons.*;
+import frc.robot.commands.JackJogExtendCommand;
+import frc.robot.commands.JackJogRetractCommand;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -43,4 +46,12 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
   public Joystick driverController = new Joystick(RobotMap.driverController);
   public Joystick operatorController = new Joystick(RobotMap.operatorController);
+
+  private Button ButtonClimbJogExtend = new JoystickButton(operatorController, RobotMap.climbJackJogExtendButton);
+  private Button ButtonClimbJogRetract = new JoystickButton(operatorController, RobotMap.climbJackJogRetractButton);
+
+  public OI(){
+  ButtonClimbJogExtend.whileHeld(new JackJogExtendCommand());
+  ButtonClimbJogRetract.whileHeld (new JackJogRetractCommand());
+  }
 }

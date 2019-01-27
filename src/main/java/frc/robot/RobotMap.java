@@ -35,9 +35,9 @@ public class RobotMap {
   // Climb Jack System Constants
   public static int climbJack_talon = 7;
   public static int ClimbJackFullyRetracted = 0;
-  public static int climbJackMaxExtend = 21500; //not really lol TODO: figure out what  this number is
+  public static int climbJackMaxExtend = 8000; //not really lol TODO: figure out what  this number is
   public static int climbJackJogRetractedLimit = 0;
-  public static int climbJackJogExtendedLimit = 21500; //not really lol TODO: figure out what  this number is
+  public static int climbJackJogExtendedLimit = 8000; //not really lol TODO: figure out what  this number is
   public static int climbJackJogExtendButton = 6; // right bumper
   public static int climbJackJogRetractButton = 5; // left bumper
   public static int climbJackFullyExtendButton = 3;   // button x 
@@ -55,13 +55,18 @@ public class RobotMap {
   public static int suctionArm_Talon = 8; //TODO: find the true value of these motors
   //define solenoids here
   public static int suctionArmStartingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int outOfTheWayEncoderCount = 1000000; //TODO: find the true value of these motors
   public static int cargoLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
   public static int hatchLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int cargoEncoderCountOne = 1000000; //TODO: find the true value of these motors
-  public static int cargoEncoderCountTwo = 1000000; //TODO: find the true value of these motors
-  public static int hatchEncoderCountOne = 1000000; //TODO: find the true value of these motors
-  public static int hatchEncoderCountTwo = 1000000; //TODO: find the true value of these motors
+  public static int cargoEncoderCount1 = 1000000; //TODO: find the true value of these motors
+  public static int cargoEncoderCount2 = 1000000; //TODO: find the true value of these motors
+  public static int hatchEncoderCount1 = 1000000; //TODO: find the true value of these motors
+  public static int hatchEncoderCount2 = 1000000; //TODO: find the true value of these motors
+  public static int suctionArmJoystick = 1000000; //TODO: find the right value of joystick needed
+  public static int suctionArmUpButton = 1000000; //TODO: correct button value needed
+  public static int suctionArmDownButton = 1000000; //TODO: correct button value needed
+  public static int cargoSuctionButton = 1000000; //TODO: correct button value needed
+  public static int hatchSuctionButton = 1000000; //TODO: correct button value needed
+  public static int hazmatRate = 1000000; //TODO: find correct rate
 
  
 }

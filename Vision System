@@ -5,7 +5,9 @@ Step 1
   How autoassits  will work  on the field: 
   1. The robot has to be in proximity of // TODO: figure out distance and the placement of the camera  on the robot 
     A. The reflecting tape and the alignment tape will be used to guide the robot  for assistance to driver 
-    B. Some of the constraints is the driver may NOT be parallel to the target. It MUST be perpendicular to the target. This target is the reflecting tape and alignment tape on the cargoship and rocketship. However, the rocketship on has reflecting tape on level one, for levels 2 and 3 it is the same basic vision for the first level, yet is  determined by distance ( of the arm, the driver  arrivng in placemet of level one will  be the same placement of the robot for levels 1 and 2)  
+    B. Some of the constraints is the driver may NOT be parallel to the target. It MUST be perpendicular to the target. This target is the reflecting tape and alignment tape 
+    on the cargoship and rocketship. However, the rocketship on has reflecting tape on level one, for levels 2 and 3 it is the same basic vision for the first level, yet is  
+    determined by distance ( of the arm, the driver  arrivng in placemet of level one will  be the same placement of the robot for levels 1 and 2)  
   2. If the robot is close to the alignment tape ( when parallel) please press the autoassist button to allow the system to detect the reflecting tape and alignment tape.
     A. The adjustment of the robot will allow the driver to be centered for placement of cargo and hatch cover.
   
