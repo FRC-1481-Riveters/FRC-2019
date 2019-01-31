@@ -1,9 +1,39 @@
+Input / Output Sheet - for 2019 Deep Space
+-------------------------------------------------------------------------------------------------------------------------------
+List of motors
+    Drive Motors (6) - to drive front/middle/rear wheels on left/right
+    Climb Jack Motor to extend/retract jacks
+    Hazmat Arm motor - to move arm up/down
+    Hazmat Elevator motor - to move elevator mechanism up/down
+    Cargo Arm motor - to pull in cargo
+    Cargo Arm motor - to pivot arm up and down
+    Vacuum Pump Motor - for suction
+
+List of encoders
+    Climb Jack encoder - to allow full-extend and full-retract functions
+    Hazmat arm encoder  - to stop at specific heights
+    Cargo Arm encoder - to stop at specific angles
+
+List of solenoids
+     Hazmat cargo/ball suction
+     Hazmat hatch suction
+
+----------------------------------------------------------------------------------------------------------------------    
+
+
 CAN ID 1 = front left motor (Primary Drive) , Chassis SRX Mag Encoder, left
 CAN ID 2 = front right motor (Primary Drive) , Chassis SRX Mag Encoder, right
 CAN ID 3 = rear left motor (Primary Drive)
 CAN ID 4 = rear right motor (Primary Drive)
 CAN ID 5 = middle left motor (Secondary Drive)
 CAN ID 6 = middle right motor (Secondary Drive)
+CAN ID 7 = Climb Jack Motor
+CAN ID 8 = Hazmat Arm motor
+CAN ID 9 = Hazmat Elevator motor (phase 2)
+CAN ID 10 = Cargo Arm Intake Motor
+CAN ID 11 = Cargo Arm Pivot Motor
+CAN ID 12 = Vacuum Pump Motor
+
 
 Driver Controller 
 Axis 
@@ -12,4 +42,34 @@ Axis
   2
   3
   4 turn left and right 
-  
+
+ -------------------------------------------------------------------------------------------------------------------
+ Drive Code (copied on 30Jan by Karen)
+  Inputs: joystick to drive, encoders
+  Output: drive motors
+
+
+  Climb_Jack (copied on 30Jan by Karen)
+    Inputs: controller buttons/joysticks, encoder
+    Inputs: controller bumpers, encoder
+    Outputs: climb motor, action of climb
+
+Hazmat arm (copied on 30Jan by Karen)
+    inputs: 
+			joystick/buttons from controller 
+				4 buttons 
+				2 for arm to move up/down
+				2 for Solenoid, one for hatch, one for Cargo
+				Joystick for emergency manual jog
+
+			encoders
+				say exact position needed for arm
+		outputs: the arm moves up or down to set positions, jog to positions,
+		vacuums to load/unload hatch and unload cargo 
+
+Cargo Intake Arm (copied by Karen on 30Jan)
+    Inputs: buttons/joysticks of controller, encoders
+	  Outputs: cargo pivot arm motors, cargo arm intake motor
+
+
+
