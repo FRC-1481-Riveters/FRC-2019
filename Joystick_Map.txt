@@ -23,8 +23,9 @@ axis 2 - jacks up
 4 - CARM rollers out
 5 - CARM rollers in fast
 2 - CARM rollers in slow
-3 - vacuum in
-1 - vacuum out
+6 - hatch vacuum on
+7 - pod vacuum on
+10 - blow vacuum
 0 - auto (camera) align
 rumble - after ball secured, duration 2 seconds
 rumble - 200 milliseconds after vacuum out, duration 2 seconds
