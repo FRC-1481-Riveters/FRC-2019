@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Climb_Jack;
 import frc.robot.subsystems.Hazmat_Arm;
+import frc.robot.subsystems.Gyro;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -27,6 +28,7 @@ import frc.robot.subsystems.Hazmat_Arm;
 public class Robot extends TimedRobot {
 
   public static OI m_oi;
+  public static Gyro m_gyro;
   public static Drive m_drive;
   public static Climb_Jack m_climb_jack;
   public static Hazmat_Arm m_hazmat_arm;
@@ -43,6 +45,7 @@ public class Robot extends TimedRobot {
     m_drive = new Drive();
     m_climb_jack = new Climb_Jack();
     m_hazmat_arm = new Hazmat_Arm();
+    m_gyro = new Gyro();
     m_oi = new OI();  //OI must be done after other instantiations
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
