@@ -8,19 +8,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
-import frc.robot.subsystems.Hazmat_Arm;
+import frc.robot.subsystems.*;
 import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class JogExtendHazmatCommand extends Command {
-  public JogExtendHazmatCommand() {
+public class CargoPivotArmJogUpCommand extends Command {
+  public CargoPivotArmJogUpCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.m_hazmat_arm);
-
-    SmartDashboard.putNumber("HazmatJogUpDistanceOvertravelOffset",4.0);
+    requires(Robot.m_cargo_arm);
   }
 
   // Called just before this Command runs the first time
@@ -31,7 +30,12 @@ public class JogExtendHazmatCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getActualPosition() + RobotMap.hazmatRate) ;
+    // Read the axes of the joysticks
+  double throttleUpAxisValue = Robot.m_oi.operatorController.getRawAxis(RobotMap.cargoIntakeJogUpAxis);
+  System.out.println(throttleUpAxisValue);
+  if (throttleUpAxisValue > RobotMap.joystickIsActive){
+    Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate) ;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

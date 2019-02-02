@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.*;
 import frc.robot.*;
 
-public class DoNothingCommand extends Command {
-  public DoNothingCommand() {
+public class DoNothingCommandJack extends Command {
+  public DoNothingCommandJack() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.m_climb_jack);

@@ -66,6 +66,8 @@ Suction to grab cargo and hatches
 		cargoGoToLoadHazmatCommand
 		hatchGoToLoadHazmatCommand
 		extendToStartHazmatCommand
+		goUpHazmatCommand
+
 
 	step 6
 		assumptions
