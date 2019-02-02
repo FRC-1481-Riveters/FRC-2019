@@ -1,0 +1,29 @@
+// Joystick map.txt
+
+CARM - Cargo arm
+HARM - Height Attainment arm
+
+OPERATOR joystick
+4 - HARM jog up
+5 - HARM jog down
+axis 2 - CARM jog up
+axis 3 - CARM jog down 
+3 - HARM up 1 position
+1 - HARM down 1 position
+2 - CARM to up position
+0 - CARM to down position
+7 - CARM to start position
+push 9 - climb
+
+DRIVER joystick
+axis 1 (left stick Y) - arcade drive forward/backward
+axis 4 - (right stick X) - arcade drive left/right
+axis 3 - jacks down
+axis 2 - jacks up
+4 - CARM rollers out
+5 - CARM rollers in fast
+2 - CARM rollers in slow
+3 - vacuum in
+1 - vacuum out
+rumble - after ball secured, duration 2 seconds
+rumble - 200 milliseconds after vacuum out, duration 2 seconds
