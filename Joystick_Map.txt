@@ -25,5 +25,6 @@ axis 2 - jacks up
 2 - CARM rollers in slow
 3 - vacuum in
 1 - vacuum out
+0 - auto (camera) align
 rumble - after ball secured, duration 2 seconds
 rumble - 200 milliseconds after vacuum out, duration 2 seconds
