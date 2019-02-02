@@ -1,5 +1,23 @@
 Input / Output Sheet - for 2019 Deep Space
 -------------------------------------------------------------------------------------------------------------------------------
+CAN ID 1 = front left motor (Primary Drive) , Chassis SRX Mag Encoder, left
+CAN ID 2 = front right motor (Primary Drive) , Chassis SRX Mag Encoder, right
+CAN ID 3 = rear left motor (Primary Drive)
+CAN ID 4 = rear right motor (Primary Drive)
+CAN ID 5 = middle left motor (Secondary Drive)
+CAN ID 6 = middle right motor (Secondary Drive)
+CAN ID 7 = Climb Jack Motor
+CAN ID 8 = Hazmat Arm motor
+CAN ID 9 = Hazmat Elevator motor (phase 2)
+CAN ID 10 = Cargo Arm Intake Motor
+CAN ID 11 = Cargo Arm Pivot Motor
+CAN ID 12 = Vacuum Pump Motor
+
+
+See Joystick_Map.txt for button and joystick mapping from strategy
+
+-------------------------------------------------------------------------------------------------------------------
+
 List of motors
     Drive Motors (6) - to drive front/middle/rear wheels on left/right
     Climb Jack Motor to extend/retract jacks
@@ -35,13 +53,7 @@ CAN ID 11 = Cargo Arm Pivot Motor
 CAN ID 12 = Vacuum Pump Motor
 
 
-Driver Controller 
-Axis 
-  0 
-  1 drive forward and back
-  2
-  3
-  4 turn left and right 
+See Joystick_Map.txt for button and joystick mapping from strategy
 
  -------------------------------------------------------------------------------------------------------------------
  Drive Code (copied on 30Jan by Karen)
