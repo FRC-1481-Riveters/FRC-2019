@@ -9,11 +9,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
+import frc.robot.commands.CargoPivotArmJogUpCommand;
+import frc.robot.commands.CargoPivotArmJogDownCommand;
 import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackJogRetractCommand;
 import frc.robot.commands.JogExtendHazmatCommand;
 import frc.robot.commands.JogRetractHazmatCommand;
 import frc.robot.commands.goUpHazmatCommand;
+import frc.robot.RobotMap;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -56,11 +60,22 @@ public class OI {
   private Button ButtonHazmatUpPosition = new JoystickButton(operatorController, RobotMap.upDeliverHazmatButton);
   private Button ButtonHazmatDownPosition = new JoystickButton(operatorController, RobotMap.downDeliverHazmatButton);
 
+  private Button ButtonCargoStartPosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmStartPositionButton);
+  private Button ButtonCargoIntakePosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmIntakePositionButton);
+  private Button ButtonCargoClimbPosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmClimbPositionButton);
+  private Button ButtonCargoIntakeRollersOut = new JoystickButton(driverController, RobotMap.cargoIntakeRollersOutButton);
+  private Button ButtonCargoIntakeRollersFast = new JoystickButton(driverController, RobotMap.cargoIntakeRollersFastButton);
+  private Button ButtonCargoIntakeRollersSlow = new JoystickButton(driverController, RobotMap.cargoIntakeRollersSlowButton);
+
+
   public OI(){
   ButtonClimbJogExtend.whileHeld(new JackJogExtendCommand());
   ButtonClimbJogRetract.whileHeld (new JackJogRetractCommand());
   ButtonHazmatJogExtend.whileHeld(new JogExtendHazmatCommand());
   ButtonHazmatJogRetract.whileHeld(new JogRetractHazmatCommand());
   ButtonHazmatUpPosition.whileHeld(new goUpHazmatCommand());
+  ButtonCargoStartPosition.whileHeld(new CargoPivotArmJogDownCommand());
+  ButtonCargoIntakePosition.whileHeld(new CargoPivotArmJogUpCommand());
+
   }
 }

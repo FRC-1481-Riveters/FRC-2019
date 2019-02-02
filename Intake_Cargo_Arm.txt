@@ -6,26 +6,54 @@ Intake
 
 	
 
-	Step 1
-		This system has a spinning set of wheels with one motor. 
-		It also has two motors   that pivots the arm. 
-		This system has an encoder to determine arm angle. 
-		The arm is able to assist in climb. 
-		It can pull in cargo. 
-		there need to be 3 preset positions for arm
-			ball intake, climb, and store
-		also needs to be able to jog
-		has to coordinate with jacks during climb
+Step 1
+This system has a spinning set of wheels with one motor. 
+It also has two motors   that pivots the arm. 
+This system has an encoder to determine arm angle. 
+The arm is able to assist in climb. 
+It can pull in cargo. 
+there need to be 3 preset positions for arm
+	ball intake, climb, and store
+also needs to be able to jog
+has to coordinate with jacks during climb
 
 	Step 2
-	List I/O for this system
-	Inputs: buttons/joysticks of controller, encoders
-	Outputs: cargo pivot arm motors, cargo arm intake motor
+List I/O for this system
+Inputs: buttons/joysticks of controller, encoders
+Outputs: cargo pivot arm motors, cargo arm intake motor
 
 	Step 3
-	met with Sydney, Reese, and Matt on 1/24/19
+met with Sydney, Reese, and Matt on 1/24/19
 
 	Step 4 
-		Constants:
+CargoPivotArmJogUpCommand
+CargoPivotArmJogDownCommand
+CargoPivotArmStartPositionCommand
+CargoPivotArmIntakePositionCommand
+CargoPivotArmClimbPositionCommand
+
+	Step 5
+CargoPivotArmJogUpCommand
+if (cargoIntakeJogUpAxis is pressed constantly) and (encoder counts are < cargoPivotMaxExtend) then
+turn on cargoPivotArm_Talon to extend arm
+
+CargoPivotArmJogDownCommand
+if (cargoIntakeJogDownAxis is pressed constantly) and (encoder counts are > cargoPivotMaxRetract) then
+turn  on cargoPivotArm_Talon to retract arm
+
+CargoPivotArmStartPosittionCommand
+if (cargoPivotArmStartPositionButton is pressed once) and (encoder counts are > cargoPivotMaxRetract) then
+turn on cargoPivotArm_Talon to go to cargoPivotArmStartPosition
+
+CargoPivotArmIntakePositionCommand
+if (cargoPivotArmIntakePositionButton is pressed once) and (encoder counts are < cargoPivotMaxExtend) then
+turn on cargoPivotArm_Talon to go to cargoPivotIntakePosition
+
+CargoPivotArmClimbPositionCommand
+if (cargoPivotArmClimbPositionButton is pressed once) and (encoder counts are < cargoPivotMaxExtend) then
+turn on cargoPivotArm_Talon to go to cargoPivotArmClimbPosition
+
+
+
 		
 
