@@ -80,3 +80,5 @@ Suction to grab cargo and hatches
 		JogRetractHazmatCommand	
 			if (suctionArmJoystick is toggled downward)
 			then (move from wherever until whenever joystick is no longer toggled)
+		FullyExtendHazmatCommand
+			if ()

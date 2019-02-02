@@ -53,7 +53,7 @@ public class RobotMap {
 
   //suction arm constants
   public static int hazmatArm_Talon = 8; //TODO: find the true value of these motors
-  //define solenoids here
+  //define solenoids her
   public static int hazmatArmStartingEncoderCount = 1000000; //TODO: find the true value of these motors
   public static int cargoLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
   public static int hatchLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
@@ -61,13 +61,17 @@ public class RobotMap {
   public static int cargoEncoderCount2 = 1000000; //TODO: find the true value of these motors
   public static int hatchEncoderCount1 = 1000000; //TODO: find the true value of these motors
   public static int hatchEncoderCount2 = 1000000; //TODO: find the true value of these motors
-  public static int hazmatArmJoystick = 1000000; //TODO: find the right value of joystick needed
-  public static int hazmatArmUpButton = 1000000; //TODO: correct button value needed
-  public static int hazmatArmDownButton = 1000000; //TODO: correct button value needed
+  public static int hazmatArmUpButton = 4;
+  public static int hazmatArmDownButton = 5;
   public static int cargoHazmatButton = 1000000; //TODO: correct button value needed
   public static int hatchHazmatButton = 1000000; //TODO: correct button value needed
-  public static int hazmatRate = 1000000; //TODO: find correct rate
+  public static int hazmatRate = 2000; //TODO: find correct rate
   public static int hazmatLimitSwitch = 3; //i added this for you TODO: find the correct number for this
+  public static int hazmatJogLowerLimit = 100;
+  public static int hazmatJogUpperLimit = 890000;
+
+  public static int operatorControllerAxisFrontAndBack = 5;
+  public static int operatorControllerAxisLeftAndRight = 4;
  
 // cargo intake arm constants
 public static int cargoIntakeArm_Talon = 10;
