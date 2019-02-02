@@ -10,9 +10,9 @@ axis 2 - CARM jog up
 axis 3 - CARM jog down 
 3 - HARM up 1 position
 1 - HARM down 1 position
-2 - CARM to up position
-0 - CARM to down position
-7 - CARM to start position
+2 - CARM to climb position
+0 - CARM to intake position
+7 - CARM to start/store position
 push 9 - climb
 
 DRIVER joystick
