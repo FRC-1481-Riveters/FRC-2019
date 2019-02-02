@@ -13,6 +13,7 @@ import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackJogRetractCommand;
 import frc.robot.commands.JogExtendHazmatCommand;
 import frc.robot.commands.JogRetractHazmatCommand;
+import frc.robot.commands.goUpHazmatCommand;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -52,11 +53,14 @@ public class OI {
   private Button ButtonClimbJogRetract = new JoystickButton(operatorController, RobotMap.climbJackJogRetractButton);
   private Button ButtonHazmatJogExtend = new JoystickButton(operatorController, RobotMap.hazmatArmUpButton);
   private Button ButtonHazmatJogRetract = new JoystickButton(operatorController, RobotMap.hazmatArmDownButton);
+  private Button ButtonHazmatUpPosition = new JoystickButton(operatorController, RobotMap.upDeliverHazmatButton);
+  private Button ButtonHazmatDownPosition = new JoystickButton(operatorController, RobotMap.downDeliverHazmatButton);
 
   public OI(){
   ButtonClimbJogExtend.whileHeld(new JackJogExtendCommand());
   ButtonClimbJogRetract.whileHeld (new JackJogRetractCommand());
   ButtonHazmatJogExtend.whileHeld(new JogExtendHazmatCommand());
   ButtonHazmatJogRetract.whileHeld(new JogRetractHazmatCommand());
+  ButtonHazmatUpPosition.whileHeld(new goUpHazmatCommand());
   }
 }

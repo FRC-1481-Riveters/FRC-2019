@@ -54,18 +54,17 @@ public class RobotMap {
   //suction arm constants
   public static int hazmatArm_Talon = 8; //TODO: find the true value of these motors
   //define solenoids her
-  public static int hazmatArmStartingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int cargoLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int hatchLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int cargoEncoderCount1 = 1000000; //TODO: find the true value of these motors
-  public static int cargoEncoderCount2 = 1000000; //TODO: find the true value of these motors
-  public static int hatchEncoderCount1 = 1000000; //TODO: find the true value of these motors
-  public static int hatchEncoderCount2 = 1000000; //TODO: find the true value of these motors
+  public static int hazmatPodIntake = 100; //TODO: find the true value of these motors
+  public static int hazmatPodLoadStart = 200; //TODO: find the true value of these motors
+  public static int hazmatHatchBottom = 300; //TODO: find the true value of these motors
+  public static int hazmatRocket1Pod = 400; //TODO: find the true value of these motors
+  public static int hazmatRocket2Hatch = 500; //TODO: find the true value of these motors
+  public static int hazmatRocket2Pod = 600; //TODO: find the true value of these motors
   public static int hazmatArmUpButton = 4;
   public static int hazmatArmDownButton = 5;
-  public static int cargoHazmatButton = 1000000; //TODO: correct button value needed
-  public static int hatchHazmatButton = 1000000; //TODO: correct button value needed
-  public static int hazmatRate = 2000; //TODO: find correct rate
+  public static int upDeliverHazmatButton = 3; 
+  public static int downDeliverHazmatButton = 1;
+  public static int hazmatRate = 2000;
   public static int hazmatLimitSwitch = 3; //i added this for you TODO: find the correct number for this
   public static int hazmatJogLowerLimit = 100;
   public static int hazmatJogUpperLimit = 890000;
