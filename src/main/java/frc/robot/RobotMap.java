@@ -45,28 +45,57 @@ public class RobotMap {
   public static int climbJackLimitSwitchExtendInput = 1;
   public static int climbJackLimitSwitchRetractInput = 2;
   public static double climbJackSpeed = 10.0;
-  public static int climbJackRate = 200;
+  public static int climbJackRate = 100;
   public static int climbJackIsExtendedThreshold = 6000;
 
   public final static int PID_PRIMARY = 0;
   public final static int kTimeoutMs = 30;
+  public final static double joystickIsActive = 0.1;
 
   //suction arm constants
-  public static int suctionArm_Talon = 8; //TODO: find the true value of these motors
-  //define solenoids here
-  public static int suctionArmStartingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int cargoLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int hatchLoadingEncoderCount = 1000000; //TODO: find the true value of these motors
-  public static int cargoEncoderCount1 = 1000000; //TODO: find the true value of these motors
-  public static int cargoEncoderCount2 = 1000000; //TODO: find the true value of these motors
-  public static int hatchEncoderCount1 = 1000000; //TODO: find the true value of these motors
-  public static int hatchEncoderCount2 = 1000000; //TODO: find the true value of these motors
-  public static int suctionArmJoystick = 1000000; //TODO: find the right value of joystick needed
-  public static int suctionArmUpButton = 1000000; //TODO: correct button value needed
-  public static int suctionArmDownButton = 1000000; //TODO: correct button value needed
-  public static int cargoSuctionButton = 1000000; //TODO: correct button value needed
-  public static int hatchSuctionButton = 1000000; //TODO: correct button value needed
-  public static int hazmatRate = 1000000; //TODO: find correct rate
+  public static int hazmatArm_Talon = 8; //TODO: find the true value of these motors
+  //define solenoids her
+  public static int hazmatPodIntake = 100; //TODO: find the true value of these motors
+  public static int hazmatPodLoadStart = 200; //TODO: find the true value of these motors
+  public static int hazmatHatchBottom = 300; //TODO: find the true value of these motors
+  public static int hazmatRocket1Pod = 400; //TODO: find the true value of these motors
+  public static int hazmatRocket2Hatch = 500; //TODO: find the true value of these motors
+  public static int hazmatRocket2Pod = 600; //TODO: find the true value of these motors
+  public static int hazmatArmUpButton = 4;
+  public static int hazmatArmDownButton = 5;
+  public static int upDeliverHazmatButton = 3; 
+  public static int downDeliverHazmatButton = 1;
+  public static int hazmatRate = 2000;
+  public static int hazmatLimitSwitch = 3; //i added this for you TODO: find the correct number for this
+  public static int hazmatJogLowerLimit = 100;
+  public static int hazmatJogUpperLimit = 890000;
 
+  public static int operatorControllerAxisFrontAndBack = 5;
+  public static int operatorControllerAxisLeftAndRight = 4;
  
+// cargo intake arm constants
+public static int cargoIntakeArm_Talon = 10;
+public static int cargoPivotArmLeft_Talon = 7; //this is really 11
+public static int cargoPivotArmRight_Talon = 12;
+public static int cargoIntakeJogUpAxis = 2; 
+public static int cargoIntakeJogDownAxis = 3; 
+public static int cargoPivotArmStartPositionButton = 7; //same as storage 
+public static int cargoPivotArmIntakePositionButton = 1; //should be 0
+public static int cargoPivotArmClimbPositionButton = 2;
+public static int cargoIntakeRollersOutButton = 4;
+public static int cargoIntakeRollersFastButton = 5;
+public static int cargoIntakeRollersSlowButton = 2;
+public static int cargoPivotArmStartPosition = 0; //TODO: find  the real number for  this
+public static int cargoPivotArmIntakePosition = 100;  //TODO: find the  real number for this 
+public static int cargoPivotArmClimbPosition = 200; //TODO:  find the real number for  this
+public static int cargoPivotArmRate = 100;  //TODO: find the  real number for this 
+public static int cargoPivotMaxRetract = 0; //TODO: find the real number
+public static int cargoPivotMaxExtend = 8000; //TODO: find the real number
+public static int cargoLimitSwitchExtendInput = 4; //TODO: find the  real input
+public static int cargoLimitSwitchRetractInput = 5; //TODO: find the real input
+public static int cargoIntakeSpinRate = 100; //TODO: find  the  real rate
+public static double cargoIntakeSpeed = 10.0;
+
+public static int CargoTargetPosition = 0;
+public static int lastCargoTargetPosition = 0;
 }
