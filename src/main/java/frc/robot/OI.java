@@ -14,7 +14,10 @@ import frc.robot.commands.CargoPivotArmJogDownCommand;
 import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackJogRetractCommand;
 import frc.robot.commands.JogExtendHazmatCommand;
+import frc.robot.commands.JogExtendHazmatReleasedCommand;
+import frc.robot.commands.JogRetractHazmatReleasedCommand;
 import frc.robot.commands.JogRetractHazmatCommand;
+import frc.robot.commands.goDownHazmatCommand;
 import frc.robot.commands.goUpHazmatCommand;
 import frc.robot.RobotMap;
 
@@ -72,8 +75,11 @@ public class OI {
   ButtonClimbJogExtend.whileHeld(new JackJogExtendCommand());
   ButtonClimbJogRetract.whileHeld (new JackJogRetractCommand());
   ButtonHazmatJogExtend.whileHeld(new JogExtendHazmatCommand());
+  ButtonHazmatJogExtend.whenReleased(new JogExtendHazmatReleasedCommand());
   ButtonHazmatJogRetract.whileHeld(new JogRetractHazmatCommand());
-  ButtonHazmatUpPosition.whileHeld(new goUpHazmatCommand());
+  ButtonHazmatJogRetract.whenReleased(new JogRetractHazmatReleasedCommand());
+  ButtonHazmatUpPosition.whenPressed(new goUpHazmatCommand());
+  ButtonHazmatDownPosition.whenPressed(new goDownHazmatCommand());
   ButtonCargoStartPosition.whileHeld(new CargoPivotArmJogDownCommand());
   ButtonCargoIntakePosition.whileHeld(new CargoPivotArmJogUpCommand());
 

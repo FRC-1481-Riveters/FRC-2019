@@ -14,8 +14,8 @@ import frc.robot.subsystems.Hazmat_Arm;
 import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class goUpHazmatCommand extends Command {
-  public goUpHazmatCommand() {
+public class JogRetractHazmatReleasedCommand extends Command {
+  public JogRetractHazmatReleasedCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.m_hazmat_arm);
@@ -29,11 +29,7 @@ public class goUpHazmatCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    int currentSetPosition;
-    //currentSetPosition = Robot.m_hazmat_arm.m_hazmat_arm_talon.
-    for (int i = 0;  i < Robot.m_hazmat_arm.hazmatPositions.length; i++) {
-
-    }
+    Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.Position,  Robot.m_hazmat_arm.getActualPosition() );
   }
 
   // Make this return true when this Command no longer needs to run execute()

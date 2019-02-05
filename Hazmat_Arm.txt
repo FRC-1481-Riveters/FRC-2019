@@ -53,6 +53,9 @@ Suction to grab cargo and hatches
 	step 5
 		JogExtendHazmatCommand
 		JogRetractHazmatCommand
+		goUpHazmatCommand
+		goDownHazmatCommand
+		
 		FullyExtendHazmatCommand
 		FullyRetractHazmatCommand
 		hatchSuctionLoadCommand
@@ -66,7 +69,6 @@ Suction to grab cargo and hatches
 		cargoGoToLoadHazmatCommand
 		hatchGoToLoadHazmatCommand
 		extendToStartHazmatCommand
-		goUpHazmatCommand
 
 
 	step 6
@@ -76,11 +78,19 @@ Suction to grab cargo and hatches
 				loads cargo after gathered by intake arm
 
 		JogExtendHazmatCommand
-			if (suctionArmJoystick is toggled upward)
-			then (move from wherever until whenever joystick is no longer toggled)
+			if (hazmatArmUpButton is held)
+			then (move from wherever until whenever button is no longer pressed)
 
 		JogRetractHazmatCommand	
-			if (suctionArmJoystick is toggled downward)
-			then (move from wherever until whenever joystick is no longer toggled)
-		FullyExtendHazmatCommand
-			if ()
+			if (hazmatArmDownButton is held)
+			then (move from wherever until whenever button is no longer pressed)
+
+		goUpHazmatCommand
+			if (upDeliverHazmatButton is pressed)
+			then (move from wherever to the next highest position)
+
+		goDownHazmatCommand
+			if  (downDeliverHazmatButton is pressed)
+			then (move from wherever to the next lowest position)
+
+		

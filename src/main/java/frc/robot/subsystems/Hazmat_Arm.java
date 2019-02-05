@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.SensorCollection;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
+import java.util.Arrays;
 
 /**
  * Add your docs here.
@@ -28,9 +29,18 @@ public class Hazmat_Arm extends Subsystem {
 
   private static DigitalInput m_limitSwitchExtended = new DigitalInput(RobotMap.hazmatLimitSwitch);
   int m_lastTargetPosition;
+
+  public int hazmatPositions[] = new int [6];
   public Hazmat_Arm() {
   
     m_lastTargetPosition = getActualPosition();
+
+    hazmatPositions[0] = RobotMap.hazmatPodIntake;
+    hazmatPositions[1] = RobotMap.hazmatPodLoadStart;
+    hazmatPositions[2] = RobotMap.hazmatHatchBottom;
+    hazmatPositions[3] = RobotMap.hazmatRocket1Pod;
+    hazmatPositions[4] = RobotMap.hazmatRocket2Hatch;
+    hazmatPositions[5] = RobotMap.hazmatRocket2Pod;
   }
   public void periodic() {
 
