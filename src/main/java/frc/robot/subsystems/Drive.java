@@ -30,21 +30,21 @@ public class Drive extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-	//WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(RobotMap.frontLeftMotor);
+	WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(RobotMap.frontLeftMotor);
 	WPI_VictorSPX m_midLeft = new WPI_VictorSPX(RobotMap.middleLeftMotor);
 	WPI_VictorSPX m_rearLeft = new WPI_VictorSPX(RobotMap.rearLeftMotor);
 
 	//change m_frontleft to a victor to use for last year's robot
-	WPI_VictorSPX m_frontLeft = new WPI_VictorSPX(RobotMap.frontLeftMotor);
+	//WPI_VictorSPX m_frontLeft = new WPI_VictorSPX(RobotMap.frontLeftMotor);
 
 	SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_midLeft, m_rearLeft);
 
-	//WPI_TalonSRX m_frontRight = new WPI_TalonSRX(RobotMap.frontRightMotor);
+	WPI_TalonSRX m_frontRight = new WPI_TalonSRX(RobotMap.frontRightMotor);
 	WPI_VictorSPX m_midRight = new WPI_VictorSPX(RobotMap.middleRightMotor);
 	WPI_VictorSPX m_rearRight = new WPI_VictorSPX(RobotMap.rearRightMotor);
 
 	//change m_frontright to a victor to use for last year's robot
-	WPI_VictorSPX m_frontRight = new WPI_VictorSPX(RobotMap.frontRightMotor);
+	//WPI_VictorSPX m_frontRight = new WPI_VictorSPX(RobotMap.frontRightMotor);
 
 	SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_midRight, m_rearRight);
 
@@ -82,11 +82,7 @@ public class Drive extends Subsystem {
 
 		setDefaultCommand(new DriveCommandJoystick());
 
-		// *** These 3 inversions are for 1481_Beta bot *** //
-		m_rearLeft.setInverted(true);// motor #3
-		m_frontLeft.setInverted(true);// motor #1
-		m_midLeft.setInverted(true);// motor #5
-
+		
 
 	}
 	public void driveDirection(float FRSpeed, float turningSpeed, float LRSpeed) {
