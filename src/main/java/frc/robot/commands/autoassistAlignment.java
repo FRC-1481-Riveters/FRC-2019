@@ -12,12 +12,48 @@ import frc.robot.RobotMap;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.wpilibj.CameraServer;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Gyro;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 
 
 public class autoassistAlignment extends Command {
-private VideoSource usbCamera;
-  CameraServer server;
+  private PIDController m_PidControllerLeftRight;
+  private double m_setpoint = 0;
+  private mysteryPIDSource m_gyroTurning = new mysteryPIDSource(); // fix later 
+  private double m_output;
+  private pidOutput m_pidOutput  =  new pidOutput();
+  
+  private class mysteryPIDSource implements PIDSource {
+
+		@Override
+		public double pidGet() {
+      return Robot.m_gyro.getGyroHeading(); 
+      
+		}
+		@Override
+		public PIDSourceType getPIDSourceType() {
+			return PIDSourceType.kDisplacement;
+		}
+		@Override
+		public void setPIDSourceType(PIDSourceType pidSource) {
+			/* don't care about this */
+		}
+  }
+  private class pidOutput implements PIDOutput {
+		@Override
+		public void pidWrite(double output) {
+			m_output = output;
+		}
+  }
+ 
   public autoassistAlignment() {
+    requires(Robot.m_gyro);
+    requires(Robot.m_drive);
+    m_PidControllerLeftRight = new PIDController(0.2, 0, 0, m_gyroTurning, m_pidOutput);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -26,7 +62,7 @@ private VideoSource usbCamera;
   @Override
   protected void initialize() {
     
-    server = CameraServer.getInstance();
+    
      // server.setQuality(50);
      // LocalVariableDetection();
       
@@ -35,11 +71,19 @@ private VideoSource usbCamera;
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    // while driving in joystick you need drive.java and the usage  of button 0 
+    // you need joystick to feed to drive 
+    // and direction you are facing 
+    double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
+    Robot.m_drive.driveDirection((float) throttleJoystick,(float) m_output);
+    
+        
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    
     return false;
   }
 
