@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
   public static Climb_Jack m_climb_jack;
   public static Hazmat_Arm m_hazmat_arm;
   public static Cargo_Arm m_cargo_arm;
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 

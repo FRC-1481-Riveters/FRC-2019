@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.doNothingGyro;
+
 /**
  * Add your docs here.
  */
@@ -22,21 +23,29 @@ public class Gyro extends Subsystem {
   AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
   double lastPrintedHeading;
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     setDefaultCommand(new doNothingGyro());
-    
+
   }
 
-
-    public void periodic() {
-      // Override me!
-      double currentHeading = ahrs.getAngle();
-      if (Math.abs(currentHeading - lastPrintedHeading) > 0.1) {
-        lastPrintedHeading = currentHeading;
-        System.out.println(lastPrintedHeading);
-      }
-   
+  public void periodic() {
+    // Override me!
+    double currentHeading = ahrs.getAngle();
+    if (Math.abs(currentHeading - lastPrintedHeading) > 0.1) {
+      lastPrintedHeading = currentHeading;
+      System.out.println(lastPrintedHeading);
     }
+
+  }
+
+  public double getGyroHeading() {
+    return ahrs.getAngle();
+  }
+  public double gyroDiary(long timeStamp){
+    return getGyroHeading();
+  }
+    
 }
