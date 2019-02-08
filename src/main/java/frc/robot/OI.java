@@ -9,8 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
-import frc.robot.commands.CargoPivotArmJogUpCommand;
-import frc.robot.commands.CargoPivotArmJogDownCommand;
 import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackJogRetractCommand;
 import frc.robot.commands.JogExtendHazmatCommand;
@@ -80,8 +78,6 @@ public class OI {
   ButtonHazmatJogRetract.whenReleased(new JogRetractHazmatReleasedCommand());
   ButtonHazmatUpPosition.whenPressed(new goUpHazmatCommand());
   ButtonHazmatDownPosition.whenPressed(new goDownHazmatCommand());
-  ButtonCargoStartPosition.whileHeld(new CargoPivotArmJogDownCommand());
-  ButtonCargoIntakePosition.whileHeld(new CargoPivotArmJogUpCommand());
 
   }
 }

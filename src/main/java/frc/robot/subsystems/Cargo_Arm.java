@@ -11,8 +11,7 @@ import frc.robot.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.command.*;
 import frc.robot.RobotMap;
-import frc.robot.commands.CargoPivotArmJogUpCommand;
-import frc.robot.commands.DoNothingCommandCargo;
+import frc.robot.commands.CargoPivotArmManualCommand;
 
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.SensorCollection;
@@ -30,35 +29,62 @@ public class Cargo_Arm extends Subsystem {
   public static WPI_TalonSRX m_cargo_arm_right_talon = new WPI_TalonSRX (RobotMap.cargoPivotArmRight_Talon);
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+
+int m_lastCargoTargetPosition;
+
 public Cargo_Arm(){
-  RobotMap.lastCargoTargetPosition = getActualPosition();
+  m_lastCargoTargetPosition = getActualPosition();
+}
+
+public void periodic(){
+  SmartDashboard.putNumber("CargoArmEncoderCounts",  getActualPosition());
 }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand())
-    setDefaultCommand(new DoNothingCommandCargo());
+    setDefaultCommand(new CargoPivotArmManualCommand());
+
+    m_cargo_arm_right_talon.configSelectedFeedbackSensor(	FeedbackDevice.QuadEncoder,				// Local Feedback Source
+
+		RobotMap.PID_PRIMARY,					// PID Slot for Source [0, 1]
+
+    RobotMap.kTimeoutMs);	
+    
+    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0, RobotMap.kTimeoutMs);				// Feedback Device of Remote Talon
+
+    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.kTimeoutMs);	// Quadrature Encoder of current Talon		
+    m_cargo_arm_right_talon.configNominalOutputForward(0, 30); 
+    m_cargo_arm_right_talon.configNominalOutputReverse(0, 30); 
+    m_cargo_arm_right_talon.configPeakOutputForward(1, 30); 
+    m_cargo_arm_right_talon.configPeakOutputReverse(-1, 30); 
+    m_cargo_arm_right_talon.setSensorPhase(false);
+    m_cargo_arm_right_talon.config_kF(0, 0.0, 30); 
+    m_cargo_arm_right_talon.config_kP(0, 0.05, 30); 
+    m_cargo_arm_right_talon.config_kI(0, 0.0, 30); 
+    m_cargo_arm_right_talon.config_kD(0, 0.0, 30); 
+
     
   }
   public void setTargetPosition(int CargoTargetPosition) {
 
-    if (RobotMap.CargoTargetPosition < RobotMap.cargoPivotMaxRetract)  {
+    if (CargoTargetPosition < RobotMap.cargoPivotMaxRetract)  {
       CargoTargetPosition = RobotMap.cargoPivotMaxRetract;
     }
     if (CargoTargetPosition > RobotMap.cargoPivotMaxExtend){
       CargoTargetPosition = RobotMap.cargoPivotMaxExtend ;
     }
-    m_cargo_arm_left_talon.set(ControlMode.Position, CargoTargetPosition);
-      RobotMap.lastCargoTargetPosition = RobotMap.CargoTargetPosition;
+    m_cargo_arm_right_talon.set(ControlMode.Position, CargoTargetPosition);
+      m_lastCargoTargetPosition = CargoTargetPosition;
     }
   public int getTargetPosition() {
 
-    return RobotMap.lastCargoTargetPosition;
+    return m_lastCargoTargetPosition;
      
       }
   public int getActualPosition() {
   
-    return m_cargo_arm_left_talon.getSensorCollection().getQuadraturePosition();
+    return m_cargo_arm_right_talon.getSensorCollection().getQuadraturePosition();
      
       }
 }
