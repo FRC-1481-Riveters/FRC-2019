@@ -36,3 +36,16 @@ hatch loading station / cargo hatch 1 / rocket hatch 1: 19"
 rocket port 1: 27.5"
 rocket hatch 2: 47"
 rocket port 2: 56.5"
+
+
+//XboxOne Buttons for java - Karen got this from Chief Delphi on 6-Feb
+	public static final int A = 1;
+	public static final int B = 2;
+	public static final int X = 3;
+	public static final int Y = 4;
+	public static final int LB = 5;
+	public static final int RB = 6;
+	public static final int LOGO_LEFT = 7;
+	public static final int LOGO_RIGHT = 8;
+	public static final int LEFT_STICK_BUTTON = 9;
+	public static final int RIGHT_STICK_BUTTON = 10;
