@@ -31,10 +31,10 @@ public class Climb_Jack extends Subsystem {
 
   private static DigitalInput m_limitSwitchExtended = new DigitalInput(RobotMap.climbJackLimitSwitchExtendInput);
   private static DigitalInput m_limitSwitchRetract = new DigitalInput(RobotMap.climbJackLimitSwitchRetractInput);
-  int m_lastTargetPosition;
+  int m_lastClimbJackTargetPosition;
   public Climb_Jack() {
   
-    m_lastTargetPosition = getActualPosition();
+    m_lastClimbJackTargetPosition = getActualPosition();
   }
   public void periodic() {
 
@@ -87,7 +87,7 @@ public class Climb_Jack extends Subsystem {
     //SmartDashboard.putNumber("MotorKI", 0.0);
     //SmartDashboard.putNumber("MotorKD", 0.0);
 
-    SmartDashboard.putNumber("ElevatorEncoderCounts", getActualPosition());
+    SmartDashboard.putNumber("ClimbJackEncoderCounts", getActualPosition());
 
     //SmartDashboard.putBoolean("ElevatorLimitSwitch", m_limitSwitchElevator.get());
     //SmartDashboard.putNumber("ElevatorRampRate",0.1);
@@ -105,11 +105,11 @@ public class Climb_Jack extends Subsystem {
     TargetPosition = RobotMap.climbJackMaxExtend;
   }
   m_climbJack_talon.set(ControlMode.Position, TargetPosition);
-    m_lastTargetPosition = TargetPosition;
+    m_lastClimbJackTargetPosition = TargetPosition;
   }
   public int getTargetPosition() {
 
-    return m_lastTargetPosition;
+    return m_lastClimbJackTargetPosition;
      
       }
   

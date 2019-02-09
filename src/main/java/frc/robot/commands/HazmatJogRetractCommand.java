@@ -20,7 +20,7 @@ public class HazmatJogRetractCommand extends Command {
     // eg. requires(chassis);
     requires(Robot.m_hazmat_arm);
 
-    SmartDashboard.putNumber("HazmatJogDownDistanceOvertravelOffset",1.0);
+    //SmartDashboard.putNumber("HazmatJogDownDistanceOvertravelOffset",1.0);
   }
 
   // Called just before this Command runs the first time

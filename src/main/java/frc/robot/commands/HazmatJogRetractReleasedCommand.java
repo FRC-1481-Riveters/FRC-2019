@@ -29,7 +29,8 @@ public class HazmatJogRetractReleasedCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.Position,  Robot.m_hazmat_arm.getActualPosition() );
+    //Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.Position,  Robot.m_hazmat_arm.getActualPosition() );
+    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition() - RobotMap.hazmatRate) ;
   }
 
   // Make this return true when this Command no longer needs to run execute()
