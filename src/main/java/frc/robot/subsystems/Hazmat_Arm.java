@@ -32,6 +32,11 @@ public class Hazmat_Arm extends Subsystem {
 
   public int hazmatPositions[] = new int [6];
   public Hazmat_Arm() {
+
+    SmartDashboard.putNumber("MotorKF", 0.0) ;
+    SmartDashboard.putNumber("MotorKp", 0.0) ;
+    SmartDashboard.putNumber("MotorKI", 0.0) ;
+    SmartDashboard.putNumber("MotorKD", 0.0) ;
   
     m_lastHazmatTargetPosition = getActualPosition();
 
@@ -44,11 +49,10 @@ public class Hazmat_Arm extends Subsystem {
   }
   public void periodic() {
 
-    //m_elevator_talon.config_kF(0,  SmartDashboard.getNumber("MotorKF", 0.0), 30); 
-    //m_elevator_talon.config_kP(0,  SmartDashboard.getNumber("MotorKp", 0.0), 30); 
-    //m_elevator_talon.config_kI(0,  SmartDashboard.getNumber("MotorKI", 0.0), 30); 
-    //m_elevator_talon.config_kD(0,  SmartDashboard.getNumber("MotorKD", 0.0), 30); 
-    //m_elevator_talon.configClosedloopRamp(SmartDashboard.getNumber("ElevatorRampRate",0.1),0);
+    m_hazmat_arm_talon.config_kF(0,  SmartDashboard.getNumber("MotorKF", 0.0), 0); 
+    m_hazmat_arm_talon.config_kP(0,  SmartDashboard.getNumber("MotorKp", 0.0), 0); 
+    m_hazmat_arm_talon.config_kI(0,  SmartDashboard.getNumber("MotorKI", 0.0), 0); 
+    m_hazmat_arm_talon.config_kD(0,  SmartDashboard.getNumber("MotorKD", 0.0), 0); 
   
     
   

@@ -30,13 +30,13 @@ public class HazmatJogRetractReleasedCommand extends Command {
   @Override
   protected void execute() {
     //Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.Position,  Robot.m_hazmat_arm.getActualPosition() );
-    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition() - RobotMap.hazmatRate) ;
+    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition()) ;
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true
