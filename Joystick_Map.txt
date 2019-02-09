@@ -4,12 +4,13 @@ CARM - Cargo arm
 HARM - Height Attainment arm
 
 OPERATOR joystick
-5 - HARM jog up (old 4)
-6 - HARM jog down (old 5)
-axis 2 - CARM jog up (old axis 2)
-axis 3 - CARM jog down (old axis 3)
-4 - HARM up 1 position (see HARM POSITIONS section)  (old 3)
-2 - HARM down 1 position (see HARM POSITIONS section) (old 1)
+5 - HARM jog up/extend (old 4) - Left bumper
+6 - HARM jog down/retract (old 5) - Right bumper
+4 - HARM up 1 position (see HARM POSITIONS section)  (old 3) - makes H-arm go up one position per click
+2 - HARM down 1 position (see HARM POSITIONS section) (old 1) - makes H-arm go down one position per click
+
+axis 2 - CARM jog up (old axis 2) - Left trigger
+axis 3 - CARM jog down (old axis 3) - Right trigger
 3 - CARM to climb position (old 2)
 1 - CARM to intake position (old 0)
 8 - CARM to start/store position (old 7)
@@ -18,13 +19,13 @@ push 10 - auto climb (old push 9)
 DRIVER joystick
 axis 1 (left stick Y) - arcade drive forward/backward (old axis 1)
 axis 4 - (right stick X) - arcade drive left/right (old axis 4)
-axis 3 - jacks down (old axis 3)
-axis 2 - jacks up (old axis 2)
-5 - CARM rollers out  (old 4)
-6 - CARM rollers in fast (old 5)
+axis 3 - jacks down/extend (old axis 3) - right trigger
+axis 2 - jacks up/retract (old axis 2) - left trigger 
+5 - CARM rollers out  (old 4) - Left bumper
+6 - CARM rollers in fast (old 5) - Right bumper
 3 - CARM rollers in slow (old 2)
-7 - hatch vacuum on (old 6)
-8 - pod vacuum on (old 7)
+7 - vacuum on (old 6)
+NO LONGER NEEDED BECAUSE 2 VACUUM MOTORS ---  8 - pod vacuum on (old 7)
 11? (big silver button in center) - blow vacuum (old 10)
 1 - auto (camera) align (old 0)
 rumble - after ball secured, duration 2 seconds
