@@ -33,7 +33,7 @@ public class RobotMap {
 
   public static int usbCamera = 1;
   // Climb Jack System Constants
-  public static int climbJack_talon = 7;
+  public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
   public static int climbJackMaxExtend = 8000; //not really lol TODO: figure out what  this number is
   public static int climbJackJogRetractedLimit = 0;
@@ -76,7 +76,7 @@ public class RobotMap {
  
 // cargo intake arm constants
 public static int cargoIntakeArm_Talon = 10;
-public static int cargoPivotArmLeft_Talon = 7; //this is really 11
+public static int cargoPivotArmLeft_Talon = 4;
 public static int cargoPivotArmRight_Talon = 12;
 public static int cargoIntakeJogUpAxis = 2; 
 public static int cargoIntakeJogDownAxis = 3; 
