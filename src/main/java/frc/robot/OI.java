@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
 import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackJogRetractCommand;
-import frc.robot.commands.JogExtendHazmatCommand;
-import frc.robot.commands.JogExtendHazmatReleasedCommand;
-import frc.robot.commands.JogRetractHazmatReleasedCommand;
-import frc.robot.commands.JogRetractHazmatCommand;
-import frc.robot.commands.goDownHazmatCommand;
-import frc.robot.commands.goUpHazmatCommand;
+import frc.robot.commands.HazmatJogExtendCommand;
+import frc.robot.commands.HazmatJogExtendReleasedCommand;
+import frc.robot.commands.HazmatJogRetractReleasedCommand;
+import frc.robot.commands.HazmatJogRetractCommand;
+import frc.robot.commands.HazmatGoUpCommand;
+import frc.robot.commands.HazmatGoDownCommand;
 import frc.robot.RobotMap;
 
 /**
@@ -54,12 +54,12 @@ public class OI {
   public Joystick driverController = new Joystick(RobotMap.driverController);
   public Joystick operatorController = new Joystick(RobotMap.operatorController);
 
-  private Button ButtonClimbJogExtend = new JoystickButton(operatorController, RobotMap.climbJackJogExtendButton);
-  private Button ButtonClimbJogRetract = new JoystickButton(operatorController, RobotMap.climbJackJogRetractButton);
+  private Button ButtonClimbJogExtend = new JoystickButton(driverController, RobotMap.climbJackJogExtendButton);
+  private Button ButtonClimbJogRetract = new JoystickButton(driverController, RobotMap.climbJackJogRetractButton);
   private Button ButtonHazmatJogExtend = new JoystickButton(operatorController, RobotMap.hazmatArmUpButton);
   private Button ButtonHazmatJogRetract = new JoystickButton(operatorController, RobotMap.hazmatArmDownButton);
-  private Button ButtonHazmatUpPosition = new JoystickButton(operatorController, RobotMap.upDeliverHazmatButton);
-  private Button ButtonHazmatDownPosition = new JoystickButton(operatorController, RobotMap.downDeliverHazmatButton);
+  private Button ButtonHazmatUpPosition = new JoystickButton(operatorController, RobotMap.hazmatDeliverButton);
+  private Button ButtonHazmatDownPosition = new JoystickButton(operatorController, RobotMap.hazmatDownDeliverButton);
 
   private Button ButtonCargoStartPosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmStartPositionButton);
   private Button ButtonCargoIntakePosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmIntakePositionButton);
@@ -72,12 +72,12 @@ public class OI {
   public OI(){
   ButtonClimbJogExtend.whileHeld(new JackJogExtendCommand());
   ButtonClimbJogRetract.whileHeld (new JackJogRetractCommand());
-  ButtonHazmatJogExtend.whileHeld(new JogExtendHazmatCommand());
-  ButtonHazmatJogExtend.whenReleased(new JogExtendHazmatReleasedCommand());
-  ButtonHazmatJogRetract.whileHeld(new JogRetractHazmatCommand());
-  ButtonHazmatJogRetract.whenReleased(new JogRetractHazmatReleasedCommand());
-  ButtonHazmatUpPosition.whenPressed(new goUpHazmatCommand());
-  ButtonHazmatDownPosition.whenPressed(new goDownHazmatCommand());
+  ButtonHazmatJogExtend.whileHeld(new HazmatJogExtendCommand());
+  ButtonHazmatJogExtend.whenReleased(new HazmatJogExtendReleasedCommand());
+  ButtonHazmatJogRetract.whileHeld(new HazmatJogRetractCommand());
+  ButtonHazmatJogRetract.whenReleased(new HazmatJogRetractReleasedCommand());
+  ButtonHazmatUpPosition.whenPressed(new HazmatGoUpCommand());
+  ButtonHazmatDownPosition.whenPressed(new HazmatGoDownCommand());
 
   }
 }

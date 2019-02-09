@@ -64,7 +64,7 @@ public class RobotMap {
   public static int hazmatArmUpButton = 4;
   public static int hazmatArmDownButton = 5;
   public static int hazmatDeliverButton = 3; 
-  public static int HazmatDownDeliverButton = 1;
+  public static int hazmatDownDeliverButton = 1;
   public static int hazmatRate = 2000;
   public static int hazmatLimitSwitch = 3; //i added this for you TODO: find the correct number for this
   public static int hazmatJogLowerLimit = 100;

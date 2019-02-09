@@ -14,8 +14,8 @@ import frc.robot.subsystems.Hazmat_Arm;
 import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class JogExtendHazmatReleasedCommand extends Command {
-  public JogExtendHazmatReleasedCommand() {
+public class HazmatJogExtendReleasedCommand extends Command {
+  public HazmatJogExtendReleasedCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.m_hazmat_arm);
