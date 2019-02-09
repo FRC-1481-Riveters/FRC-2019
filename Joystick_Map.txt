@@ -1,0 +1,38 @@
+// Joystick map.txt
+
+CARM - Cargo arm
+HARM - Height Attainment arm
+
+OPERATOR joystick
+4 - HARM jog up
+5 - HARM jog down
+axis 2 - CARM jog up
+axis 3 - CARM jog down 
+3 - HARM up 1 position (see HARM POSITIONS section)
+1 - HARM down 1 position (see HARM POSITIONS section)
+2 - CARM to climb position
+0 - CARM to intake position
+7 - CARM to start/store position
+push 9 - auto climb
+
+DRIVER joystick
+axis 1 (left stick Y) - arcade drive forward/backward
+axis 4 - (right stick X) - arcade drive left/right
+axis 3 - jacks down
+axis 2 - jacks up
+4 - CARM rollers out
+5 - CARM rollers in fast
+2 - CARM rollers in slow
+6 - hatch vacuum on
+7 - pod vacuum on
+10 - blow vacuum
+0 - auto (camera) align
+rumble - after ball secured, duration 2 seconds
+rumble - 200 milliseconds after vacuum out, duration 2 seconds
+
+HARM POSITIONS (all positions are based on center of cargo hatch / cargo pod distance above ground)
+pod loading ?? (all the way down)
+hatch loading station / cargo hatch 1 / rocket hatch 1: 19"
+rocket port 1: 27.5"
+rocket hatch 2: 47"
+rocket port 2: 56.5"
