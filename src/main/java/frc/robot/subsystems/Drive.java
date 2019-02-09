@@ -46,6 +46,8 @@ public class Drive extends Subsystem {
 	//change m_frontright to a victor to use for last year's robot
 	//WPI_VictorSPX m_frontRight = new WPI_VictorSPX(RobotMap.frontRightMotor);
 
+	
+
 	SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_midRight, m_rearRight);
 
 	public DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
@@ -86,9 +88,9 @@ public class Drive extends Subsystem {
 
 	}
 	public void driveDirection(float FRSpeed, float turningSpeed, float LRSpeed) {
-		m_drive.arcadeDrive(turningSpeed, FRSpeed);
+		m_drive.arcadeDrive(turningSpeed, -FRSpeed);
 	}
 	public void driveDirection(float FRSpeed, float turningSpeed) {
-		m_drive.arcadeDrive( turningSpeed, FRSpeed);
+		m_drive.arcadeDrive( turningSpeed, -FRSpeed);
 	}
 }
