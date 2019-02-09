@@ -31,22 +31,29 @@ public class CargoPivotArmManualCommand extends Command {
   @Override
   protected void execute() {
     // Read the axes of the joysticks
-  double throttleUpAxisValue = Robot.m_oi.operatorController.getRawAxis(RobotMap.cargoIntakeJogUpAxis);
-  double throttleDownAxisValue = Robot.m_oi.operatorController.getRawAxis(RobotMap.cargoIntakeJogDownAxis);
+    double throttleUpAxisValue = Robot.m_oi.operatorController.getRawAxis(RobotMap.cargoIntakeJogUpAxis);
+    double throttleDownAxisValue = Robot.m_oi.operatorController.getRawAxis(RobotMap.cargoIntakeJogDownAxis);
 
+    // System.out.println(throttleUpAxisValue);
+    // if cargoArmUpTrigger is pulled, move the cargo arm up
+    int triggerPulled = 0;
+    if (throttleUpAxisValue > RobotMap.joystickIsActive) {
+      SmartDashboard.putNumber("CargoArmUp", throttleUpAxisValue);
+      Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() - RobotMap.cargoPivotArmRate);
+      triggerPulled = 1;
+    }
 
-  System.out.println(throttleUpAxisValue);
-  // if cargoArmUpTrigger is pulled, move the cargo arm up
-  if (throttleUpAxisValue > RobotMap.joystickIsActive){
-    Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate) ;
+    // if cargoArmDownTrigger is pulled, move the cargo arm down
+    if (throttleDownAxisValue > RobotMap.joystickIsActive) {
+      SmartDashboard.putNumber("CargoArmDown", throttleDownAxisValue);
+      Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate);
+      triggerPulled = 1;
     }
-    // if cargoArmUpTrigger is not pulled, check if cargoArmDownTrigger is pulled
-    else{
-      // if cargoArmDownTrigger is pulled, move the cargo arm down
-      if (throttleDownAxisValue > RobotMap.joystickIsActive){
-        Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() - RobotMap.cargoPivotArmRate) ;
-        }
+
+    if (triggerPulled == 1) {
+     // Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition());
     }
+
   }
 
   // Make this return true when this Command no longer needs to run execute()

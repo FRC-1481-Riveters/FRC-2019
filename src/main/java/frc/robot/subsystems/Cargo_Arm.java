@@ -25,76 +25,86 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * Add your docs here.
  */
 public class Cargo_Arm extends Subsystem {
-  public static WPI_TalonSRX m_cargo_arm_left_talon = new WPI_TalonSRX (RobotMap.cargoPivotArmLeft_Talon);
-  public static WPI_TalonSRX m_cargo_arm_right_talon = new WPI_TalonSRX (RobotMap.cargoPivotArmRight_Talon);
+  public static WPI_TalonSRX m_cargo_arm_left_talon = new WPI_TalonSRX(RobotMap.cargoPivotArmLeft_Talon);
+  public static WPI_TalonSRX m_cargo_arm_right_talon = new WPI_TalonSRX(RobotMap.cargoPivotArmRight_Talon);
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-int m_lastCargoTargetPosition;
+  int m_lastCargoTargetPosition;
 
-public Cargo_Arm(){
-  m_lastCargoTargetPosition = getActualPosition();
+  public Cargo_Arm() {
+    m_lastCargoTargetPosition = getActualPosition();
 
-//set left talon to follow right talon 
-  m_cargo_arm_left_talon.follow(m_cargo_arm_right_talon);
+    // set left talon to follow right talon
+    m_cargo_arm_left_talon.follow(m_cargo_arm_right_talon);
 
-  //invert left  talon 
-  m_cargo_arm_left_talon.setInverted(true);
-}
+    // invert left talon
+    m_cargo_arm_left_talon.setInverted(true);
+  }
 
-public void periodic(){
-  SmartDashboard.putNumber("CargoArmEncoderCounts",  getActualPosition());
-}
+  public void periodic() {
+    SmartDashboard.putNumber("CargoArmEncoderCounts", getActualPosition());
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand())
     setDefaultCommand(new CargoPivotArmManualCommand());
 
-    m_cargo_arm_right_talon.configSelectedFeedbackSensor(	FeedbackDevice.QuadEncoder,				// Local Feedback Source
+    m_cargo_arm_right_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, // Local Feedback Source
 
-		RobotMap.PID_PRIMARY,					// PID Slot for Source [0, 1]
+        RobotMap.PID_PRIMARY, // PID Slot for Source [0, 1]
 
-    RobotMap.kTimeoutMs);	
-    
-    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0, RobotMap.kTimeoutMs);				// Feedback Device of Remote Talon
+        RobotMap.kTimeoutMs);
 
-    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.kTimeoutMs);	// Quadrature Encoder of current Talon		
-    m_cargo_arm_right_talon.configNominalOutputForward(0, 30); 
-    m_cargo_arm_right_talon.configNominalOutputReverse(0, 30); 
-    m_cargo_arm_right_talon.configPeakOutputForward(1, 30); 
-    m_cargo_arm_right_talon.configPeakOutputReverse(-1, 30); 
-    m_cargo_arm_right_talon.setSensorPhase(false);
-    m_cargo_arm_right_talon.config_kF(0, 0.0, 30); 
-    m_cargo_arm_right_talon.config_kP(0, 0.2, 30); 
-    m_cargo_arm_right_talon.config_kI(0, 0.0, 30); 
-    m_cargo_arm_right_talon.config_kD(0, 0.0, 30); 
+    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0, RobotMap.kTimeoutMs); // Feedback
+                                                                                                                  // Device
+                                                                                                                  // of
+                                                                                                                  // Remote
+                                                                                                                  // Talon
+
+    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative,
+        RobotMap.kTimeoutMs); // Quadrature Encoder of current Talon
+    m_cargo_arm_right_talon.configNominalOutputForward(0, 30);
+    m_cargo_arm_right_talon.configNominalOutputReverse(0, 30);
+    m_cargo_arm_right_talon.configPeakOutputForward(1, 30);
+    m_cargo_arm_right_talon.configPeakOutputReverse(-1, 30);
+    m_cargo_arm_right_talon.setSensorPhase(true);
+    m_cargo_arm_right_talon.config_kF(0, 0.0, 30);
+    m_cargo_arm_right_talon.config_kP(0, 0.2, 30);
+    m_cargo_arm_right_talon.config_kI(0, 0.0, 30);
+    m_cargo_arm_right_talon.config_kD(0, 0.0, 30);
 
     SmartDashboard.putNumber("CargoArmEncoderCounts", getActualPosition());
 
-    
   }
+
   public void setTargetPosition(int CargoTargetPosition) {
 
-    if (CargoTargetPosition < RobotMap.cargoPivotMaxRetract)  {
+    if (CargoTargetPosition > RobotMap.cargoPivotMaxRetract) {
       CargoTargetPosition = RobotMap.cargoPivotMaxRetract;
     }
-    if (CargoTargetPosition > RobotMap.cargoPivotMaxExtend){
-      CargoTargetPosition = RobotMap.cargoPivotMaxExtend ;
+    if (CargoTargetPosition < RobotMap.cargoPivotMaxExtend) {
+      CargoTargetPosition = RobotMap.cargoPivotMaxExtend;
     }
+
+
     SmartDashboard.putNumber("CargoArmTargetPosition", CargoTargetPosition);
     SmartDashboard.putNumber("CargoArmLastTargetPosition", m_lastCargoTargetPosition);
     m_cargo_arm_right_talon.set(ControlMode.Position, CargoTargetPosition);
-      m_lastCargoTargetPosition = CargoTargetPosition;
-    }
+    m_lastCargoTargetPosition = CargoTargetPosition;
+  }
+
   public int getTargetPosition() {
 
     return m_lastCargoTargetPosition;
-     
-      }
+
+  }
+
   public int getActualPosition() {
-  
-    return -m_cargo_arm_right_talon.getSensorCollection().getQuadraturePosition();
-     
-      }
+
+    return m_cargo_arm_right_talon.getSensorCollection().getQuadraturePosition();
+
+  }
 }
