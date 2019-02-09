@@ -61,14 +61,16 @@ public class RobotMap {
   public static int hazmatRocket1Pod = 400; //TODO: find the true value of these motors
   public static int hazmatRocket2Hatch = 500; //TODO: find the true value of these motors
   public static int hazmatRocket2Pod = 600; //TODO: find the true value of these motors
-  public static int hazmatArmUpButton = 5;
-  public static int hazmatArmDownButton = 6;
-  public static int upDeliverHazmatButton = 4; 
-  public static int downDeliverHazmatButton = 2;
-  public static int hazmatRate = 2000;
+  public static int hazmatArmUpButton = 4;
+  public static int hazmatArmDownButton = 2;
+ // public static int hazmatDeliverButton = 3; 
+  //public static int hazmatDownDeliverButton = 1;
+  public static int hazmatJogExtendButton =  5;
+  public static int hazmatJogRetractButton = 6;
+  public static int hazmatRate = 200;
   public static int hazmatLimitSwitch = 3; //i added this for you TODO: find the correct number for this
   public static int hazmatJogLowerLimit = 100;
-  public static int hazmatJogUpperLimit = 890000;
+  public static int hazmatJogUpperLimit = 8000;
   public static double hazmatSpeed = 0.25;
 
   public static int operatorControllerAxisFrontAndBack = 5;

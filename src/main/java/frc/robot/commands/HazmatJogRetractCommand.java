@@ -14,11 +14,13 @@ import frc.robot.subsystems.Hazmat_Arm;
 import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class JogRetractHazmatReleasedCommand extends Command {
-  public JogRetractHazmatReleasedCommand() {
+public class HazmatJogRetractCommand extends Command {
+  public HazmatJogRetractCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.m_hazmat_arm);
+
+    //SmartDashboard.putNumber("HazmatJogDownDistanceOvertravelOffset",1.0);
   }
 
   // Called just before this Command runs the first time
@@ -29,7 +31,7 @@ public class JogRetractHazmatReleasedCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.Position,  Robot.m_hazmat_arm.getActualPosition() );
+    Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.PercentOutput, -RobotMap.hazmatSpeed);
   }
 
   // Make this return true when this Command no longer needs to run execute()

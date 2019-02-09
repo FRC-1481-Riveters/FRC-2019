@@ -28,12 +28,12 @@ public class Hazmat_Arm extends Subsystem {
   // here. Call these from Commands.
 
   private static DigitalInput m_limitSwitchExtended = new DigitalInput(RobotMap.hazmatLimitSwitch);
-  int m_lastTargetPosition;
+  int m_lastHazmatTargetPosition;
 
   public int hazmatPositions[] = new int [6];
   public Hazmat_Arm() {
   
-    m_lastTargetPosition = getActualPosition();
+    m_lastHazmatTargetPosition = getActualPosition();
 
     hazmatPositions[0] = RobotMap.hazmatPodIntake;
     hazmatPositions[1] = RobotMap.hazmatPodLoadStart;
@@ -56,7 +56,7 @@ public class Hazmat_Arm extends Subsystem {
       m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0,0);
     }
     //SmartDashboard.putBoolean("ElevatorLimitSwitch", m_limitSwitchElevator.get());
-    SmartDashboard.putNumber("ClimbJackEncoderCounts",  getActualPosition());
+    SmartDashboard.putNumber("HazmatArmEncoderCounts",  getActualPosition());
    
     //SmartDashboard.putNumber("bullseyeElevatorPosition",  m_lastTargetPosition);
   }
@@ -67,18 +67,18 @@ public class Hazmat_Arm extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
   public void setTargetPosition(int TargetPosition) {
-    if (TargetPosition < RobotMap.climbJackJogRetractedLimit)  {
-      TargetPosition = RobotMap.climbJackJogRetractedLimit;
+    if (TargetPosition < RobotMap.hazmatJogLowerLimit)  {
+      TargetPosition = RobotMap.hazmatJogLowerLimit;
     }
-    if (TargetPosition > RobotMap.climbJackMaxExtend){
-      TargetPosition = RobotMap.climbJackMaxExtend;
+    if (TargetPosition > RobotMap.hazmatJogUpperLimit){
+      TargetPosition = RobotMap.hazmatJogUpperLimit;
     }
     m_hazmat_arm_talon.set(ControlMode.Position, TargetPosition);
-      m_lastTargetPosition = TargetPosition;
+      m_lastHazmatTargetPosition = TargetPosition;
   }
   public int getTargetPosition() {
 
-    return m_lastTargetPosition;
+    return m_lastHazmatTargetPosition;
   }
   public int getActualPosition() {
     return m_hazmat_arm_talon.getSensorCollection().getQuadraturePosition();
