@@ -34,6 +34,12 @@ int m_lastCargoTargetPosition;
 
 public Cargo_Arm(){
   m_lastCargoTargetPosition = getActualPosition();
+
+//set left talon to follow right talon 
+  m_cargo_arm_left_talon.follow(m_cargo_arm_right_talon);
+
+  //invert left  talon 
+  m_cargo_arm_left_talon.setInverted(true);
 }
 
 public void periodic(){
@@ -60,9 +66,11 @@ public void periodic(){
     m_cargo_arm_right_talon.configPeakOutputReverse(-1, 30); 
     m_cargo_arm_right_talon.setSensorPhase(false);
     m_cargo_arm_right_talon.config_kF(0, 0.0, 30); 
-    m_cargo_arm_right_talon.config_kP(0, 0.05, 30); 
+    m_cargo_arm_right_talon.config_kP(0, 0.2, 30); 
     m_cargo_arm_right_talon.config_kI(0, 0.0, 30); 
     m_cargo_arm_right_talon.config_kD(0, 0.0, 30); 
+
+    SmartDashboard.putNumber("CargoArmEncoderCounts", getActualPosition());
 
     
   }

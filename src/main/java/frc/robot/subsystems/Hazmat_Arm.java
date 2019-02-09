@@ -56,7 +56,7 @@ public class Hazmat_Arm extends Subsystem {
       m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0,0);
     }
     //SmartDashboard.putBoolean("ElevatorLimitSwitch", m_limitSwitchElevator.get());
-    SmartDashboard.putNumber("ClimbJackEncoderCounts",  getActualPosition());
+    SmartDashboard.putNumber("HazmatArmEncoderCounts",  getActualPosition());
    
     //SmartDashboard.putNumber("bullseyeElevatorPosition",  m_lastTargetPosition);
   }
