@@ -29,6 +29,11 @@ public class goDownHazmatCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    int currentSetPosition;
+    //currentSetPosition = Robot.m_hazmat_arm.m_hazmat_arm_talon.
+    for (int i = 0;  i < Robot.m_hazmat_arm.hazmatPositions.length; i++) {
+
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
