@@ -82,6 +82,8 @@ public void periodic(){
     if (CargoTargetPosition > RobotMap.cargoPivotMaxExtend){
       CargoTargetPosition = RobotMap.cargoPivotMaxExtend ;
     }
+    SmartDashboard.putNumber("CargoArmTargetPosition", CargoTargetPosition);
+    SmartDashboard.putNumber("CargoArmLastTargetPosition", m_lastCargoTargetPosition);
     m_cargo_arm_right_talon.set(ControlMode.Position, CargoTargetPosition);
       m_lastCargoTargetPosition = CargoTargetPosition;
     }
@@ -92,7 +94,7 @@ public void periodic(){
       }
   public int getActualPosition() {
   
-    return m_cargo_arm_right_talon.getSensorCollection().getQuadraturePosition();
+    return -m_cargo_arm_right_talon.getSensorCollection().getQuadraturePosition();
      
       }
 }
