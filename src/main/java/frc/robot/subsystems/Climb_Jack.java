@@ -29,28 +29,32 @@ public class Climb_Jack extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private static DigitalInput m_limitSwitchExtended = new DigitalInput(RobotMap.climbJackLimitSwitchExtendInput);
-  private static DigitalInput m_limitSwitchRetract = new DigitalInput(RobotMap.climbJackLimitSwitchRetractInput);
+  //private static DigitalInput m_limitSwitchExtended = new DigitalInput(RobotMap.climbJackLimitSwitchExtendInput);
+  //private static DigitalInput m_limitSwitchRetract = new DigitalInput(RobotMap.climbJackLimitSwitchRetractInput);
   int m_lastClimbJackTargetPosition;
   public Climb_Jack() {
   
     m_lastClimbJackTargetPosition = getActualPosition();
+
+   SmartDashboard.putNumber("climbJackMotorKF", 0.0); 
+   SmartDashboard.putNumber("climbJackMotorKp", 0.6); 
+   SmartDashboard.putNumber("climbJackMotorKI", 0.0); 
+   SmartDashboard.putNumber("climbJackMotorKD", 0.0);
   }
   public void periodic() {
 
-    //m_elevator_talon.config_kF(0,  SmartDashboard.getNumber("MotorKF", 0.0), 30); 
-    //m_elevator_talon.config_kP(0,  SmartDashboard.getNumber("MotorKp", 0.0), 30); 
-    //m_elevator_talon.config_kI(0,  SmartDashboard.getNumber("MotorKI", 0.0), 30); 
-    //m_elevator_talon.config_kD(0,  SmartDashboard.getNumber("MotorKD", 0.0), 30); 
-    //m_elevator_talon.configClosedloopRamp(SmartDashboard.getNumber("ElevatorRampRate",0.1),0);
-  
+    m_climbJack_talon.config_kF(0,  SmartDashboard.getNumber("climbJackMotorKF", 0.0), 30); 
+    m_climbJack_talon.config_kP(0,  SmartDashboard.getNumber("climbJackMotorKp", 0.0), 30); 
+    m_climbJack_talon.config_kI(0,  SmartDashboard.getNumber("climbJackMotorKI", 0.0), 30); 
+    m_climbJack_talon.config_kD(0,  SmartDashboard.getNumber("climbJackMotorKD", 0.0), 30); 
     
-  
-    if (m_limitSwitchExtended.get() == false) {
-    m_climbJack_talon.getSensorCollection().setQuadraturePosition(0,0);
-    }
+    //if (m_limitSwitchExtended.get() == false) {
+    //m_climbJack_talon.getSensorCollection().setQuadraturePosition(0,0);
+    //}
+
     //SmartDashboard.putBoolean("ElevatorLimitSwitch", m_limitSwitchElevator.get());
     SmartDashboard.putNumber("ClimbJackEncoderCounts",  getActualPosition());
+    SmartDashboard.putNumber("ClimbJackTarget Position",  getTargetPosition());
    
    
     //SmartDashboard.putNumber("bullseyeElevatorPosition",  m_lastTargetPosition);
@@ -72,16 +76,17 @@ public class Climb_Jack extends Subsystem {
 
     
     m_climbJack_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.kTimeoutMs);	// Quadrature Encoder of current Talon		
-    m_climbJack_talon.configNominalOutputForward(0, 30); 
-    m_climbJack_talon.configNominalOutputReverse(0, 30); 
-    m_climbJack_talon.configPeakOutputForward(1, 30); 
-    m_climbJack_talon.configPeakOutputReverse(-1, 30); 
-    m_climbJack_talon.setSensorPhase(false);
-    m_climbJack_talon.config_kF(0, 0.0, 30); 
-    m_climbJack_talon.config_kP(0, 1.0, 30); 
-    m_climbJack_talon.config_kI(0, 0.0, 30); 
-    m_climbJack_talon.config_kD(0, 0.0, 30); 
-
+    m_climbJack_talon.configNominalOutputForward(0, 0); 
+    m_climbJack_talon.configNominalOutputReverse(0, 0); 
+    m_climbJack_talon.configPeakOutputForward(1, 0); 
+    m_climbJack_talon.configPeakOutputReverse(-1, 0); 
+    m_climbJack_talon.setSensorPhase(true);
+    m_climbJack_talon.setInverted(false);
+    m_climbJack_talon.config_kF(0, 0.0, 0); 
+    m_climbJack_talon.config_kP(0, 1.0, 0); 
+    m_climbJack_talon.config_kI(0, 0.0, 0); 
+    m_climbJack_talon.config_kD(0, 0.0, 0);
+    m_climbJack_talon.configClosedloopRamp(0.04); // 60 ms ramp rate limit
     //SmartDashboard.putNumber("MotorKF", 0.0); 
     //SmartDashboard.putNumber("MotorKp", 1.0);
     //SmartDashboard.putNumber("MotorKI", 0.0);
@@ -106,6 +111,7 @@ public class Climb_Jack extends Subsystem {
   }
   m_climbJack_talon.set(ControlMode.Position, TargetPosition);
     m_lastClimbJackTargetPosition = TargetPosition;
+
   }
   public int getTargetPosition() {
 
