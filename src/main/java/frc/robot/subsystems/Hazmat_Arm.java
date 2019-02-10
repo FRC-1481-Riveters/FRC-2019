@@ -30,10 +30,10 @@ public class Hazmat_Arm extends Subsystem {
 
   public Hazmat_Arm() {
 
-    SmartDashboard.putNumber("MotorKF", 0.0);
-    SmartDashboard.putNumber("MotorKp", 6.0);
-    SmartDashboard.putNumber("MotorKI", 0.0);
-    SmartDashboard.putNumber("MotorKD", 0.0);
+    SmartDashboard.putNumber("HazmatArmMotorKF", 0.0);
+    SmartDashboard.putNumber("HazmatArmMotorKp", 6.0);
+    SmartDashboard.putNumber("HazmatArmMotorKI", 0.0);
+    SmartDashboard.putNumber("HazmatArmMotorKD", 0.0);
 
     m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, RobotMap.PID_PRIMARY, 0);
 
@@ -60,10 +60,10 @@ public class Hazmat_Arm extends Subsystem {
 
   public void periodic() {
 
-    m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("MotorKF", 0.0), 0);
-    m_hazmat_arm_talon.config_kP(0, SmartDashboard.getNumber("MotorKp", 0.0), 0);
-    m_hazmat_arm_talon.config_kI(0, SmartDashboard.getNumber("MotorKI", 0.0), 0);
-    m_hazmat_arm_talon.config_kD(0, SmartDashboard.getNumber("MotorKD", 0.0), 0);
+    m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("HazmatArmMotorKF", 0.0), 0);
+    m_hazmat_arm_talon.config_kP(0, SmartDashboard.getNumber("HazmatArmMotorKp", 0.0), 0);
+    m_hazmat_arm_talon.config_kI(0, SmartDashboard.getNumber("HazmatArmMotorKI", 0.0), 0);
+    m_hazmat_arm_talon.config_kD(0, SmartDashboard.getNumber("HazmatArmMotorKD", 0.0), 0);
 
     if (m_limitSwitchExtended.get() == false) {
       m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0, 0);
