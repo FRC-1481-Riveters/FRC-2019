@@ -7,37 +7,47 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.Robot;
 
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.motorcontrol.SensorCollection;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
-import java.util.Arrays;
 
 /**
  * Add your docs here.
  */
 public class Hazmat_Arm extends Subsystem {
-  public static WPI_TalonSRX m_hazmat_arm_talon = new WPI_TalonSRX (RobotMap.hazmatArm_Talon);
+  public static WPI_TalonSRX m_hazmat_arm_talon = new WPI_TalonSRX(RobotMap.hazmatArm_Talon);
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
   private static DigitalInput m_limitSwitchExtended = new DigitalInput(RobotMap.hazmatLimitSwitch);
   int m_lastHazmatTargetPosition;
 
-  public int hazmatPositions[] = new int [6];
+  public int hazmatPositions[] = new int[6];
+
   public Hazmat_Arm() {
 
-    SmartDashboard.putNumber("MotorKF", 0.0) ;
-    SmartDashboard.putNumber("MotorKp", 0.0) ;
-    SmartDashboard.putNumber("MotorKI", 0.0) ;
-    SmartDashboard.putNumber("MotorKD", 0.0) ;
-  
+    SmartDashboard.putNumber("MotorKF", 0.0);
+    SmartDashboard.putNumber("MotorKp", 6.0);
+    SmartDashboard.putNumber("MotorKI", 0.0);
+    SmartDashboard.putNumber("MotorKD", 0.0);
+
+    m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, RobotMap.PID_PRIMARY, 0);
+
+    /* Feedback device of remote talon */
+    m_hazmat_arm_talon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0, 0);
+    /* Quadrature Encoder of current Talon */
+    m_hazmat_arm_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, 0);
+    m_hazmat_arm_talon.configNominalOutputForward(0, 0);
+    m_hazmat_arm_talon.configNominalOutputReverse(0, 0);
+    m_hazmat_arm_talon.configPeakOutputForward(.5, 0);
+    m_hazmat_arm_talon.configPeakOutputReverse(-.5, 0);
+    m_hazmat_arm_talon.setSensorPhase(true);
+    m_hazmat_arm_talon.setInverted(false);
+
     m_lastHazmatTargetPosition = getActualPosition();
 
     hazmatPositions[0] = RobotMap.hazmatPodIntake;
@@ -47,44 +57,46 @@ public class Hazmat_Arm extends Subsystem {
     hazmatPositions[4] = RobotMap.hazmatRocket2Hatch;
     hazmatPositions[5] = RobotMap.hazmatRocket2Pod;
   }
+
   public void periodic() {
 
-    m_hazmat_arm_talon.config_kF(0,  SmartDashboard.getNumber("MotorKF", 0.0), 0); 
-    m_hazmat_arm_talon.config_kP(0,  SmartDashboard.getNumber("MotorKp", 0.0), 0); 
-    m_hazmat_arm_talon.config_kI(0,  SmartDashboard.getNumber("MotorKI", 0.0), 0); 
-    m_hazmat_arm_talon.config_kD(0,  SmartDashboard.getNumber("MotorKD", 0.0), 0); 
-  
-    
-  
+    m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("MotorKF", 0.0), 0);
+    m_hazmat_arm_talon.config_kP(0, SmartDashboard.getNumber("MotorKp", 0.0), 0);
+    m_hazmat_arm_talon.config_kI(0, SmartDashboard.getNumber("MotorKI", 0.0), 0);
+    m_hazmat_arm_talon.config_kD(0, SmartDashboard.getNumber("MotorKD", 0.0), 0);
+
     if (m_limitSwitchExtended.get() == false) {
-      m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0,0);
+      m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0, 0);
     }
-    //SmartDashboard.putBoolean("ElevatorLimitSwitch", m_limitSwitchElevator.get());
-    SmartDashboard.putNumber("HazmatArmEncoderCounts",  getActualPosition());
-   
-    //SmartDashboard.putNumber("bullseyeElevatorPosition",  m_lastTargetPosition);
+
+    SmartDashboard.putNumber("HazmatArmEncoderCounts", getActualPosition());
+    SmartDashboard.putNumber("HazmatTargetPositionCounts", getTargetPosition());
+
   }
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+
   }
+
   public void setTargetPosition(int TargetPosition) {
-    if (TargetPosition < RobotMap.hazmatJogLowerLimit)  {
+    if (TargetPosition < RobotMap.hazmatJogLowerLimit) {
       TargetPosition = RobotMap.hazmatJogLowerLimit;
     }
-    if (TargetPosition > RobotMap.hazmatJogUpperLimit){
+    if (TargetPosition > RobotMap.hazmatJogUpperLimit) {
       TargetPosition = RobotMap.hazmatJogUpperLimit;
     }
     m_hazmat_arm_talon.set(ControlMode.Position, TargetPosition);
-      m_lastHazmatTargetPosition = TargetPosition;
+    m_lastHazmatTargetPosition = TargetPosition;
+
   }
+
   public int getTargetPosition() {
 
     return m_lastHazmatTargetPosition;
   }
+
   public int getActualPosition() {
-    return m_hazmat_arm_talon.getSensorCollection().getQuadraturePosition();
+    return -m_hazmat_arm_talon.getSensorCollection().getQuadraturePosition();
   }
 }

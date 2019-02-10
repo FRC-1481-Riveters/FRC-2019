@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
 import frc.robot.subsystems.Hazmat_Arm;
-import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class HazmatJogExtendCommand extends Command {
@@ -20,19 +19,20 @@ public class HazmatJogExtendCommand extends Command {
     // eg. requires(chassis);
     requires(Robot.m_hazmat_arm);
 
-    SmartDashboard.putNumber("HazmatJogUpDistanceOvertravelOffset",4.0);
+    SmartDashboard.putNumber("HazmatJogUpDistanceOvertravelOffset", 4.0);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+
+
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.PercentOutput, RobotMap.hazmatSpeed);
-    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition() + RobotMap.hazmatRate) ;
+    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition() + RobotMap.hazmatRate);
   }
 
   // Make this return true when this Command no longer needs to run execute()

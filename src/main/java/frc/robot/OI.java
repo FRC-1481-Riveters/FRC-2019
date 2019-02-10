@@ -57,7 +57,7 @@ public class OI {
   private Button ButtonClimbJogExtend = new JoystickButton(driverController, RobotMap.climbJackJogExtendButton);
   private Button ButtonClimbJogRetract = new JoystickButton(driverController, RobotMap.climbJackJogRetractButton);
 
-  private Button ButtonHazmatJogExtend = new JoystickButton(driverController, RobotMap.hazmatJogExtendButton);
+  private Button ButtonHazmatJogExtend = new JoystickButton(operatorController, RobotMap.hazmatJogExtendButton);
   private Button ButtonHazmatJogRetract = new JoystickButton(operatorController, RobotMap.hazmatJogRetractButton);
   private Button ButtonHazmatUpPosition = new JoystickButton(operatorController, RobotMap.hazmatArmUpButton);
   private Button ButtonHazmatDownPosition = new JoystickButton(operatorController, RobotMap.hazmatArmDownButton);
@@ -75,9 +75,9 @@ public class OI {
   ButtonClimbJogRetract.whileHeld (new JackJogRetractCommand());
 
   ButtonHazmatJogExtend.whileHeld(new HazmatJogExtendCommand());
-  ButtonHazmatJogExtend.whenReleased(new HazmatJogExtendReleasedCommand());
   ButtonHazmatJogRetract.whileHeld(new HazmatJogRetractCommand());
-  ButtonHazmatJogRetract.whenReleased(new HazmatJogRetractReleasedCommand());
+
+  
   ButtonHazmatUpPosition.whenPressed(new HazmatGoUpCommand());
   ButtonHazmatDownPosition.whenPressed(new HazmatGoDownCommand());
 

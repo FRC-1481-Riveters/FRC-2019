@@ -53,7 +53,7 @@ public class RobotMap {
   public final static double joystickIsActive = 0.1;
 
   //suction arm constants
-  public static int hazmatArm_Talon = 7; //TODO: find the true value of these motors
+  public static int hazmatArm_Talon = 8;
   //define solenoids here
   public static int hazmatPodIntake = 100; //TODO: find the true value of these motors
   public static int hazmatPodLoadStart = 200; //TODO: find the true value of these motors
@@ -67,10 +67,10 @@ public class RobotMap {
   //public static int hazmatDownDeliverButton = 1;
   public static int hazmatJogExtendButton =  5;
   public static int hazmatJogRetractButton = 6;
-  public static int hazmatRate = 200;
+  public static int hazmatRate = 8;
   public static int hazmatLimitSwitch = 3; //i added this for you TODO: find the correct number for this
-  public static int hazmatJogLowerLimit = 100;
-  public static int hazmatJogUpperLimit = 8000;
+  public static int hazmatJogLowerLimit = 0;
+  public static int hazmatJogUpperLimit = 1600;
   public static double hazmatSpeed = 0.45;
 
   public static int operatorControllerAxisFrontAndBack = 5;

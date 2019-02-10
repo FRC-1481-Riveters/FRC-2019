@@ -51,7 +51,7 @@ public class CargoPivotArmManualCommand extends Command {
     }
 
     if (triggerPulled == 1) {
-     // Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition());
+      // Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition());
     }
 
   }
