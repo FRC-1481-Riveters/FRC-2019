@@ -68,9 +68,8 @@ public class RobotMap {
   public static int hazmatJogExtendButton =  5;
   public static int hazmatJogRetractButton = 6;
   public static int hazmatRate = 8;
-  public static int hazmatLimitSwitch = 3; //i added this for you TODO: find the correct number for this
   public static int hazmatJogLowerLimit = 0;
-  public static int hazmatJogUpperLimit = 1600;
+  public static int hazmatJogUpperLimit = 1660;
   public static double hazmatSpeed = 0.45;
 
   public static int operatorControllerAxisFrontAndBack = 5;

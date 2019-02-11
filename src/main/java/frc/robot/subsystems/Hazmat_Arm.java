@@ -16,13 +16,10 @@ import com.ctre.phoenix.motorcontrol.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * Add your docs here.
- */
+
 public class Hazmat_Arm extends Subsystem {
   private static WPI_TalonSRX m_hazmat_arm_talon = new WPI_TalonSRX(RobotMap.hazmatArm_Talon);
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+
 
   public enum stepDirection {
     stepUp, stepDown
@@ -30,8 +27,9 @@ public class Hazmat_Arm extends Subsystem {
 
   private int m_targetPosition;
 
-  private boolean hasRecentlyTrippedLimitSwitch = false;
-
+  private boolean hasRecentlyTrippedFwdLimitSwitch = false;
+  private boolean hasRecentlyTrippedRevLimitSwitch = false;
+  
   private ArrayList<Integer> hazmatPositions = new ArrayList<>();
 
   private enum PerformanceLevel {
@@ -119,7 +117,7 @@ public class Hazmat_Arm extends Subsystem {
     
     /*
      * Check if the system is running in full performance mode. If it isn't, don't
-     * allow the tap-up/tap-down functionality, only tolerate jogging, which use
+     * allow the tap-up/tap-down functionality, only tolerate jogging, which use small
      * relative movements.
      */
     if (getPerformanceLevel() != PerformanceLevel.full) {
@@ -143,7 +141,7 @@ public class Hazmat_Arm extends Subsystem {
        * we might not be sitting right on a preset fixed position. Maybe we jogged to
        * our current position. We could be anywhere.
        * 
-       * Seach the list of preset positions for the first fixed position that's
+       * Search the list of preset positions for the first fixed position that's
        * *higher* than our current target position. When we find that next position
        * (that's higher than where the arm is supposed to be sitting) set our new
        * target position to that new, higher position.
@@ -223,22 +221,28 @@ public class Hazmat_Arm extends Subsystem {
     /*
      * Check if the hazmat_arm has hit its lower limit switch. If it has: 1) Reset
      * the arm's encoder count; this IS the arm's zero point. 2) Increase the arm's
-     * performance by switching from the limited PID output limits to the
-     * full speed that the arm can support.
+     * performance by switching from the limited PID output limits to the full speed
+     * that the arm can support.
+     * 
+     * Check if the hazmat_arm has hit its upper limit switch. If it has: 1) Reset
+     * the arm's encoder count; this IS the arm's upper limit point. 2) Increase the
+     * arm's performance by switching from the limited PID output limits to the full
+     * speed that the arm can support.
+     * 
      * 
      * However, only reset the encoder once per limit switch trip. This helps
      * improve the accuracy of the encoder counts on the Talon as the RoboRIO's lag
      * in processing the limit switch tripping could cause the Talon to constantly
      * reset its encoder counts even when the limit switch isn't tripped.
      * 
-     * Use hasRecentlyTrippedLimitSwitch to do this.
+     * Use hasRecentlyTrippedRevLimitSwitch and hasRecentlyTrippedRevLimitSwitch to do this.
      */
     if (m_hazmat_arm_talon.getSensorCollection().isRevLimitSwitchClosed()) {
 
-      if (!hasRecentlyTrippedLimitSwitch) {
-        hasRecentlyTrippedLimitSwitch = true;
+      if (!hasRecentlyTrippedRevLimitSwitch) {
+        hasRecentlyTrippedRevLimitSwitch = true;
         
-        m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0, 0);
+        m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(RobotMap.hazmatJogLowerLimit, 0);
 
         /*
          * We've found our zero position. We know exactly where the arm is located.
@@ -248,14 +252,32 @@ public class Hazmat_Arm extends Subsystem {
       }
 
     } else {
-      hasRecentlyTrippedLimitSwitch = false;
+      hasRecentlyTrippedRevLimitSwitch = false;
+    }
+    
+    if (m_hazmat_arm_talon.getSensorCollection().isFwdLimitSwitchClosed()) {
+
+      if (!hasRecentlyTrippedFwdLimitSwitch) {
+        hasRecentlyTrippedFwdLimitSwitch = true;
+        
+        m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(RobotMap.hazmatJogUpperLimit, 0);
+
+        /*
+         * We've found our upper position. We know exactly where the arm is located.
+         * Enable the arm's full performance now that we know it's working properly.
+         */
+        setPerformanceLevel(PerformanceLevel.full);
+      }
+
+    } else {
+      hasRecentlyTrippedFwdLimitSwitch = false;
     }
 
   }
 
   @Override
   public void initDefaultCommand() {
-    /* A subsystem doesn't need a default command */
+    /* This subsystem doesn't need a default command */
 
   }
 
@@ -301,6 +323,7 @@ public class Hazmat_Arm extends Subsystem {
        */
       m_hazmat_arm_talon.configPeakOutputForward(0.2);
       m_hazmat_arm_talon.configPeakOutputReverse(-0.2);
+      
       m_currentLevel = PerformanceLevel.limited;
       break;
     case full:
@@ -309,6 +332,7 @@ public class Hazmat_Arm extends Subsystem {
        */
       m_hazmat_arm_talon.configPeakOutputForward(0.5);
       m_hazmat_arm_talon.configPeakOutputReverse(-0.5);
+      
       m_currentLevel = PerformanceLevel.full;
       break;
     }
