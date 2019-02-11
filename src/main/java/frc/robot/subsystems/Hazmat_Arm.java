@@ -26,17 +26,19 @@ public class Hazmat_Arm extends Subsystem {
 
   public enum stepDirection {
     stepUp, stepDown
-  };
+  }
 
-  private int m_lastHazmatTargetPosition;
+  private int m_targetPosition;
 
   private boolean hasRecentlyTrippedLimitSwitch = false;
 
-  private ArrayList<Integer> hazmatPositions = new ArrayList<Integer>();
+  private ArrayList<Integer> hazmatPositions = new ArrayList<>();
 
   private enum PerformanceLevel {
-    limpHome, full
-  };
+    limited, full
+  }
+  
+  private PerformanceLevel m_currentLevel = PerformanceLevel.limited;
 
   public Hazmat_Arm() {
 
@@ -45,7 +47,32 @@ public class Hazmat_Arm extends Subsystem {
     SmartDashboard.putNumber("HazmatArmMotorKI", 0.0);
     SmartDashboard.putNumber("HazmatArmMotorKD", 0.0);
 
-    m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, RobotMap.PID_PRIMARY, 0);
+    /* Configure the close loop gains for slot 0 */
+    m_hazmat_arm_talon.selectProfileSlot(0, 0);
+    
+    m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("HazmatArmMotorKF", 0.0));
+    m_hazmat_arm_talon.config_kP(0, SmartDashboard.getNumber("HazmatArmMotorKp", 6.0));
+    m_hazmat_arm_talon.config_kI(0, SmartDashboard.getNumber("HazmatArmMotorKI", 0.0));
+    m_hazmat_arm_talon.config_kD(0, SmartDashboard.getNumber("HazmatArmMotorKD", 0.0));
+
+    /*
+     * This is the maximum velocity of the arm in units of encoder counts per 100 ms (a decisecond)
+     * 
+     * The entire range of motion is about 1660 encoder counts.
+     * Design for traversing this in 3.0 seconds
+     * 
+     * That's 1660 counts / 3.0 seconds * 1 second / 10 deciseconds = 55.3 counts / decisecond
+     * 
+     */
+    m_hazmat_arm_talon.configMotionCruiseVelocity(55);
+
+    /*
+     * This is the maximum acceleration of the arm in units of encoder counts per 100 ms (a decisecond)
+     * 
+     */
+    m_hazmat_arm_talon.configMotionAcceleration(60);
+    
+    m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     /* Feedback device of remote talon */
     m_hazmat_arm_talon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0);
@@ -56,15 +83,16 @@ public class Hazmat_Arm extends Subsystem {
     m_hazmat_arm_talon.setSensorPhase(true);
     m_hazmat_arm_talon.setInverted(false);
 
+
     /*
      * Initialize the arm's performance to a safe output that can't damage itself if
      * it resets in the wrong position and doesn't know where its zero position is.
      * When the arm figures out where it is, the system will increase the arm's
      * speed to maximum performance.
      */
-    setPerformanceLevel(PerformanceLevel.limpHome);
+    setPerformanceLevel(PerformanceLevel.limited);
 
-    m_lastHazmatTargetPosition = getActualPosition();
+    m_targetPosition = getActualPosition();
 
     /*
      * You can add a new position to the hazmatPosition ArrayList in any order. The
@@ -88,6 +116,16 @@ public class Hazmat_Arm extends Subsystem {
   }
 
   public void stepToNextIndexedPosition(stepDirection direction) {
+    
+    /*
+     * Check if the system is running in full performance mode. If it isn't, don't
+     * allow the tap-up/tap-down functionality, only tolerate jogging, which use
+     * relative movements.
+     */
+    if (getPerformanceLevel() != PerformanceLevel.full) {
+      System.out.println("HazmatArm: Rejected stepping while in low performance mode.");
+      return;
+    }
 
     /*
      * Get a snapshot of our current target position. This is where the arm *thinks*
@@ -185,7 +223,7 @@ public class Hazmat_Arm extends Subsystem {
     /*
      * Check if the hazmat_arm has hit its lower limit switch. If it has: 1) Reset
      * the arm's encoder count; this IS the arm's zero point. 2) Increase the arm's
-     * performance by switching from the limited limp-home PID output limits to the
+     * performance by switching from the limited PID output limits to the
      * full speed that the arm can support.
      * 
      * However, only reset the encoder once per limit switch trip. This helps
@@ -222,20 +260,27 @@ public class Hazmat_Arm extends Subsystem {
   }
 
   public void setTargetPosition(int TargetPosition) {
-    if (TargetPosition < RobotMap.hazmatJogLowerLimit) {
-      TargetPosition = RobotMap.hazmatJogLowerLimit;
+
+    int safeTargetPosition = TargetPosition;
+
+    if (getPerformanceLevel() == PerformanceLevel.full) {
+      if (TargetPosition < RobotMap.hazmatJogLowerLimit) {
+        safeTargetPosition = RobotMap.hazmatJogLowerLimit;
+      }
+
+      if (TargetPosition > RobotMap.hazmatJogUpperLimit) {
+        safeTargetPosition = RobotMap.hazmatJogUpperLimit;
+      }
     }
-    if (TargetPosition > RobotMap.hazmatJogUpperLimit) {
-      TargetPosition = RobotMap.hazmatJogUpperLimit;
-    }
-    m_hazmat_arm_talon.set(ControlMode.Position, TargetPosition);
-    m_lastHazmatTargetPosition = TargetPosition;
+
+    m_hazmat_arm_talon.set(ControlMode.MotionMagic, safeTargetPosition);
+    m_targetPosition = safeTargetPosition;
 
   }
 
   public int getTargetPosition() {
 
-    return m_lastHazmatTargetPosition;
+    return m_targetPosition;
   }
 
   public int getActualPosition() {
@@ -250,15 +295,27 @@ public class Hazmat_Arm extends Subsystem {
   private void setPerformanceLevel(PerformanceLevel level) {
 
     switch (level) {
-    case limpHome:
+    case limited:
+      /* While in limited mode, reduce the maximum output of the arm's Talon so it doesn't 
+       * damage anything with quick movements or high torque.
+       */
       m_hazmat_arm_talon.configPeakOutputForward(0.2);
       m_hazmat_arm_talon.configPeakOutputReverse(-0.2);
+      m_currentLevel = PerformanceLevel.limited;
       break;
     case full:
+      /* While in full mode, run the system at the maximum output of the arm's Talon so it
+       * has full torque and maximum energy to move quickly.
+       */
       m_hazmat_arm_talon.configPeakOutputForward(0.5);
       m_hazmat_arm_talon.configPeakOutputReverse(-0.5);
+      m_currentLevel = PerformanceLevel.full;
       break;
     }
+
   }
 
+  private PerformanceLevel getPerformanceLevel() {
+    return m_currentLevel;
+  }
 }
