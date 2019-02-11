@@ -8,10 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.RobotMap;
 import frc.robot.Robot;
 import frc.robot.subsystems.Hazmat_Arm;
-
 
 public class HazmatGoUpCommand extends Command {
   public HazmatGoUpCommand() {
@@ -28,17 +26,13 @@ public class HazmatGoUpCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    int currentSetPosition;
-    //currentSetPosition = Robot.m_hazmat_arm.m_hazmat_arm_talon.
-    for (int i = 0;  i < Robot.m_hazmat_arm.hazmatPositions.length; i++) {
-
-    }
+    Robot.m_hazmat_arm.stepToNextIndexedPosition(Hazmat_Arm.stepDirection.stepUp);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

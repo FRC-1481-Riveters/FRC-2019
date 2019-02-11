@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.buttons.*;
 import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackJogRetractCommand;
 import frc.robot.commands.HazmatJogExtendCommand;
-import frc.robot.commands.HazmatJogExtendReleasedCommand;
-import frc.robot.commands.HazmatJogRetractReleasedCommand;
 import frc.robot.commands.HazmatJogRetractCommand;
 import frc.robot.commands.HazmatGoUpCommand;
 import frc.robot.commands.HazmatGoDownCommand;
