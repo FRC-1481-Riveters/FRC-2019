@@ -43,10 +43,10 @@ public class Climb_Jack extends Subsystem {
   }
   public void periodic() {
 
-    m_climbJack_talon.config_kF(0,  SmartDashboard.getNumber("climbJackMotorKF", 0.0), 30); 
-    m_climbJack_talon.config_kP(0,  SmartDashboard.getNumber("climbJackMotorKp", 0.0), 30); 
-    m_climbJack_talon.config_kI(0,  SmartDashboard.getNumber("climbJackMotorKI", 0.0), 30); 
-    m_climbJack_talon.config_kD(0,  SmartDashboard.getNumber("climbJackMotorKD", 0.0), 30); 
+    m_climbJack_talon.config_kF(0,  SmartDashboard.getNumber("climbJackMotorKF", 0.0)); 
+    m_climbJack_talon.config_kP(0,  SmartDashboard.getNumber("climbJackMotorKp", 0.0)); 
+    m_climbJack_talon.config_kI(0,  SmartDashboard.getNumber("climbJackMotorKI", 0.0)); 
+    m_climbJack_talon.config_kD(0,  SmartDashboard.getNumber("climbJackMotorKD", 0.0)); 
     
     //if (m_limitSwitchExtended.get() == false) {
     //m_climbJack_talon.getSensorCollection().setQuadraturePosition(0,0);
@@ -76,16 +76,16 @@ public class Climb_Jack extends Subsystem {
 
     
     m_climbJack_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.kTimeoutMs);	// Quadrature Encoder of current Talon		
-    m_climbJack_talon.configNominalOutputForward(0, 0); 
-    m_climbJack_talon.configNominalOutputReverse(0, 0); 
-    m_climbJack_talon.configPeakOutputForward(1, 0); 
-    m_climbJack_talon.configPeakOutputReverse(-1, 0); 
+    m_climbJack_talon.configNominalOutputForward(0); 
+    m_climbJack_talon.configNominalOutputReverse(0); 
+    m_climbJack_talon.configPeakOutputForward(1); 
+    m_climbJack_talon.configPeakOutputReverse(-1); 
     m_climbJack_talon.setSensorPhase(true);
     m_climbJack_talon.setInverted(false);
-    m_climbJack_talon.config_kF(0, 0.0, 0); 
-    m_climbJack_talon.config_kP(0, 1.0, 0); 
-    m_climbJack_talon.config_kI(0, 0.0, 0); 
-    m_climbJack_talon.config_kD(0, 0.0, 0);
+    m_climbJack_talon.config_kF(0, 0.0); 
+    m_climbJack_talon.config_kP(0, 1.0); 
+    m_climbJack_talon.config_kI(0, 0.0); 
+    m_climbJack_talon.config_kD(0, 0.0);
     m_climbJack_talon.configClosedloopRamp(0.04); // 60 ms ramp rate limit
     //SmartDashboard.putNumber("MotorKF", 0.0); 
     //SmartDashboard.putNumber("MotorKp", 1.0);

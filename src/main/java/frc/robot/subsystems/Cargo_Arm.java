@@ -58,23 +58,22 @@ public class Cargo_Arm extends Subsystem {
 
         RobotMap.kTimeoutMs);
 
-    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0, RobotMap.kTimeoutMs); // Feedback
+    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0); // Feedback
                                                                                                                   // Device
                                                                                                                   // of
                                                                                                                   // Remote
                                                                                                                   // Talon
 
-    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative,
-        RobotMap.kTimeoutMs); // Quadrature Encoder of current Talon
-    m_cargo_arm_right_talon.configNominalOutputForward(0, 30);
-    m_cargo_arm_right_talon.configNominalOutputReverse(0, 30);
-    m_cargo_arm_right_talon.configPeakOutputForward(1, 30);
-    m_cargo_arm_right_talon.configPeakOutputReverse(-1, 30);
+    m_cargo_arm_right_talon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative); // Quadrature Encoder of current Talon
+    m_cargo_arm_right_talon.configNominalOutputForward(0);
+    m_cargo_arm_right_talon.configNominalOutputReverse(0);
+    m_cargo_arm_right_talon.configPeakOutputForward(1);
+    m_cargo_arm_right_talon.configPeakOutputReverse(-1);
     m_cargo_arm_right_talon.setSensorPhase(true);
-    m_cargo_arm_right_talon.config_kF(0, 0.0, 30);
-    m_cargo_arm_right_talon.config_kP(0, 0.2, 30);
-    m_cargo_arm_right_talon.config_kI(0, 0.0, 30);
-    m_cargo_arm_right_talon.config_kD(0, 0.0, 30);
+    m_cargo_arm_right_talon.config_kF(0, 0.0);
+    m_cargo_arm_right_talon.config_kP(0, 0.2);
+    m_cargo_arm_right_talon.config_kI(0, 0.0);
+    m_cargo_arm_right_talon.config_kD(0, 0.0);
 
     SmartDashboard.putNumber("CargoArmEncoderCounts", getActualPosition());
 

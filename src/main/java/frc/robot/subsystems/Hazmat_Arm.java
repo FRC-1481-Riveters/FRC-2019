@@ -88,7 +88,7 @@ public class Hazmat_Arm extends Subsystem {
      * When the arm figures out where it is, the system will increase the arm's
      * speed to maximum performance.
      */
-    setPerformanceLevel(PerformanceLevel.limited);
+    setPerformanceLevel(PerformanceLevel.full);
 
     m_targetPosition = getActualPosition();
 
