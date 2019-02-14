@@ -25,6 +25,7 @@ import frc.robot.subsystems.Climb_Jack;
 import frc.robot.subsystems.Hazmat_Arm;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Cargo_Arm;
+import frc.robot.subsystems.CargoIntakeRoller;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
   public static Climb_Jack m_climb_jack;
   public static Hazmat_Arm m_hazmat_arm;
   public static Cargo_Arm m_cargo_arm;
+  public static CargoIntakeRoller m_CargoIntakeRoller;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -57,6 +59,7 @@ public class Robot extends TimedRobot {
     m_hazmat_arm = new Hazmat_Arm();
     m_gyro = new Gyro();
     m_cargo_arm = new Cargo_Arm();
+    m_CargoIntakeRoller = new CargoIntakeRoller();
     m_oi = new OI();  //OI must be done after other instantiations
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);

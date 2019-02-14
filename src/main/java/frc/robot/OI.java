@@ -16,6 +16,9 @@ import frc.robot.commands.HazmatJogRetractCommand;
 import frc.robot.commands.HazmatGoUpCommand;
 import frc.robot.commands.HazmatGoDownCommand;
 import frc.robot.RobotMap;
+import frc.robot.commands.CargoArmRollerFast;
+import frc.robot.commands.CargoArmRollerReverse;
+import frc.robot.commands.CargoArmRollerSlow;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -63,7 +66,7 @@ public class OI {
   private Button ButtonCargoStartPosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmStartPositionButton);
   private Button ButtonCargoIntakePosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmIntakePositionButton);
   private Button ButtonCargoClimbPosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmClimbPositionButton);
-  private Button ButtonCargoIntakeRollersOut = new JoystickButton(driverController, RobotMap.cargoIntakeRollersOutButton);
+  private Button ButtonCargoIntakeRollersReverse = new JoystickButton(driverController, RobotMap.cargoIntakeRollersReverseButton);
   private Button ButtonCargoIntakeRollersFast = new JoystickButton(driverController, RobotMap.cargoIntakeRollersFastButton);
   private Button ButtonCargoIntakeRollersSlow = new JoystickButton(driverController, RobotMap.cargoIntakeRollersSlowButton);
 
@@ -78,6 +81,10 @@ public class OI {
   
   ButtonHazmatUpPosition.whenPressed(new HazmatGoUpCommand());
   ButtonHazmatDownPosition.whenPressed(new HazmatGoDownCommand());
+
+  ButtonCargoIntakeRollersReverse.whileHeld(new CargoArmRollerReverse());
+  ButtonCargoIntakeRollersFast.whileHeld(new CargoArmRollerFast());
+  ButtonCargoIntakeRollersSlow.whileHeld(new CargoArmRollerSlow());
 
   }
 }

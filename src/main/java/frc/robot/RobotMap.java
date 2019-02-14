@@ -38,8 +38,8 @@ public class RobotMap {
   public static int climbJackMaxExtend = 38500; //not really lol TODO: figure out what  this number is
   public static int climbJackJogRetractedLimit = 0;
   //public static int climbJackJogExtendedLimit = 40000; //not really lol TODO: figure out what  this number is
-  public static int climbJackJogExtendButton = 6; // right bumper
-  public static int climbJackJogRetractButton = 5; // left bumper
+  public static int climbJackJogExtendButton = 3; // right trigger
+  public static int climbJackJogRetractButton = 2; // left trigger
   public static int climbJackFullyExtendButton = 3;   // button x 
   public static int climbJackFullyRetractButton =  4; // button y
   public static int climbJackLimitSwitchExtendInput = 1;
@@ -82,7 +82,6 @@ public class RobotMap {
   public static int operatorControllerAxisLeftAndRight = 4;
  
 // cargo intake arm constants
-public static int cargoIntakeArm_Talon = 10;
 public static int cargoPivotArmLeft_Talon = 4;
 public static int cargoPivotArmRight_Talon = 12;
 public static int cargoIntakeJogUpAxis = 2; 
@@ -90,9 +89,6 @@ public static int cargoIntakeJogDownAxis = 3;
 public static int cargoPivotArmStartPositionButton = 7; //same as storage 
 public static int cargoPivotArmIntakePositionButton = 1; //should be 0
 public static int cargoPivotArmClimbPositionButton = 2;
-public static int cargoIntakeRollersOutButton = 4;
-public static int cargoIntakeRollersFastButton = 5;
-public static int cargoIntakeRollersSlowButton = 2;
 public static int cargoPivotArmStartPosition = 0; //TODO: find  the real number for  this
 public static int cargoPivotArmIntakePosition = 100;  //TODO: find the  real number for this 
 public static int cargoPivotArmClimbPosition = 200; //TODO:  find the real number for  this
@@ -102,8 +98,16 @@ public static int cargoPivotMaxExtend = 0; //TODO: find the real number
 public static int cargoLimitSwitchExtendInput = 4; //TODO: find the  real input
 public static int cargoLimitSwitchRetractInput = 5; //TODO: find the real input
 public static int cargoIntakeSpinRate = 100; //TODO: find  the  real rate
-public static double cargoIntakeSpeed = 10.0;
-
 public static int CargoTargetPosition = 0;
 public static int lastCargoTargetPosition = 0;
+
+//Intake Roller Constants
+public static double cargoIntakeSpeedFast = 0.5;
+public static double cargoIntakeSpeedSlow = 0.3;
+public static double cargoIntakeSpeedReverse = -0.5;
+public static double cargoIntakeSpeedZero = 0.0;
+public static int cargoIntakeRollersReverseButton = 5;
+public static int cargoIntakeRollersFastButton = 6;
+public static int cargoIntakeRollersSlowButton = 3;
+public static int cargoIntakeArm_Talon = 10;
 }
