@@ -19,6 +19,8 @@ import frc.robot.RobotMap;
 import frc.robot.commands.CargoArmRollerFast;
 import frc.robot.commands.CargoArmRollerReverse;
 import frc.robot.commands.CargoArmRollerSlow;
+import frc.robot.commands.CargoPivotArmClimbPositionCommand;
+import frc.robot.commands.CargoSetPositions;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -80,6 +82,6 @@ public class OI {
   ButtonCargoIntakeRollersReverse.whileHeld(new CargoArmRollerReverse());
   ButtonCargoIntakeRollersFast.whileHeld(new CargoArmRollerFast());
   ButtonCargoIntakeRollersSlow.whileHeld(new CargoArmRollerSlow());
-
+  ButtonCargoClimbPosition.whenPressed(new CargoSetPositions());
   }
 }

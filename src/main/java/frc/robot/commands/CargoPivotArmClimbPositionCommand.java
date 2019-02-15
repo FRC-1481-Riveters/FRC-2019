@@ -14,13 +14,21 @@ import frc.robot.Robot;
 import frc.robot.subsystems.*;
 import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.HazmatGetOutOfTheWayCommand;
 
 public class CargoPivotArmClimbPositionCommand extends Command {
+  HazmatGetOutOfTheWayCommand hazmatgootw = new HazmatGetOutOfTheWayCommand();
   public CargoPivotArmClimbPositionCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.m_cargo_arm);
-  }
+   }
+
+   public CargoPivotArmClimbPositionCommand(double timeout) {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    requires(Robot.m_cargo_arm);
+   }
 
   // Called just before this Command runs the first time
   @Override
@@ -30,12 +38,15 @@ public class CargoPivotArmClimbPositionCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_cargo_arm.setTargetPosition(RobotMap.cargoPivotArmClimbPosition);
+
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return (isTimedOut() || Math.abs(Robot.m_cargo_arm.getActualPosition() - RobotMap.cargoPivotArmClimbPosition) < 100);
   }
 
   // Called once after isFinished returns true
