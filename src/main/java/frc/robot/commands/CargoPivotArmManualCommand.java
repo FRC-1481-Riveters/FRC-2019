@@ -39,15 +39,25 @@ public class CargoPivotArmManualCommand extends Command {
     int triggerPulled = 0;
     if (throttleUpAxisValue > RobotMap.joystickIsActive) {
       SmartDashboard.putNumber("CargoArmUp", throttleUpAxisValue);
-      Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() - RobotMap.cargoPivotArmRate);
-      triggerPulled = 1;
+      if(Robot.m_hazmat_arm.getActualPosition() > RobotMap.hazmatNoCrashPosition){
+        Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate);
+        triggerPulled = 1;
+      }
+      else {
+        Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
+      }
     }
 
     // if cargoArmDownTrigger is pulled, move the cargo arm down
     if (throttleDownAxisValue > RobotMap.joystickIsActive) {
       SmartDashboard.putNumber("CargoArmDown", throttleDownAxisValue);
-      Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate);
-      triggerPulled = 1;
+      if(Robot.m_hazmat_arm.getActualPosition() > RobotMap.hazmatNoCrashPosition){
+        Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() - RobotMap.cargoPivotArmRate);
+        triggerPulled = 1;
+      }
+      else {
+        Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
+      } 
     }
 
     if (triggerPulled == 1) {

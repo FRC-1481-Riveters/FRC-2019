@@ -38,8 +38,8 @@ public class RobotMap {
   public static int climbJackMaxExtend = 38500; //not really lol TODO: figure out what  this number is
   public static int climbJackJogRetractedLimit = 0;
   //public static int climbJackJogExtendedLimit = 40000; //not really lol TODO: figure out what  this number is
-  public static int climbJackJogExtendButton = 3; // right trigger
-  public static int climbJackJogRetractButton = 2; // left trigger
+  public static int climbJackJogExtendAxis = 3; // right trigger
+  public static int climbJackJogRetractAxis = 2; // left trigger
   public static int climbJackFullyExtendButton = 3;   // button x 
   public static int climbJackFullyRetractButton =  4; // button y
   public static int climbJackLimitSwitchExtendInput = 1;
@@ -77,6 +77,8 @@ public class RobotMap {
   public static int hazmatJogLowerLimit = 0;
   public static int hazmatJogUpperLimit = 1660;
   public static double hazmatSpeed = 0.45;
+  public static int  hazmatNoCrashPosition = 550;
+  public static int hazmatNoCrashError = 50;
 
   public static int operatorControllerAxisFrontAndBack = 5;
   public static int operatorControllerAxisLeftAndRight = 4;
@@ -102,9 +104,9 @@ public static int CargoTargetPosition = 0;
 public static int lastCargoTargetPosition = 0;
 
 //Intake Roller Constants
-public static double cargoIntakeSpeedFast = 0.5;
-public static double cargoIntakeSpeedSlow = 0.3;
-public static double cargoIntakeSpeedReverse = -0.5;
+public static double cargoIntakeSpeedFast = 1.0;
+public static double cargoIntakeSpeedSlow = 0.5;
+public static double cargoIntakeSpeedReverse = -0.8;
 public static double cargoIntakeSpeedZero = 0.0;
 public static int cargoIntakeRollersReverseButton = 5;
 public static int cargoIntakeRollersFastButton = 6;

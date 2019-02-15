@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.commands.JackJogExtendCommand;
+import frc.robot.commands.JackManualCommand;
 import frc.robot.commands.DoNothingCommandJack;
 
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -63,7 +64,7 @@ public class Climb_Jack extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new DoNothingCommandJack());
+    setDefaultCommand(new JackManualCommand());
   
 
 		m_climbJack_talon.configSelectedFeedbackSensor(	FeedbackDevice.QuadEncoder,				// Local Feedback Source

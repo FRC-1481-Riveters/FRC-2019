@@ -4,26 +4,26 @@ CARM - Cargo arm
 HARM - Height Attainment arm
 
 OPERATOR joystick
-5 - HARM jog up/extend (old 4) - Left bumper
-6 - HARM jog down/retract (old 5) - Right bumper
-4 - HARM up 1 position (see HARM POSITIONS section)  (old 3) - makes H-arm go up one position per click
-2 - HARM down 1 position (see HARM POSITIONS section) (old 1) - makes H-arm go down one position per click
+5 - HARM jog up/extend (old 4) - Left bumper X
+6 - HARM jog down/retract (old 5) - Right bumper X
+4 - HARM up 1 position (see HARM POSITIONS section)  (old 3) - makes H-arm go up one position per click X
+2 - HARM down 1 position (see HARM POSITIONS section) (old 1) - makes H-arm go down one position per click X
 
-axis 2 - CARM jog up (old axis 2) - Left trigger
-axis 3 - CARM jog down (old axis 3) - Right trigger
+axis 2 - CARM jog up (old axis 2) - Left trigger X
+axis 3 - CARM jog down (old axis 3) - Right trigger X
 3 - CARM to climb position (old 2)
 1 - CARM to intake position (old 0)
 8 - CARM to start/store position (old 7)
 push 10 - auto climb (old push 9)
 
 DRIVER joystick
-axis 1 (left stick Y) - arcade drive forward/backward (old axis 1)
-axis 4 - (right stick X) - arcade drive left/right (old axis 4)
-axis 3 - jacks down/extend (old axis 3) - right trigger
-axis 2 - jacks up/retract (old axis 2) - left trigger 
-5 - CARM rollers out  (old 4) - Left bumper
-6 - CARM rollers in fast (old 5) - Right bumper
-3 - CARM rollers in slow (old 2)
+axis 1 (left stick Y) - arcade drive forward/backward (old axis 1)  X
+axis 4 - (right stick X) - arcade drive left/right (old axis 4) X
+axis 3 - jacks down/extend (old axis 3) - right trigger X
+axis 2 - jacks up/retract (old axis 2) - left trigger X
+5 - CARM rollers out  (old 4) - Left bumper X
+6 - CARM rollers in fast (old 5) - Right bumper X
+3 - CARM rollers in slow (old 2) X
 7 - vacuum on (old 6)
 NO LONGER NEEDED BECAUSE 2 VACUUM MOTORS ---  8 - pod vacuum on (old 7)
 11? (big silver button in center) - blow vacuum (old 10)
