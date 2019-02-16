@@ -4,13 +4,13 @@ CARM - Cargo arm
 HARM - Height Attainment arm
 
 OPERATOR joystick
-5 - HARM jog up/extend (old 4) - Left bumper X
-6 - HARM jog down/retract (old 5) - Right bumper X
+5 - HARM jog down/retract (was up until 2/16) (old 4) - Left bumper X
+6 - HARM jog  up/extend (was down/retract until 2/16) (old 5) - Right bumper X
 4 - HARM up 1 position (see HARM POSITIONS section)  (old 3) - makes H-arm go up one position per click X
 2 - HARM down 1 position (see HARM POSITIONS section) (old 1) - makes H-arm go down one position per click X
 
-axis 2 - CARM jog up (old axis 2) - Left trigger X
-axis 3 - CARM jog down (old axis 3) - Right trigger X
+axis 2 - CARM jog down (was up until 2/16) (old axis 2) - Left trigger X
+axis 3 - CARM jog up (was down until 2/16) (old axis 3) - Right trigger X
 3 - CARM to climb position (old 2)
 1 - CARM to intake position (old 0)
 8 - CARM to start/store position (old 7)
