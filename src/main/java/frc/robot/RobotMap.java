@@ -102,6 +102,7 @@ public static int cargoLimitSwitchRetractInput = 5; //TODO: find the real input
 public static int cargoIntakeSpinRate = 100; //TODO: find  the  real rate
 public static int CargoTargetPosition = 0;
 public static int lastCargoTargetPosition = 0;
+public static int CargoArmNoCrashPosition = -25000;
 
 //Intake Roller Constants
 public static double cargoIntakeSpeedFast = 1.0;

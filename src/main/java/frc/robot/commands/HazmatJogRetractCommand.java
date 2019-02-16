@@ -31,7 +31,13 @@ public class HazmatJogRetractCommand extends Command {
   @Override
   protected void execute() {
     //Robot.m_hazmat_arm.m_hazmat_arm_talon.set(ControlMode.PercentOutput, -RobotMap.hazmatSpeed);
-    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition() - RobotMap.hazmatRate) ;
+    if (Robot.m_cargo_arm.getActualPosition() < RobotMap.CargoArmNoCrashPosition){
+      Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition() - RobotMap.hazmatRate);
+    }
+    else {
+      Robot.m_hazmat_arm.setTargetPosition(RobotMap.CargoArmNoCrashPosition);
+    }
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
