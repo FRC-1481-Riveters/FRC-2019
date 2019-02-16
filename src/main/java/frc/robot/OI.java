@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.*;
 import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackJogRetractCommand;
@@ -64,32 +65,48 @@ public class OI {
   private Button ButtonHazmatUpPosition = new JoystickButton(operatorController, RobotMap.hazmatArmUpButton);
   private Button ButtonHazmatDownPosition = new JoystickButton(operatorController, RobotMap.hazmatArmDownButton);
 
-  private Button ButtonCargoStartPosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmStartPositionButton);
-  private Button ButtonCargoIntakePosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmIntakePositionButton);
-  private Button ButtonCargoClimbPosition = new JoystickButton(operatorController, RobotMap.cargoPivotArmClimbPositionButton);
-  private Button ButtonCargoIntakeRollersReverse = new JoystickButton(driverController, RobotMap.cargoIntakeRollersReverseButton);
-  private Button ButtonCargoIntakeRollersFast = new JoystickButton(driverController, RobotMap.cargoIntakeRollersFastButton);
-  private Button ButtonCargoIntakeRollersSlow = new JoystickButton(driverController, RobotMap.cargoIntakeRollersSlowButton);
+  private Button ButtonCargoStartPosition = new JoystickButton(operatorController,
+      RobotMap.cargoPivotArmStartPositionButton);
+  private Button ButtonCargoIntakePosition = new JoystickButton(operatorController,
+      RobotMap.cargoPivotArmIntakePositionButton);
+  private Button ButtonCargoClimbPosition = new JoystickButton(operatorController,
+      RobotMap.cargoPivotArmClimbPositionButton);
+  private Button ButtonCargoIntakeRollersReverse = new JoystickButton(driverController,
+      RobotMap.cargoIntakeRollersReverseButton);
+  private Button ButtonCargoIntakeRollersFast = new JoystickButton(driverController,
+      RobotMap.cargoIntakeRollersFastButton);
+  private Button ButtonCargoIntakeRollersSlow = new JoystickButton(driverController,
+      RobotMap.cargoIntakeRollersSlowButton);
 
   private Button ButtonVacuumGrabGamePiece = new JoystickButton(driverController, RobotMap.vacuumGrabGamePieceButton);
-  private Button ButtonVacuumReleaseGamePiece = new JoystickButton(driverController, RobotMap.vacuumDropGamePieceButton);
+  private Button ButtonVacuumReleaseGamePiece = new JoystickButton(driverController,
+      RobotMap.vacuumDropGamePieceButton);
 
+  public void rumbleDriver(boolean on) {
+    
+    if (on) {
+      driverController.setRumble(RumbleType.kLeftRumble, 100);
+      driverController.setRumble(RumbleType.kRightRumble, 100);
+    } else {
+      driverController.setRumble(RumbleType.kLeftRumble, 0);
+      driverController.setRumble(RumbleType.kRightRumble, 0);
+    }
+  }
 
-  public OI(){
+  public OI() {
 
-  ButtonHazmatJogExtend.whileHeld(new HazmatJogExtendCommand());
-  ButtonHazmatJogRetract.whileHeld(new HazmatJogRetractCommand());
+    ButtonHazmatJogExtend.whileHeld(new HazmatJogExtendCommand());
+    ButtonHazmatJogRetract.whileHeld(new HazmatJogRetractCommand());
 
-  
-  ButtonHazmatUpPosition.whenPressed(new HazmatGoUpCommand());
-  ButtonHazmatDownPosition.whenPressed(new HazmatGoDownCommand());
+    ButtonHazmatUpPosition.whenPressed(new HazmatGoUpCommand());
+    ButtonHazmatDownPosition.whenPressed(new HazmatGoDownCommand());
 
-  ButtonCargoIntakeRollersReverse.whileHeld(new CargoArmRollerReverse());
-  ButtonCargoIntakeRollersFast.whileHeld(new CargoArmRollerFast());
-  ButtonCargoIntakeRollersSlow.whileHeld(new CargoArmRollerSlow());
-  ButtonCargoClimbPosition.whenPressed(new CargoSetPositions());
+    ButtonCargoIntakeRollersReverse.whileHeld(new CargoArmRollerReverse());
+    ButtonCargoIntakeRollersFast.whileHeld(new CargoArmRollerFast());
+    ButtonCargoIntakeRollersSlow.whileHeld(new CargoArmRollerSlow());
+    ButtonCargoClimbPosition.whenPressed(new CargoSetPositions());
 
-  ButtonVacuumGrabGamePiece.whenPressed(new VacuumGrabGamePiece());
-  ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());
+    ButtonVacuumGrabGamePiece.whenPressed(new VacuumGrabGamePiece());
+    ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());
   }
 }

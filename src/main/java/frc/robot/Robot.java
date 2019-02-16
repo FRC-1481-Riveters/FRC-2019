@@ -58,8 +58,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
    
-    m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,"HatchCover");
-    m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,"Cargo");
+    m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
+    m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");
 
     m_drive = new Drive();
     m_climb_jack = new Climb_Jack();

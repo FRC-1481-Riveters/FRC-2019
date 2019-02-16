@@ -12,8 +12,8 @@ CAN ID X = Hazmat Elevator motor (phase 2)
 CAN ID 10 = Cargo Arm Intake Roller Motor
 CAN ID 12 = Right Cargo Arm Motor
 CAN ID 4 = Left Cargo Arm Motor
-CAN ID X = Vacuum Pump Motor #1
-CAN ID X = Vacuum Pump Motor #2
+CAN ID 5 = Cargo vacuum motor
+CAN ID 6 = Hatch Cover vacuum motor
 
 
 
@@ -37,24 +37,13 @@ List of encoders
     Cargo Arm encoder - to stop at specific angles
 
 List of solenoids
-     Hazmat cargo/ball suction
-     Hazmat hatch suction
+1   Hazmat cargo/ball suction system
+0   Hazmat hatch suction system
 
 ----------------------------------------------------------------------------------------------------------------------    
 
 
-CAN ID 1 = front left motor (Primary Drive) , Chassis SRX Mag Encoder, left
-CAN ID 2 = front right motor (Primary Drive) , Chassis SRX Mag Encoder, right
-CAN ID 3 = rear left motor (Primary Drive)
-CAN ID 4 = rear right motor (Primary Drive)
-CAN ID 5 = middle left motor (Secondary Drive)
-CAN ID 6 = middle right motor (Secondary Drive)
-CAN ID 7 = Climb Jack Motor
-CAN ID 8 = Hazmat Arm motor
-CAN ID 9 = Hazmat Elevator motor (phase 2)
-CAN ID 10 = Cargo Arm Intake Motor
-CAN ID 11 = Cargo Arm Pivot Motor
-CAN ID 12 = Vacuum Pump Motor
+
 
 
 See Joystick_Map.txt for button and joystick mapping from strategy
