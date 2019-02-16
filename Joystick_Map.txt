@@ -24,9 +24,9 @@ axis 2 - jacks up/retract (old axis 2) - left trigger X
 5 - CARM rollers out  (old 4) - Left bumper X
 6 - CARM rollers in fast (old 5) - Right bumper X
 3 - CARM rollers in slow (old 2) X
-7 - vacuum on (old 6)
+7 - vacuum on (old 6), close valves
 NO LONGER NEEDED BECAUSE 2 VACUUM MOTORS ---  8 - pod vacuum on (old 7)
-11? (big silver button in center) - blow vacuum (old 10)
+8 - stop vacuum, open valves
 1 - auto (camera) align (old 0)
 rumble - after ball secured, duration 2 seconds
 rumble - 200 milliseconds after vacuum out, duration 2 seconds

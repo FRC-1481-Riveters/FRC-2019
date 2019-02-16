@@ -26,6 +26,7 @@ import frc.robot.subsystems.Hazmat_Arm;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
+import frc.robot.subsystems.Vacuum;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -43,6 +44,9 @@ public class Robot extends TimedRobot {
   public static Hazmat_Arm m_hazmat_arm;
   public static Cargo_Arm m_cargo_arm;
   public static CargoIntakeRoller m_CargoIntakeRoller;
+  public static Vacuum m_HatchCoverVacuum;
+  public static Vacuum m_CargoVacuum;
+  
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -54,6 +58,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
    
+    m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,"HatchCover");
+    m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,"Cargo");
+
     m_drive = new Drive();
     m_climb_jack = new Climb_Jack();
     m_hazmat_arm = new Hazmat_Arm();

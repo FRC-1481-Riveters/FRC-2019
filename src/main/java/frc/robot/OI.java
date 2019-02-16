@@ -21,6 +21,8 @@ import frc.robot.commands.CargoArmRollerReverse;
 import frc.robot.commands.CargoArmRollerSlow;
 import frc.robot.commands.CargoPivotArmClimbPositionCommand;
 import frc.robot.commands.CargoSetPositions;
+import frc.robot.commands.VacuumGrabGamePiece;
+import frc.robot.commands.VacuumReleaseAllGamePiece;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -69,6 +71,9 @@ public class OI {
   private Button ButtonCargoIntakeRollersFast = new JoystickButton(driverController, RobotMap.cargoIntakeRollersFastButton);
   private Button ButtonCargoIntakeRollersSlow = new JoystickButton(driverController, RobotMap.cargoIntakeRollersSlowButton);
 
+  private Button ButtonVacuumGrabGamePiece = new JoystickButton(driverController, RobotMap.vacuumGrabGamePieceButton);
+  private Button ButtonVacuumReleaseGamePiece = new JoystickButton(driverController, RobotMap.vacuumDropGamePieceButton);
+
 
   public OI(){
 
@@ -83,5 +88,8 @@ public class OI {
   ButtonCargoIntakeRollersFast.whileHeld(new CargoArmRollerFast());
   ButtonCargoIntakeRollersSlow.whileHeld(new CargoArmRollerSlow());
   ButtonCargoClimbPosition.whenPressed(new CargoSetPositions());
+
+  ButtonVacuumGrabGamePiece.whenPressed(new VacuumGrabGamePiece());
+  ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());
   }
 }

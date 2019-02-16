@@ -112,4 +112,14 @@ public static int cargoIntakeRollersReverseButton = 5;
 public static int cargoIntakeRollersFastButton = 6;
 public static int cargoIntakeRollersSlowButton = 3;
 public static int cargoIntakeArm_Talon = 10;
+
+// Vacuum constants
+public static double vacuumInitialHoldSpeed = 1.0; // %
+public static double vacuumSustainHoldSpeed = 0.2; // % 
+public static double vacuumGamePieceDetectedCurrent = 2.0; // amps
+public static int vacuumHatchCoverCANId = 5;
+public static int vacuumCargoCANId = 6;
+public static int vacuumGrabGamePieceButton = 7;
+public static int vacuumDropGamePieceButton = 8;
+
 }

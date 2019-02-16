@@ -1,0 +1,17 @@
+15 Feb 2019
+
+To do:
+
+Alpha bot:
+    1. Wire Vacuum pumps
+    2. Plumb Vacuum pumps
+    3. Wire Vacuum release valve
+    4. Plumb vacuum release valve
+    5. 
+
+
+Beta bot:
+    1. Wire Vacuum pumps
+    2. Plumb Vacuum pumps
+    3. Wire Vacuum release valve
+    4. Plumb vacuum release valve
