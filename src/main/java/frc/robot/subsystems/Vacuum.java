@@ -88,7 +88,7 @@ public class Vacuum extends Subsystem {
 
     boolean isDetected = false;
 
-    if (m_timeStampOfEnable > 0 && (System.currentTimeMillis() - m_timeStampOfEnable) > 200) {
+    if (m_timeStampOfEnable > 0 && (System.currentTimeMillis() - m_timeStampOfEnable) > 1000) {
       /*
        * If the motor is running for at least 200 ms AND the output current is BELOW 2
        * amps (vacuumGamePieceDetectedCurrent) , you probably have a game piece.
