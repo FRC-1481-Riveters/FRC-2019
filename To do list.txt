@@ -7,13 +7,31 @@ Alpha bot:
     2. Plumb Vacuum pumps
     3. Wire Vacuum release valve
     4. Plumb vacuum release valve
-    5. 
+    5. Limit switches on Cargo arm
+    6. Limit switch on Hazmat arm
+    7. Limit switches on Climb Jacks
+    8. Add driver camera
+    9. Add PEP camera
 
 
 Beta bot:
-    1. Wire Vacuum pumps
-    2. Plumb Vacuum pumps
-    3. Wire Vacuum release valve
-    4. Plumb vacuum release valve
-    xxx
+    1. x Wire Vacuum pumps
+    2. x Plumb Vacuum pumps
+    3. x Wire Vacuum release valve
+    4. x Plumb vacuum release valve
+    5. Limit switches on Cargo arm
+    6. Limit switch on Hazmat arm
+    7. Limit switches on Climb Jacks
+    8. Add driver camera
+    9. Add PEP camera
+
+
+Software to write / test
+    1. No crash for Hazmat arm coming down into cargo arm (create & test)
+    2. Reset encoder counts based on limit switches being active (x create & test)
+    3. Soft starting when powered up not in home position (create & test)
+    4. Calibrate encoder counts for Hazmat Arm positions (tune)
+    5. Calibrate encoder counts for Cargo Arm positions (tune)
+    6. Limit on voltage ramp rate for driver (create & test)
+    7. Add SetNeutralMode() to enable braking instead of coasting (create & test)
     
