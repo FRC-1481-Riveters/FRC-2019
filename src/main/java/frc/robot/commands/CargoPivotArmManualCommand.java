@@ -44,7 +44,7 @@ public class CargoPivotArmManualCommand extends Command {
         triggerPulled = 1;
       }
       else {
-        Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
+       Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
       }
     }
 

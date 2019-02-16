@@ -35,7 +35,7 @@ public class HazmatJogRetractCommand extends Command {
       Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getTargetPosition() - RobotMap.hazmatRate);
     }
     else {
-      Robot.m_hazmat_arm.setTargetPosition(RobotMap.CargoArmNoCrashPosition);
+    //  Robot.m_hazmat_arm.setTargetPosition(RobotMap.CargoArmNoCrashPosition);
     }
 
   }
