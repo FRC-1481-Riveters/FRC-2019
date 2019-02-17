@@ -71,8 +71,8 @@ public class RobotMap {
   public static int hazmatArmDownButton = 2;
  // public static int hazmatDeliverButton = 3; 
   //public static int hazmatDownDeliverButton = 1;
-  public static int hazmatJogExtendButton =  5;
-  public static int hazmatJogRetractButton = 6;
+  public static int hazmatJogExtendButton =  6;
+  public static int hazmatJogRetractButton = 5;
   public static int hazmatRate = 8;
   public static int hazmatJogLowerLimit = 0;
   public static int hazmatJogUpperLimit = 1660;

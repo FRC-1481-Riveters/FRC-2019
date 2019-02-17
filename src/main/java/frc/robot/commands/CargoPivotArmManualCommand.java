@@ -37,17 +37,18 @@ public class CargoPivotArmManualCommand extends Command {
     // System.out.println(throttleUpAxisValue);
     // if cargoArmUpTrigger is pulled, move the cargo arm up
     int triggerPulled = 0;
-    if (throttleUpAxisValue > RobotMap.joystickIsActive) {
-      SmartDashboard.putNumber("CargoArmUp", throttleUpAxisValue);
-      if(Robot.m_hazmat_arm.getActualPosition() > RobotMap.hazmatNoCrashPosition){
-        Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate);
-        triggerPulled = 1;
-      }
-      else {
-        Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
-      }
-    }
-
+ //   if (throttleUpAxisValue > RobotMap.joystickIsActive) {
+   //   SmartDashboard.putNumber("CargoArmUp", throttleUpAxisValue);
+  //    if(Robot.m_hazmat_arm.getActualPosition() > RobotMap.hazmatNoCrashPosition){
+    //    Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate);
+    //    triggerPulled = 1;
+    //  }
+    //  else {
+    //   Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
+    //  }
+ //   }
+ Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate);
+ 
     // if cargoArmDownTrigger is pulled, move the cargo arm down
     if (throttleDownAxisValue > RobotMap.joystickIsActive) {
       SmartDashboard.putNumber("CargoArmDown", throttleDownAxisValue);
