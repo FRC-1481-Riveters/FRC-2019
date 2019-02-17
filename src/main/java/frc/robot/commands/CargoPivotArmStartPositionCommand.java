@@ -8,11 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
-import frc.robot.subsystems.*;
-import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CargoPivotArmStartPositionCommand extends Command {
@@ -25,18 +22,21 @@ public class CargoPivotArmStartPositionCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    setTimeout(RobotMap.cargoPivotArmMovementTimeout);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_cargo_arm.setTargetPosition(RobotMap.cargoPivotArmStartPosition);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return (isTimedOut() || Math.abs(Robot.m_cargo_arm.getActualPosition() - RobotMap.cargoPivotArmStartPosition) < 100);
   }
+
 
   // Called once after isFinished returns true
   @Override

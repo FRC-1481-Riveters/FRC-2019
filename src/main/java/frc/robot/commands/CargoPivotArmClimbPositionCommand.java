@@ -8,11 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
-import frc.robot.subsystems.*;
-import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.HazmatGetOutOfTheWayCommand;
 
@@ -33,14 +30,13 @@ public class CargoPivotArmClimbPositionCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    setTimeout(RobotMap.cargoPivotArmMovementTimeout);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     Robot.m_cargo_arm.setTargetPosition(RobotMap.cargoPivotArmClimbPosition);
-
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
