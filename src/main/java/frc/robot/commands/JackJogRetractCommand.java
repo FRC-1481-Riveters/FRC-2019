@@ -10,9 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
-import frc.robot.subsystems.Climb_Jack;
-import com.ctre.phoenix.motorcontrol.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class JackJogRetractCommand extends Command {

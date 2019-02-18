@@ -11,31 +11,22 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.motorcontrol.SensorCollection;
-
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.commands.DriveCommandJoystick;
-import frc.robot.commands.DriveCommandAuton;
-import edu.wpi.first.wpilibj.PIDController;
-
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import java.util.HashMap;
 import frc.robot.RobotMap;
 
-/**
- * Add your docs here.
- */
 public class Drive extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
 
 	WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(RobotMap.frontLeftMotor);
 	WPI_VictorSPX m_midLeft = new WPI_VictorSPX(RobotMap.middleLeftMotor);
 	WPI_VictorSPX m_rearLeft = new WPI_VictorSPX(RobotMap.rearLeftMotor);
 
-	//change m_frontleft to a victor to use for last year's robot
-	//WPI_VictorSPX m_frontLeft = new WPI_VictorSPX(RobotMap.frontLeftMotor);
+	// change m_frontleft to a victor to use for last year's robot
+	// WPI_VictorSPX m_frontLeft = new WPI_VictorSPX(RobotMap.frontLeftMotor);
 
 	SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_midLeft, m_rearLeft);
 
@@ -43,54 +34,65 @@ public class Drive extends Subsystem {
 	WPI_VictorSPX m_midRight = new WPI_VictorSPX(RobotMap.middleRightMotor);
 	WPI_VictorSPX m_rearRight = new WPI_VictorSPX(RobotMap.rearRightMotor);
 
-	//change m_frontright to a victor to use for last year's robot
-	//WPI_VictorSPX m_frontRight = new WPI_VictorSPX(RobotMap.frontRightMotor);
-
-	
+	// change m_frontright to a victor to use for last year's robot
+	// WPI_VictorSPX m_frontRight = new WPI_VictorSPX(RobotMap.frontRightMotor);
 
 	SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_midRight, m_rearRight);
 
-	public DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
+	private DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
 
+	public Drive() {
 
-  public enum driveSide {
-		Left, Right
-	};
+		/*
+		 * Set each of the motor controllers to "brake" when they're not being driven.
+		 * This will cause the robot to slow down quickly when the joysticks are
+		 * released and will improve the drive team's ability to control the robot.
+		 */
+		m_frontLeft.setNeutralMode(NeutralMode.Brake);
+		m_midLeft.setNeutralMode(NeutralMode.Brake);
+		m_rearLeft.setNeutralMode(NeutralMode.Brake);
+		m_frontRight.setNeutralMode(NeutralMode.Brake);
+		m_midRight.setNeutralMode(NeutralMode.Brake);
+		m_rearRight.setNeutralMode(NeutralMode.Brake);
 
+		/*
+		 * Slow down the controllers' rate of change from Neutral to Full speed. This
+		 * reduces the load on the battery and keeps the system from browning out when
+		 * the driver rapidly changes the robot's drive direction.
+		 */
+		m_frontLeft.configOpenloopRamp(RobotMap.driveFullThrottleRampTime);
+		m_midLeft.configOpenloopRamp(RobotMap.driveFullThrottleRampTime);
+		m_rearLeft.configOpenloopRamp(RobotMap.driveFullThrottleRampTime);
+		m_frontRight.configOpenloopRamp(RobotMap.driveFullThrottleRampTime);
+		m_midRight.configOpenloopRamp(RobotMap.driveFullThrottleRampTime);
+		m_rearRight.configOpenloopRamp(RobotMap.driveFullThrottleRampTime);
 
-	private static HashMap<driveSide, SensorCollection> m_odometers = new HashMap<>();
-	static {
-		m_odometers.put(driveSide.Left, new WPI_TalonSRX(RobotMap.chassisSRXMagEncoderLeft).getSensorCollection());
-		m_odometers.put(driveSide.Right, new WPI_TalonSRX(RobotMap.chassisSRXMagEncoderRight).getSensorCollection());
-  }
-  
-  public void periodic() {
+	}
+
+	public void periodic() {
 		// Override me!
-
 	}
 
-	/* Compute the absolute distance travelled per a given side */
-	/*public double getCurrentDistance(driveSide side) {
-		int ticksOdometer = m_odometers.get(side).getQuadraturePosition();
-		/* TODO: Find a better way to do this.
-		if (side == driveSide.Right) {
-			ticksOdometer =  ticksOdometer * -1;
-		}
-    return new RobotMap().convertDriveTicksToInches(ticksOdometer);
-	}
-*/
 	@Override
 	public void initDefaultCommand() {
-
 		setDefaultCommand(new DriveCommandJoystick());
-
-		
-
 	}
+
 	public void driveDirection(float FRSpeed, float turningSpeed, float LRSpeed) {
-		m_drive.arcadeDrive(turningSpeed, -FRSpeed);
+
+		/*
+		 * Invoke arcadeDrive with squareInputs set to true to improve steering and
+		 * control at low speeds
+		 */
+		m_drive.arcadeDrive(turningSpeed, -FRSpeed, true);
 	}
+
 	public void driveDirection(float FRSpeed, float turningSpeed) {
-		m_drive.arcadeDrive( turningSpeed, -FRSpeed);
+
+		/*
+		 * Invoke arcadeDrive with squareInputs set to true to improve steering and
+		 * control at low speeds
+		 */
+		m_drive.arcadeDrive(turningSpeed, -FRSpeed, true);
 	}
 }

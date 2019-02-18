@@ -13,8 +13,66 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.Solenoid;
+import java.util.LinkedList;
+import java.util.Collections;
 
 public class Vacuum extends Subsystem {
+
+  private class Debounce {
+    private LinkedList<Boolean> m_values = new LinkedList<>();
+
+    private boolean lastStableState = false;
+
+    void addNewValue(boolean value) {
+      m_values.addFirst(value);
+
+      while (m_values.size() > Math.max(RobotMap.vacuumPumpSpinUpTime / 20, 2)) {
+        m_values.removeLast();
+      }
+    }
+
+    boolean getDebounceState() {
+      /*
+       * Count the number values that are equal to true in the list.
+       */
+      int numberOfTrueValues = Collections.frequency(m_values, true);
+
+      /*
+       * Compare the number of true values. If every element is true, set the
+       * lastStableState to true; it's stabilized. If nothing is true, then they are
+       * all false and set the lastStableState to false to indicate that they're all
+       * false; it's stabilized. If there's a mix of true and false values, well, just
+       * keep returning the last stable value until every sample can agree whether
+       * they're all true or all false.
+       */
+      if (numberOfTrueValues == m_values.size()) {
+        lastStableState = true;
+      } else if (numberOfTrueValues == 0) {
+        lastStableState = false;
+      }
+
+      return lastStableState;
+    }
+  }
+
+  private class RunningAverage {
+
+    private LinkedList<Double> m_values = new LinkedList<>();
+    private double m_accumulation = 0.0;
+
+    void addNewValue(double value) {
+      m_values.addFirst(value);
+      m_accumulation += value;
+
+      while (m_values.size() > Math.min(RobotMap.vacuumPumpSpinUpTime / 20, 2)) {
+        m_accumulation -= m_values.removeLast();
+      }
+    }
+
+    double getAverage() {
+      return m_accumulation / m_values.size();
+    }
+  }
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -22,8 +80,10 @@ public class Vacuum extends Subsystem {
   private Solenoid m_ventSolenoid;
   private String m_subsystemName;
   private long m_timeStampOfEnable = 0;
+  private RunningAverage m_averageConductance = new RunningAverage();
+  private Debounce m_debouncedDetectedState = new Debounce();
 
-  private long m_timeStampOfDetectedGamePiece = 0;
+  private boolean m_newGamePieceDetected = false;
 
   public Vacuum(int TalonCANID, int solenoidID, String name) {
 
@@ -85,24 +145,31 @@ public class Vacuum extends Subsystem {
   }
 
   public boolean isDetectsGamePiece() {
+    return m_debouncedDetectedState.getDebounceState();
+  }
+
+  private boolean _isDetectsGamePiece() {
 
     boolean isDetected = false;
 
-    if (m_timeStampOfEnable > 0 && (System.currentTimeMillis() - m_timeStampOfEnable) > 1000) {
+    if (m_timeStampOfEnable > 0 && (System.currentTimeMillis() - m_timeStampOfEnable) > RobotMap.vacuumPumpSpinUpTime) {
       /*
-       * If the motor is running for at least 200 ms AND the output current is BELOW 2
-       * amps (vacuumGamePieceDetectedCurrent) , you probably have a game piece.
+       * If the motor is running for at least vacuumPumpSpinUpTime ms AND the output
+       * current is BELOW 2 amps (vacuumGamePieceDetectedCurrent) , you probably have
+       * a game piece.
        * 
-       * If the motor is running for at least 200 ms AND the output current is ABOVE 2
-       * amps (vacuumGamePieceDetectedCurrent), you haven't got a game piece.
+       * If the motor is running for at least vacuumPumpSpinUpTime ms AND the output
+       * current is ABOVE 2 amps (vacuumGamePieceDetectedCurrent), you haven't got a
+       * game piece.
        * 
-       * The 200 ms gives the motor on the vacuum pump to spin up so the current
-       * measurement from the Talon has had time to settle out to a meaningful number.
+       * The vacuumPumpSpinUpTime ms gives the motor on the vacuum pump to spin up so
+       * the current measurement from the Talon has had time to settle out to a
+       * meaningful number.
        * 
        * It's weird. Trust me. This is how it works.
        */
 
-      isDetected = m_vacuumTalon.getOutputCurrent() < RobotMap.vacuumGamePieceDetectedCurrent;
+      isDetected = m_averageConductance.getAverage() < RobotMap.vacuumGamePieceDetectedConductance;
     }
 
     return isDetected;
@@ -115,24 +182,42 @@ public class Vacuum extends Subsystem {
      * system. If it has, set the vacuum system to the minimum sustaining vacuum
      * level. This level is enough to hold vacuum on the game piece but is not as
      * noisy as full vacuum speed.
+     * 
+     * Also, request that the driver controller rumble for a few milliseconds.
      */
+
+    m_debouncedDetectedState.addNewValue(_isDetectsGamePiece());
+
     if (isDetectsGamePiece()) {
 
-      if (m_timeStampOfDetectedGamePiece == 0) {
-        m_timeStampOfDetectedGamePiece = System.currentTimeMillis();
-        Robot.m_oi.rumbleDriver(true);
-      } else {
-        if ((System.currentTimeMillis() - m_timeStampOfDetectedGamePiece) > 2000) {
-          Robot.m_oi.rumbleDriver(false);
-        }
+      if (!m_newGamePieceDetected) {
+        m_newGamePieceDetected = true;
+        Robot.m_oi.rumbleDriver(RobotMap.vacuumGamePieceDetectedJoystickRumbleTime);
       }
+
       m_vacuumTalon.set(RobotMap.vacuumSustainHoldSpeed);
-      
+
+      m_timeStampOfEnable = 0;
     } else {
-      m_timeStampOfDetectedGamePiece = 0;
+      m_newGamePieceDetected = false;
     }
 
-    SmartDashboard.putNumber(m_subsystemName + "VacuumMotorCurrent", m_vacuumTalon.getOutputCurrent());
+    double currentBatteryVoltage = m_vacuumTalon.getBusVoltage();
+    double currentTalonCurrent = m_vacuumTalon.getOutputCurrent();
+
+    double conductance;
+    try {
+      conductance = currentTalonCurrent / currentBatteryVoltage;
+    } catch (Exception e) {
+      conductance = Double.NaN;
+    }
+
+    m_averageConductance.addNewValue(conductance);
+
+    SmartDashboard.putNumber(m_subsystemName + "VacuumMotorCurrent", currentTalonCurrent);
+    SmartDashboard.putNumber(m_subsystemName + "VacuumMotorImpedance", conductance);
+    SmartDashboard.putNumber(m_subsystemName + "VacuumMotorAverageConductance", m_averageConductance.getAverage());
+
   }
 
   @Override
