@@ -14,6 +14,7 @@ import frc.robot.RobotMap;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.Solenoid;
 import java.util.LinkedList;
+import java.util.Collections;
 
 public class Vacuum extends Subsystem {
 
@@ -31,14 +32,19 @@ public class Vacuum extends Subsystem {
     }
 
     boolean getDebounceState() {
-      int numberOfTrueValues = 0;
-      /* Check for all true values */
-      for (boolean value : m_values) {
-        if (value == true) {
-          numberOfTrueValues++;
-        }
-      }
+      /*
+       * Count the number values that are equal to true in the list.
+       */
+      int numberOfTrueValues = Collections.frequency(m_values, true);
 
+      /*
+       * Compare the number of true values. If every element is true, set the
+       * lastStableState to true; it's stabilized. If nothing is true, then they are
+       * all false and set the lastStableState to false to indicate that they're all
+       * false; it's stabilized. If there's a mix of true and false values, well, just
+       * keep returning the last stable value until every sample can agree whether
+       * they're all true or all false.
+       */
       if (numberOfTrueValues == m_values.size()) {
         lastStableState = true;
       } else if (numberOfTrueValues == 0) {
