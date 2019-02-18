@@ -35,7 +35,7 @@ public class RobotMap {
   // Climb Jack System Constants
   public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
-  public static int climbJackMaxExtend = 38500; //not really lol TODO: figure out what  this number is
+  public static int climbJackMaxExtend = 45000;
   public static int climbJackJogRetractedLimit = 0;
   //public static int climbJackJogExtendedLimit = 40000; //not really lol TODO: figure out what  this number is
   public static int climbJackJogExtendAxis = 3; // right trigger
