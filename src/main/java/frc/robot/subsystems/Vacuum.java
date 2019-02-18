@@ -22,10 +22,6 @@ public class Vacuum extends Subsystem {
 
     private boolean lastStableState = false;
 
-    void clear() {
-      m_values.clear();
-    }
-
     void addNewValue(boolean value) {
       m_values.addFirst(value);
 
@@ -57,10 +53,6 @@ public class Vacuum extends Subsystem {
 
     private LinkedList<Double> m_values = new LinkedList<>();
     private double m_accumulation = 0.0;
-
-    void clear() {
-      m_values.clear();
-    }
 
     void addNewValue(double value) {
       m_values.addFirst(value);
