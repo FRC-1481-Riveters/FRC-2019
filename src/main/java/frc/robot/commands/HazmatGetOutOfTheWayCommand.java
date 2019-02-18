@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
-import frc.robot.subsystems.Hazmat_Arm;
 
 /* This command will move the Hazmat arm out of the way of the
  * cargo arm, if required.

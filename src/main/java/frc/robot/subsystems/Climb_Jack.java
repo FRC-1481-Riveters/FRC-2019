@@ -7,17 +7,10 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
-import frc.robot.commands.JackJogExtendCommand;
 import frc.robot.commands.JackManualCommand;
-import frc.robot.commands.DoNothingCommandJack;
-
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.motorcontrol.SensorCollection;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 

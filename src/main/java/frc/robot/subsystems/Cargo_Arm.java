@@ -7,19 +7,13 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.command.*;
 import frc.robot.RobotMap;
 import frc.robot.commands.CargoPivotArmManualCommand;
 
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.motorcontrol.SensorCollection;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * Add your docs here.

@@ -8,10 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.*;
-import frc.robot.commands.JackJogExtendCommand;
-import frc.robot.commands.JackJogRetractCommand;
 import frc.robot.commands.HazmatJogExtendCommand;
 import frc.robot.commands.HazmatJogRetractCommand;
 import frc.robot.commands.HazmatGoUpCommand;
@@ -20,7 +17,6 @@ import frc.robot.RobotMap;
 import frc.robot.commands.CargoArmRollerFast;
 import frc.robot.commands.CargoArmRollerReverse;
 import frc.robot.commands.CargoArmRollerSlow;
-import frc.robot.commands.CargoPivotArmClimbPositionCommand;
 import frc.robot.commands.CargoSetPositions;
 import frc.robot.commands.VacuumGrabGamePiece;
 import frc.robot.commands.VacuumReleaseAllGamePiece;
