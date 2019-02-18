@@ -30,6 +30,16 @@ public class RobotMap {
 
   public static int driverController = 0;
   public static int operatorController = 1;
+  /*
+   * Number of seconds from Neutral to Full speed on the drive talons/victors.
+   * This limits how fast the drivers can change the speed of the robot and
+   * reduces the load on the battery.
+   * Units are in seconds.
+   * The bigger the value, the more sluggish the robot drives.
+   * 
+   * See configOpenloopRamp() for more details.
+   */
+  public static double driveFullThrottleRampTime = 0.025;
 
   public static int usbCamera = 1;
   // Climb Jack System Constants
