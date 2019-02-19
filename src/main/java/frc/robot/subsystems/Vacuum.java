@@ -64,7 +64,7 @@ public class Vacuum extends Subsystem {
       m_values.addFirst(value);
       m_accumulation += value;
 
-      while (m_values.size() > Math.min(RobotMap.vacuumPumpSpinUpTime / 20, 2)) {
+      while (m_values.size() > Math.max(RobotMap.vacuumPumpSpinUpTime / 20, 2)) {
         m_accumulation -= m_values.removeLast();
       }
     }
@@ -84,6 +84,12 @@ public class Vacuum extends Subsystem {
   private Debounce m_debouncedDetectedState = new Debounce();
 
   private boolean m_newGamePieceDetected = false;
+
+  public enum state {
+    off /* motor is off */, grabbing /* trying to pickup a piece */, holding
+    /* maintaining hold on held piece */}
+
+  private state m_vacuumState = state.off;
 
   public Vacuum(int TalonCANID, int solenoidID, String name) {
 
@@ -105,7 +111,7 @@ public class Vacuum extends Subsystem {
     setName("Vacuum" + name);
   }
 
-  public void holdGamePiece() {
+  public void grabGamePiece() {
     /*
      * When we turn on the vacuums, get a timestamp of the first instant that the
      * vacuum motor turns on. We'll use this timestamp to figure out how long the
@@ -124,6 +130,24 @@ public class Vacuum extends Subsystem {
      * piece.
      */
     m_vacuumTalon.set(RobotMap.vacuumInitialHoldSpeed);
+
+    m_vacuumState = state.grabbing;
+  }
+
+  public void holdGamePiece() {
+
+    /*
+     * Close the venting solenoid so we can maintain pulling a vacuum with the vacuum
+     * motor.
+     */
+    m_ventSolenoid.set(false);
+    /*
+     * Turn on the vacuum motor to start pulling a vacuum and hold onto a game
+     * piece already in the suction cups.
+     */
+    m_vacuumTalon.set(RobotMap.vacuumSustainHoldSpeed);
+
+    m_vacuumState = state.holding;
   }
 
   public void releaseGamePiece() {
@@ -142,13 +166,19 @@ public class Vacuum extends Subsystem {
      * vacuum motor (to measure the time the motor is on)
      */
     m_timeStampOfEnable = 0;
+
+    m_vacuumState = state.off;
   }
 
   public boolean isDetectsGamePiece() {
     return m_debouncedDetectedState.getDebounceState();
   }
 
-  private boolean _isDetectsGamePiece() {
+  public state getState() {
+    return m_vacuumState;
+  }
+
+  private boolean testForGamePiece() {
 
     boolean isDetected = false;
 
@@ -186,7 +216,7 @@ public class Vacuum extends Subsystem {
      * Also, request that the driver controller rumble for a few milliseconds.
      */
 
-    m_debouncedDetectedState.addNewValue(_isDetectsGamePiece());
+    m_debouncedDetectedState.addNewValue(testForGamePiece());
 
     if (isDetectsGamePiece()) {
 
@@ -195,7 +225,7 @@ public class Vacuum extends Subsystem {
         Robot.m_oi.rumbleDriver(RobotMap.vacuumGamePieceDetectedJoystickRumbleTime);
       }
 
-      m_vacuumTalon.set(RobotMap.vacuumSustainHoldSpeed);
+      holdGamePiece();
 
       m_timeStampOfEnable = 0;
     } else {
@@ -208,14 +238,15 @@ public class Vacuum extends Subsystem {
     double conductance;
     try {
       conductance = currentTalonCurrent / currentBatteryVoltage;
+
+      m_averageConductance.addNewValue(conductance);
+
     } catch (Exception e) {
       conductance = Double.NaN;
     }
 
-    m_averageConductance.addNewValue(conductance);
-
     SmartDashboard.putNumber(m_subsystemName + "VacuumMotorCurrent", currentTalonCurrent);
-    SmartDashboard.putNumber(m_subsystemName + "VacuumMotorImpedance", conductance);
+    SmartDashboard.putNumber(m_subsystemName + "VacuumMotorConductance", conductance);
     SmartDashboard.putNumber(m_subsystemName + "VacuumMotorAverageConductance", m_averageConductance.getAverage());
 
   }

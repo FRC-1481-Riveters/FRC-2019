@@ -132,7 +132,7 @@ public class RobotMap {
   // Vacuum constants
   public static double vacuumInitialHoldSpeed = 1.0; // %
   public static double vacuumSustainHoldSpeed = 0.2; // %
-  public static double vacuumGamePieceDetectedConductance = 0.1; // mhos
+  public static double vacuumGamePieceDetectedConductance = 0.2; // mhos
   public static int vacuumHatchCoverCANId = 5;
   public static int vacuumCargoCANId = 6;
   public static int solenoidHatchCoverID = 0;
