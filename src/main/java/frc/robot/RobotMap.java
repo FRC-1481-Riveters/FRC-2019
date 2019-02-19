@@ -45,10 +45,8 @@ public class RobotMap {
   // Climb Jack System Constants
   public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
-  public static int climbJackMaxExtend = 38500; // not really lol TODO: figure out what this number is
+  public static int climbJackMaxExtend = 38500; 
   public static int climbJackJogRetractedLimit = 0;
-  // public static int climbJackJogExtendedLimit = 40000; //not really lol TODO:
-  // figure out what this number is
   public static int climbJackJogExtendAxis = 3; // right trigger
   public static int climbJackJogRetractAxis = 2; // left trigger
   public static int climbJackFullyExtendButton = 3; // button x
@@ -66,12 +64,12 @@ public class RobotMap {
   // suction arm constants
   public static int hazmatArm_Talon = 8;
   // define solenoids here
-  public static int hazmatPodIntake = 100; // TODO: find the true value of these motors
-  public static int hazmatPodLoadStart = 200; // TODO: find the true value of these motors
-  public static int hazmatHatchBottom = 300; // TODO: find the true value of these motors
-  public static int hazmatRocket1Pod = 400; // TODO: find the true value of these motors
-  public static int hazmatRocket2Hatch = 500; // TODO: find the true value of these motors
-  public static int hazmatRocket2Pod = 600; // TODO: find the true value of these motors
+  public static int hazmatPodIntake = 100; // 100 is good according to drive team
+  public static int hazmatPodLoadStart = 0; // Cargo arm folded in
+  public static int hazmatHatchBottom = 159;
+  public static int hazmatRocket1Pod = 492;  
+  public static int hazmatRocket2Hatch = 1002;
+  public static int hazmatRocket2Pod = 1322; 
   public static int hazmatMinHeightAboveCargoArm = 600; // TODO: find the true value of these motors
   public static int hazmatTargetHeightAboveCargoArm = hazmatMinHeightAboveCargoArm + 100;
   /*
@@ -145,4 +143,6 @@ public class RobotMap {
 
   public static long vacuumGamePieceDetectedJoystickRumbleTime = 2000; // milliseconds
 
+  public static double cheeseyDriveTrhreshold = 0.5; 
+  public static double cheeseyDriveFactor = 0.5;
 }
