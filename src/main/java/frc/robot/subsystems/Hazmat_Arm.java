@@ -56,19 +56,19 @@ public class Hazmat_Arm extends Subsystem {
     /*
      * This is the maximum velocity of the arm in units of encoder counts per 100 ms (a decisecond)
      * 
-     * The entire range of motion is about 1660 encoder counts.
-     * Design for traversing this in 3.0 seconds
+     * The entire range of motion is about 1760 encoder counts.
+     * Design for traversing this in 1.2 seconds
      * 
-     * That's 1660 counts / 3.0 seconds * 1 second / 10 deciseconds = 55.3 counts / decisecond
+     * That's 1760 counts / 1.2 seconds * 1 second / 10 deciseconds = 147 counts / decisecond
      * 
      */
-    m_hazmat_arm_talon.configMotionCruiseVelocity(55);
+    m_hazmat_arm_talon.configMotionCruiseVelocity(147);
 
     /*
      * This is the maximum acceleration of the arm in units of encoder counts per 100 ms (a decisecond)
      * 
      */
-    m_hazmat_arm_talon.configMotionAcceleration(60);
+    m_hazmat_arm_talon.configMotionAcceleration(200);
     
     m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
