@@ -84,6 +84,11 @@ public class Drive extends Subsystem {
 		 * Invoke arcadeDrive with squareInputs set to true to improve steering and
 		 * control at low speeds
 		 */
+		// Add some Cheesey Drive
+		// When FRSpeed > 0.5, Increase turningSpeed proportionately to improve turning at speed
+
+		
+
 		m_drive.arcadeDrive(turningSpeed, -FRSpeed, true);
 	}
 
