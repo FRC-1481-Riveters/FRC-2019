@@ -45,11 +45,11 @@ public class CargoPivotArmManualCommand extends Command {
      */
     if (throttleDownAxisValue > RobotMap.joystickIsActive) {
       SmartDashboard.putNumber("CargoArmDown", throttleDownAxisValue);
-      if (Robot.m_hazmat_arm.getActualPosition() > RobotMap.hazmatNoCrashPosition) {
+ //     if (Robot.m_hazmat_arm.getActualPosition() > RobotMap.hazmatNoCrashPosition) {
         Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() - RobotMap.cargoPivotArmRate);
-      } else {
-        Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
-      }
+ //     } else {
+ //       Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
+ //     }
     }
 
   }

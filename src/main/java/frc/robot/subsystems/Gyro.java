@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.commands.doNothingGyro;
+import gyrohelper.GyroDiary;
 
 /**
  * Add your docs here.
@@ -19,7 +20,7 @@ public class Gyro extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   AHRS ahrs = new AHRS(SPI.Port.kMXP);
-
+  GyroDiary diary =  new GyroDiary();
   double lastPrintedHeading;
 
   @Override
@@ -36,6 +37,7 @@ public class Gyro extends Subsystem {
       lastPrintedHeading = currentHeading;
       System.out.println(lastPrintedHeading);
     }
+    diary.add((float) currentHeading);
 
   }
 
@@ -43,7 +45,7 @@ public class Gyro extends Subsystem {
     return ahrs.getAngle();
   }
   public double gyroDiary(long timeStamp){
-    return getGyroHeading();
+    return diary.getHeadingAtTimeStamp(timeStamp);
   }
     
 }
