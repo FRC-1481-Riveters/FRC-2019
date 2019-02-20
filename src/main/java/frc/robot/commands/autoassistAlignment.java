@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.CameraServer;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Gyro;
@@ -26,7 +29,8 @@ public class autoassistAlignment extends Command {
   private mysteryPIDSource m_gyroTurning = new mysteryPIDSource(); // fix later 
   private double m_output;
   private pidOutput m_pidOutput  =  new pidOutput();
-  
+  private NetworkTableEntry targetErrorEntry;
+
   private class mysteryPIDSource implements PIDSource {
 
 		@Override
@@ -54,6 +58,10 @@ public class autoassistAlignment extends Command {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
     m_PidControllerLeftRight = new PIDController(0.2, 0, 0, m_gyroTurning, m_pidOutput);
+    NetworkTableInstance ntinst = NetworkTableInstance.getDefault(); 
+    NetworkTable visionTable = ntinst.getTable("Vision");
+     targetErrorEntry = visionTable.getEntry("targetError");
+    NetworkTableEntry targetProcessingTimeEntry = visionTable.getEntry("targetProcessingTime");
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -61,8 +69,10 @@ public class autoassistAlignment extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    
-    
+    // Robot.m_gyro.timeStamp = targetProcessingTimeEntry.getDouble(targetProcessingTime);
+  
+   
+  m_PidControllerLeftRight.enable();
      // server.setQuality(50);
      // LocalVariableDetection();
       
@@ -74,6 +84,9 @@ public class autoassistAlignment extends Command {
     // while driving in joystick you need drive.java and the usage  of button 0 
     // you need joystick to feed to drive 
     // and direction you are facing 
+    double Gyroheading = Robot.m_gyro.getGyroHeading();
+    double targetheading  =  Gyroheading - targetErrorEntry.getDouble(Gyroheading);
+    m_PidControllerLeftRight.setSetpoint(targetheading);
     double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
     Robot.m_drive.driveDirection((float) throttleJoystick,(float) m_output);
     
