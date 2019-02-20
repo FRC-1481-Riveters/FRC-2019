@@ -47,7 +47,7 @@ public class RobotMap {
   // Climb Jack System Constants
   public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
-  public static int climbJackMaxExtend = 38500; 
+  public static int climbJackMaxExtend = 45000; 
   public static int climbJackJogRetractedLimit = 0;
   public static int climbJackJogExtendAxis = 3; // right trigger
   public static int climbJackJogRetractAxis = 2; // left trigger
@@ -107,7 +107,7 @@ public class RobotMap {
   public static int cargoPivotArmIntakePosition = 100; // TODO: find the real number for this
   public static int cargoPivotArmClimbPosition = 24000;
   public static int cargoPivotArmRate = 600; // TODO: find the real number for this
-  public static int cargoPivotMaxRetract = 55000; // TODO: find the real number
+  public static int cargoPivotMaxRetract = 60000; // TODO: find the real number
   public static int cargoPivotMaxExtend = 0; // TODO: find the real number
   public static int cargoLimitSwitchExtendInput = 4; // TODO: find the real input
   public static int cargoLimitSwitchRetractInput = 5; // TODO: find the real input
