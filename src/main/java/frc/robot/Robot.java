@@ -23,6 +23,8 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
+
+import parameterhelper.PersistantParameters;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -42,6 +44,8 @@ public class Robot extends TimedRobot {
   public static CargoIntakeRoller m_CargoIntakeRoller;
   public static Vacuum m_HatchCoverVacuum;
   public static Vacuum m_CargoVacuum;
+
+  public static PersistantParameters m_parameters;
   
 
   Command m_autonomousCommand;
@@ -53,6 +57,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    /* Create a new parameters object and load all the parameters into memory */
+    m_parameters = new PersistantParameters(RobotMap.parametersFileName);
    
     m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
     m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");

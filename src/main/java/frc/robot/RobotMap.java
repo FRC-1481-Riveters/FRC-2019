@@ -14,6 +14,8 @@ package frc.robot;
  * floating around.
  */
 public class RobotMap {
+
+  public static String parametersFileName = new String("parameters.ini");
   // drive system constants
   public static int frontLeftMotor = 1;
   public static int rearLeftMotor = 2;
