@@ -18,7 +18,7 @@ import java.util.Collections;
 
 public class Vacuum extends Subsystem {
 
-  private class Debounce {
+  protected class Debounce {
     private LinkedList<Boolean> m_values = new LinkedList<>();
 
     private boolean lastStableState = false;
@@ -55,7 +55,7 @@ public class Vacuum extends Subsystem {
     }
   }
 
-  private class RunningAverage {
+  protected class RunningAverage {
 
     private LinkedList<Double> m_values = new LinkedList<>();
     private double m_accumulation = 0.0;
@@ -84,6 +84,8 @@ public class Vacuum extends Subsystem {
   private Debounce m_debouncedDetectedState = new Debounce();
 
   private boolean m_newGamePieceDetected = false;
+  
+  private double m_vacuumGamePieceDetectedConductance;
 
   public enum state {
     off /* motor is off */, grabbing /* trying to pickup a piece */, holding
@@ -103,12 +105,23 @@ public class Vacuum extends Subsystem {
     m_subsystemName = name;
 
     /*
-     * Set the subsystem name to Vacuum + the configured name. This distinquishes
+     * Set the subsystem name to Vacuum + the configured name. This distinguishes
      * one vacuum from another vacuum.
      * 
      * e.g.: VacuumCargo VacuumHatchCover
      */
     setName("Vacuum" + name);
+    
+    /* Set the threshold for this motor's "I have a game piece" vs "I don't have a game piece" conductance
+     * value (which is related to current and the system voltage)
+     * 
+     * Every pump's motor is different, so look this value up on this robot for this pump.
+     * 
+     * If we don't have a calibration for this pump stored in a file, just use the default value from RobotMap, which is
+     * vacuumGamePieceDetectedConductance.
+     */
+    m_vacuumGamePieceDetectedConductance = Robot.m_parameters.getDouble("vacuum" + name + "GamePieceDetectedConductance",
+        RobotMap.vacuumGamePieceDetectedConductance);
   }
 
   public void grabGamePiece() {
@@ -199,7 +212,7 @@ public class Vacuum extends Subsystem {
        * It's weird. Trust me. This is how it works.
        */
 
-      isDetected = m_averageConductance.getAverage() < RobotMap.vacuumGamePieceDetectedConductance;
+      isDetected = m_averageConductance.getAverage() < m_vacuumGamePieceDetectedConductance;
     }
 
     return isDetected;
@@ -253,6 +266,7 @@ public class Vacuum extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
+    /* Subsystems don't NEED a default command, so don't bother specifying one here. */
   }
 
 }
