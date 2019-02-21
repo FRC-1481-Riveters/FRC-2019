@@ -26,7 +26,7 @@ public class Vacuum extends Subsystem {
     void addNewValue(boolean value) {
       m_values.addFirst(value);
 
-      while (m_values.size() > Math.max(RobotMap.vacuumPumpSpinUpTime / 20, 2)) {
+      while (m_values.size() > Math.max(RobotMap.gamePieceDetectionMinimumCounts, 2)) {
         m_values.removeLast();
       }
     }
