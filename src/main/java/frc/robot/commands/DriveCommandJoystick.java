@@ -26,11 +26,19 @@ public class DriveCommandJoystick extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    
-        // Read the axes of the joysticks
-        double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
-        double steerJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisLeftAndRight);
-        Robot.m_drive.driveDirection((float)throttleJoystick, (float)steerJoystick);
+
+    // Read the axes of the joysticks
+    double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
+    double steerJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisLeftAndRight);
+
+    boolean detailDriveButton = Robot.m_oi.driverController.getRawButton(RobotMap.driverControllerDetailDriverButton);
+
+    if (detailDriveButton) {
+      Robot.m_drive.driveDirection((float)( throttleJoystick* RobotMap.detailDriveGain), (float) (steerJoystick * RobotMap.detailDriveGain));
+    } else {
+      Robot.m_drive.driveDirection((float) throttleJoystick, (float) steerJoystick);
+
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

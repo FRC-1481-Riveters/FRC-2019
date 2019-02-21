@@ -30,6 +30,16 @@ public class RobotMap {
   public static int driverControllerAxisFrontAndBack = 1;
   public static int driverControllerAxisLeftAndRight = 4;
 
+  /* This button makes the robot turn slower when the button is pressed.
+  Drive team calls this the "Detail Drive"
+  */
+  public static int driverControllerDetailDriverButton = 10;
+  /* Reduce the drive gain to 75% of the maximum gain to decrease
+  the sensitivity of the robot when it's drive at lower speeds (and the
+  driver presses the drivercontrollerDetailDriverButton)
+  */
+  public static double detailDriveGain = 0.60;
+
   public static int driverController = 0;
   public static int operatorController = 1;
   /*
@@ -47,7 +57,7 @@ public class RobotMap {
   // Climb Jack System Constants
   public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
-  public static int climbJackMaxExtend = 45000; 
+  public static int climbJackMaxExtend = 53437; 
   public static int climbJackJogRetractedLimit = 0;
   public static int climbJackJogExtendAxis = 3; // right trigger
   public static int climbJackJogRetractAxis = 2; // left trigger
@@ -57,7 +67,7 @@ public class RobotMap {
   public static int climbJackLimitSwitchRetractInput = 2;
   public static double climbJackSpeed = 10.0;
   public static int climbJackRate = 250;
-  public static int climbJackIsExtendedThreshold = 6000;
+
 
   public final static int PID_PRIMARY = 0;
   public final static int kTimeoutMs = 30;
