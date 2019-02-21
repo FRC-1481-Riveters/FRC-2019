@@ -142,7 +142,7 @@ public class PersistantParameters implements Cloneable {
 
 		} catch (FileNotFoundException e) {
 			System.out.println(String.format(
-					"Couldn't find parameters file %s. All parameters are empty. (This is ok the first time this file is used!)",
+					"Couldn't find parameters file %s. No parameters have been loaded into memory.",
 					fileName));
 		} catch (Exception e) {
 			System.out.println(e.toString());
