@@ -31,9 +31,9 @@ public class DriveCommandJoystick extends Command {
     double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
     double steerJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisLeftAndRight);
 
-    boolean detailDriveButton = Robot.m_oi.driverController.getRawButton(RobotMap.driverControllerDetailDriverButton);
+    boolean driveFullSpeedButton = Robot.m_oi.driverController.getRawButton(RobotMap.driverControllerDetailDriverButton);
 
-    if (detailDriveButton) {
+    if (!driveFullSpeedButton) {
       Robot.m_drive.driveDirection((float)( throttleJoystick* RobotMap.detailDriveGain), (float) (steerJoystick * RobotMap.detailDriveGain));
     } else {
       Robot.m_drive.driveDirection((float) throttleJoystick, (float) steerJoystick);

@@ -34,9 +34,9 @@ public class RobotMap {
   Drive team calls this the "Detail Drive"
   */
   public static int driverControllerDetailDriverButton = 10;
-  /* Reduce the drive gain to 75% of the maximum gain to decrease
+  /* Reduce the drive gain to 60% of the maximum gain to decrease
   the sensitivity of the robot when it's drive at lower speeds (and the
-  driver presses the drivercontrollerDetailDriverButton)
+  driver releases the drivercontrollerDetailDriverButton)
   */
   public static double detailDriveGain = 0.60;
 
@@ -81,7 +81,7 @@ public class RobotMap {
   public static int hazmatHatchBottom = 159;
   public static int hazmatRocket1Pod = 492;  
   public static int hazmatRocket2Hatch = 1002;
-  public static int hazmatRocket2Pod = 1322; 
+  public static int hazmatRocket2Pod = 1300; 
   public static int hazmatMinHeightAboveCargoArm = 600; // TODO: find the true value of these motors
   public static int hazmatTargetHeightAboveCargoArm = hazmatMinHeightAboveCargoArm + 100;
   /*
@@ -114,7 +114,7 @@ public class RobotMap {
   public static int cargoPivotArmIntakePositionButton = 1;
   public static int cargoPivotArmClimbPositionButton = 3;
   public static int cargoPivotArmStartPosition = 0; // TODO: find the real number for this
-  public static int cargoPivotArmIntakePosition = 100; // TODO: find the real number for this
+  public static int cargoPivotArmIntakePosition = 33000; 
   public static int cargoPivotArmClimbPosition = 24000;
   public static int cargoPivotArmRate = 600; // TODO: find the real number for this
   public static int cargoPivotMaxRetract = 60000; // TODO: find the real number
