@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.io.File;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -23,6 +25,10 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
+
+import edu.wpi.first.wpilibj.Filesystem;
+import java.io.File;
+
 
 import parameterhelper.PersistantParameters;
 /**
@@ -58,9 +64,21 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    /* Create a new parameters object and load all the parameters into memory */
-    m_parameters = new PersistantParameters(RobotMap.parametersFileName);
-   
+    /*
+     * Create a new parameters object and load all the parameters into memory. This
+     * pathname resolves to
+     * 
+     * /home/lvuser/depoy/parameters.ini
+     * 
+     * If you want a file deployed into the /home/lvusers/depoy directory, you just
+     * have to store it in the FRC-2019\src\main\depoy directory in the source code
+     * and the deploy scripts will deploy it automatically.
+     * 
+     * (Look for example.txt. it's in this directory too.)
+     */
+    m_parameters = new PersistantParameters(
+        new File(Filesystem.getDeployDirectory(), RobotMap.parametersFileName).getAbsolutePath());
+
     m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
     m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");
 

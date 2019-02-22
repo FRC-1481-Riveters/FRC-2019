@@ -18,6 +18,7 @@ import frc.robot.commands.CargoArmRollerFast;
 import frc.robot.commands.CargoArmRollerReverse;
 import frc.robot.commands.CargoArmRollerSlow;
 import frc.robot.commands.CargoSetPositions;
+import frc.robot.commands.CargoPivotArmIntakePositionCommand;
 import frc.robot.commands.VacuumGrabGamePiece;
 import frc.robot.commands.VacuumReleaseAllGamePiece;
 
@@ -127,6 +128,7 @@ public class OI {
         ButtonCargoIntakeRollersFast.whileHeld(new CargoArmRollerFast());
         ButtonCargoIntakeRollersSlow.whileHeld(new CargoArmRollerSlow());
         ButtonCargoClimbPosition.whenPressed(new CargoSetPositions());
+        ButtonCargoIntakePosition.whenPressed(new CargoPivotArmIntakePositionCommand());
 
         ButtonVacuumGrabGamePiece.whenPressed(new VacuumGrabGamePiece());
         ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());

@@ -30,14 +30,25 @@ public class RobotMap {
   public static int driverControllerAxisFrontAndBack = 1;
   public static int driverControllerAxisLeftAndRight = 4;
 
+  /*
+   * This button makes the robot turn slower when the button is pressed. Drive
+   * team calls this the "Detail Drive"
+   */
+  public static int driverControllerDetailDriverButton = 10;
+  /*
+   * Reduce the drive gain to 60% of the maximum gain to decrease the sensitivity
+   * of the robot when it's drive at lower speeds (and the driver releases the
+   * drivercontrollerDetailDriverButton)
+   */
+  public static double detailDriveGain = 0.60;
+
   public static int driverController = 0;
   public static int operatorController = 1;
   /*
    * Number of seconds from Neutral to Full speed on the drive talons/victors.
    * This limits how fast the drivers can change the speed of the robot and
-   * reduces the load on the battery.
-   * Units are in seconds.
-   * The bigger the value, the more sluggish the robot drives.
+   * reduces the load on the battery. Units are in seconds. The bigger the value,
+   * the more sluggish the robot drives.
    * 
    * See configOpenloopRamp() for more details.
    */
@@ -47,7 +58,7 @@ public class RobotMap {
   // Climb Jack System Constants
   public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
-  public static int climbJackMaxExtend = 38500; 
+  public static int climbJackMaxExtend = 53437;
   public static int climbJackJogRetractedLimit = 0;
   public static int climbJackJogExtendAxis = 3; // right trigger
   public static int climbJackJogRetractAxis = 2; // left trigger
@@ -57,7 +68,6 @@ public class RobotMap {
   public static int climbJackLimitSwitchRetractInput = 2;
   public static double climbJackSpeed = 10.0;
   public static int climbJackRate = 250;
-  public static int climbJackIsExtendedThreshold = 6000;
 
   public final static int PID_PRIMARY = 0;
   public final static int kTimeoutMs = 30;
@@ -69,9 +79,10 @@ public class RobotMap {
   public static int hazmatPodIntake = 100; // 100 is good according to drive team
   public static int hazmatPodLoadStart = 0; // Cargo arm folded in
   public static int hazmatHatchBottom = 159;
-  public static int hazmatRocket1Pod = 492;  
+  public static int hazmatHatch1Delivery = 212;
+  public static int hazmatRocket1Pod = 492;
   public static int hazmatRocket2Hatch = 1002;
-  public static int hazmatRocket2Pod = 1322; 
+  public static int hazmatRocket2Pod = 1300;
   public static int hazmatMinHeightAboveCargoArm = 600; // TODO: find the true value of these motors
   public static int hazmatTargetHeightAboveCargoArm = hazmatMinHeightAboveCargoArm + 100;
   /*
@@ -104,10 +115,10 @@ public class RobotMap {
   public static int cargoPivotArmIntakePositionButton = 1;
   public static int cargoPivotArmClimbPositionButton = 3;
   public static int cargoPivotArmStartPosition = 0; // TODO: find the real number for this
-  public static int cargoPivotArmIntakePosition = 100; // TODO: find the real number for this
+  public static int cargoPivotArmIntakePosition = 33000;
   public static int cargoPivotArmClimbPosition = 24000;
   public static int cargoPivotArmRate = 600; // TODO: find the real number for this
-  public static int cargoPivotMaxRetract = 55000; // TODO: find the real number
+  public static int cargoPivotMaxRetract = 60000; // TODO: find the real number
   public static int cargoPivotMaxExtend = 0; // TODO: find the real number
   public static int cargoLimitSwitchExtendInput = 4; // TODO: find the real input
   public static int cargoLimitSwitchRetractInput = 5; // TODO: find the real input
@@ -142,9 +153,18 @@ public class RobotMap {
   public static int vacuumGrabGamePieceButton = 7;
   public static int vacuumDropGamePieceButton = 8;
   public static long vacuumPumpSpinUpTime = 500; // milliseconds before measuring the pump's impedance
+  /*
+   * Minimum number of "testForGamePiece()" detections in a row that indicate that
+   * the game piece is in place.
+   * 
+   * This is sampled at about every 20 ms.
+   * 
+   * (This is the debounce count)
+   */
+  public static int gamePieceDetectionMinimumCounts = 20;
 
   public static long vacuumGamePieceDetectedJoystickRumbleTime = 2000; // milliseconds
 
-  public static double cheeseyDriveTrhreshold = 0.5; 
+  public static double cheeseyDriveTrhreshold = 0.5;
   public static double cheeseyDriveFactor = 0.5;
 }
