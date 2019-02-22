@@ -13,6 +13,7 @@ import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JackManualCommand extends Command {
+  private boolean m_climbJackLimitSwitch;
   public JackManualCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -30,9 +31,11 @@ public class JackManualCommand extends Command {
      // Read the axes of the joysticks
      double throttleUpAxisValue = Robot.m_oi.driverController.getRawAxis(RobotMap.climbJackJogExtendAxis);
      double throttleDownAxisValue = Robot.m_oi.driverController.getRawAxis(RobotMap.climbJackJogRetractAxis);
- 
+
+//     m_climbJackLimitSwitch 
+
      // System.out.println(throttleUpAxisValue);
-     // if cargoArmUpTrigger is pulled, move the cargo arm up
+     // if climbJackRectractTrigger is pulled, retract the climb jacks
      int triggerPulled = 0;
      if (throttleUpAxisValue > RobotMap.joystickIsActive) {
        SmartDashboard.putNumber("ClimbJackRetract", throttleUpAxisValue);
@@ -40,8 +43,8 @@ public class JackManualCommand extends Command {
        triggerPulled = 1;
      }
  
-     // if cargoArmDownTrigger is pulled, move the cargo arm down
-     if (throttleDownAxisValue > RobotMap.joystickIsActive) {
+     // if climbJackExtendTrigger is pulled, extend the climb jacks
+     if ((throttleDownAxisValue > RobotMap.joystickIsActive)){
        SmartDashboard.putNumber("ClimbJackExtend", throttleDownAxisValue);
        Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + RobotMap.climbJackRate);
        triggerPulled = 1;
