@@ -53,8 +53,11 @@ public class Climb_Jack extends Subsystem {
    
     //SmartDashboard.putNumber("bullseyeElevatorPosition",  m_lastTargetPosition);
 
-    boolean climbJackLimitSwitch = m_climbJack_talon.getSensorCollection().isFwdLimitSwitchClosed();
+    RobotMap.climbJackLimitSwitch = m_climbJack_talon.getSensorCollection().isFwdLimitSwitchClosed();
+    SmartDashboard.putBoolean("ClimbJackLimitSwitch", RobotMap.climbJackLimitSwitch);
+
   }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

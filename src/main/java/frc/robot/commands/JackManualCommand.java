@@ -13,7 +13,6 @@ import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JackManualCommand extends Command {
-  private boolean m_climbJackLimitSwitch;
   public JackManualCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -37,14 +36,14 @@ public class JackManualCommand extends Command {
      // System.out.println(throttleUpAxisValue);
      // if climbJackRectractTrigger is pulled, retract the climb jacks
      int triggerPulled = 0;
-     if (throttleUpAxisValue > RobotMap.joystickIsActive) {
+     if (throttleUpAxisValue > RobotMap.joystickIsActive)  {
        SmartDashboard.putNumber("ClimbJackRetract", throttleUpAxisValue);
        Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() - RobotMap.climbJackRate);
        triggerPulled = 1;
      }
  
      // if climbJackExtendTrigger is pulled, extend the climb jacks
-     if ((throttleDownAxisValue > RobotMap.joystickIsActive)){
+     if ((throttleDownAxisValue > RobotMap.joystickIsActive) && (RobotMap.climbJackLimitSwitch != true)){
        SmartDashboard.putNumber("ClimbJackExtend", throttleDownAxisValue);
        Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + RobotMap.climbJackRate);
        triggerPulled = 1;
