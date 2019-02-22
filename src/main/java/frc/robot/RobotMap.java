@@ -79,6 +79,7 @@ public class RobotMap {
   public static int hazmatPodIntake = 100; // 100 is good according to drive team
   public static int hazmatPodLoadStart = 0; // Cargo arm folded in
   public static int hazmatHatchBottom = 159;
+  public static int hazmatHatch1Delivery = 212;
   public static int hazmatRocket1Pod = 492;
   public static int hazmatRocket2Hatch = 1002;
   public static int hazmatRocket2Pod = 1300;

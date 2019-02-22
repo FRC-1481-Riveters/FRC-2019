@@ -100,6 +100,7 @@ public class Hazmat_Arm extends Subsystem {
     hazmatPositions.add(RobotMap.hazmatPodIntake);
     hazmatPositions.add(RobotMap.hazmatPodLoadStart);
     hazmatPositions.add(RobotMap.hazmatHatchBottom);
+    hazmatPositions.add(RobotMap.hazmatHatch1Delivery);
     hazmatPositions.add(RobotMap.hazmatRocket1Pod);
     hazmatPositions.add(RobotMap.hazmatRocket2Hatch);
     hazmatPositions.add(RobotMap.hazmatRocket2Pod);
