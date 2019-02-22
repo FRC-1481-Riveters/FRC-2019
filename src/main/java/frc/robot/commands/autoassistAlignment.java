@@ -30,6 +30,7 @@ public class autoassistAlignment extends Command {
   private double m_output;
   private pidOutput m_pidOutput  =  new pidOutput();
   private NetworkTableEntry targetErrorEntry;
+  private NetworkTableEntry targetProcessingTimeEntry;
 
   private class mysteryPIDSource implements PIDSource {
 
@@ -61,9 +62,13 @@ public class autoassistAlignment extends Command {
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault(); 
     NetworkTable visionTable = ntinst.getTable("Vision");
      targetErrorEntry = visionTable.getEntry("targetError");
-    NetworkTableEntry targetProcessingTimeEntry = visionTable.getEntry("targetProcessingTime");
+     targetProcessingTimeEntry = visionTable.getEntry("targetProcessingTime");
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    
+    //does this subtract the processing time from the duration of time 
+    //when do I put the gyro diary at ? 
+    //  timestamp of when the rpi minus the duration of time
   }
 
   // Called just before this Command runs the first time
@@ -85,7 +90,7 @@ public class autoassistAlignment extends Command {
     // you need joystick to feed to drive 
     // and direction you are facing 
     double Gyroheading = Robot.m_gyro.getGyroHeading();
-    double targetheading  =  Gyroheading - targetErrorEntry.getDouble(Gyroheading);
+    double targetheading  = Robot.m_gyro.gyroDiary ((long)(targetProcessingTimeEntry.getInfo().last_change - targetProcessingTimeEntry.getDouble(0))) + targetErrorEntry.getDouble(Gyroheading);
     m_PidControllerLeftRight.setSetpoint(targetheading);
     double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
     Robot.m_drive.driveDirection((float) throttleJoystick,(float) m_output);
