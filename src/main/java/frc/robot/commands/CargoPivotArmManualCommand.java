@@ -36,7 +36,7 @@ public class CargoPivotArmManualCommand extends Command {
      */
     if (throttleUpAxisValue > RobotMap.joystickIsActive) {
       SmartDashboard.putNumber("CargoArmUp", throttleUpAxisValue);
-      Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + RobotMap.cargoPivotArmRate);
+      Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() + (int)(RobotMap.cargoPivotArmRate * throttleUpAxisValue));
     }
 
     /*
@@ -46,7 +46,7 @@ public class CargoPivotArmManualCommand extends Command {
     if (throttleDownAxisValue > RobotMap.joystickIsActive) {
       SmartDashboard.putNumber("CargoArmDown", throttleDownAxisValue);
  //     if (Robot.m_hazmat_arm.getActualPosition() > RobotMap.hazmatNoCrashPosition) {
-        Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() - RobotMap.cargoPivotArmRate);
+        Robot.m_cargo_arm.setTargetPosition(Robot.m_cargo_arm.getTargetPosition() - (int)(RobotMap.cargoPivotArmRate * throttleDownAxisValue));
  //     } else {
  //       Robot.m_hazmat_arm.setTargetPosition(RobotMap.hazmatNoCrashPosition + RobotMap.hazmatNoCrashError);
  //     }

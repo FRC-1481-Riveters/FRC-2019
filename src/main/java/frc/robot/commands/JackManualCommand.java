@@ -39,14 +39,18 @@ public class JackManualCommand extends Command {
      if (throttleUpAxisValue > RobotMap.joystickIsActive)  {
        SmartDashboard.putNumber("ClimbJackRetract", throttleUpAxisValue);
        Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() - RobotMap.climbJackRate);
-       triggerPulled = 1;
      }
  
      // if climbJackExtendTrigger is pulled, extend the climb jacks
      if ((throttleDownAxisValue > RobotMap.joystickIsActive) && (RobotMap.climbJackLimitSwitch != true)){
        SmartDashboard.putNumber("ClimbJackExtend", throttleDownAxisValue);
-       Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + RobotMap.climbJackRate);
-       triggerPulled = 1;
+       if (Robot.m_climb_jack.getTargetPosition() < RobotMap.climbJackEndofTravel)
+          {Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + (int)(RobotMap.climbJackRate * throttleDownAxisValue));
+          }
+        else
+        {
+          Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + (int)(RobotMap.climbJackSlowRate * throttleDownAxisValue));
+        }
      }
  
      if (triggerPulled == 1) {

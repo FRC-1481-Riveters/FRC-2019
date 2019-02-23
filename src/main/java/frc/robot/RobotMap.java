@@ -69,6 +69,8 @@ public class RobotMap {
   public static double climbJackSpeed = 10.0;
   public static int climbJackRate = 250;
   public static boolean climbJackLimitSwitch = false;
+  public static int climbJackEndofTravel = 50000;
+  public static double climbJackSlowRate = 5.0;
 
   public final static int PID_PRIMARY = 0;
   public final static int kTimeoutMs = 30;
