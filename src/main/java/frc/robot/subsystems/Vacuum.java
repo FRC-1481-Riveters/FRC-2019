@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import java.util.LinkedList;
 import java.util.Collections;
 
+
 public class Vacuum extends Subsystem {
 
   protected class Debounce {
@@ -77,14 +78,14 @@ public class Vacuum extends Subsystem {
   // here. Call these from Commands.
 
   private WPI_TalonSRX m_vacuumTalon;
-  private Solenoid m_ventSolenoid;
+  private TimedSolenoid m_ventSolenoid;
   private String m_subsystemName;
   private long m_timeStampOfEnable = 0;
   private RunningAverage m_averageConductance = new RunningAverage();
   private Debounce m_debouncedDetectedState = new Debounce();
 
   private boolean m_newGamePieceDetected = false;
-  
+
   private double m_vacuumGamePieceDetectedConductance;
 
   public enum state {
@@ -93,6 +94,34 @@ public class Vacuum extends Subsystem {
 
   private state m_vacuumState = state.off;
 
+  public class TimedSolenoid extends Solenoid {
+
+    private long m_timeStampTimeout;
+    private boolean m_setState;
+
+    public TimedSolenoid(int channel) {
+      super(channel);
+    }
+
+    public void set(boolean state, long durationMilliseconds) {
+
+      long newTimestamp = durationMilliseconds + System.currentTimeMillis();
+
+      m_timeStampTimeout = Math.max(m_timeStampTimeout, newTimestamp);
+
+      m_setState = state;
+      set(m_setState);
+    }
+
+    public void periodic() {
+      if (m_timeStampTimeout != 0 && System.currentTimeMillis() > m_timeStampTimeout) {
+        m_timeStampTimeout = 0;
+        m_setState = !m_setState;
+        set(m_setState);
+      }
+    }
+  }
+
   public Vacuum(int TalonCANID, int solenoidID, String name) {
 
     /*
@@ -100,7 +129,7 @@ public class Vacuum extends Subsystem {
      * so we can use them later.
      */
     m_vacuumTalon = new WPI_TalonSRX(TalonCANID);
-    m_ventSolenoid = new Solenoid(solenoidID);
+    m_ventSolenoid = new TimedSolenoid(solenoidID);
 
     m_subsystemName = name;
 
@@ -111,17 +140,20 @@ public class Vacuum extends Subsystem {
      * e.g.: VacuumCargo VacuumHatchCover
      */
     setName("Vacuum" + name);
-    
-    /* Set the threshold for this motor's "I have a game piece" vs "I don't have a game piece" conductance
-     * value (which is related to current and the system voltage)
+
+    /*
+     * Set the threshold for this motor's "I have a game piece" vs
+     * "I don't have a game piece" conductance value (which is related to current
+     * and the system voltage)
      * 
-     * Every pump's motor is different, so look this value up on this robot for this pump.
+     * Every pump's motor is different, so look this value up on this robot for this
+     * pump.
      * 
-     * If we don't have a calibration for this pump stored in a file, just use the default value from RobotMap, which is
-     * vacuumGamePieceDetectedConductance.
+     * If we don't have a calibration for this pump stored in a file, just use the
+     * default value from RobotMap, which is vacuumGamePieceDetectedConductance.
      */
-    m_vacuumGamePieceDetectedConductance = Robot.m_parameters.getDouble("vacuum" + name + "GamePieceDetectedConductance",
-        RobotMap.vacuumGamePieceDetectedConductance);
+    m_vacuumGamePieceDetectedConductance = Robot.m_parameters
+        .getDouble("vacuum" + name + "GamePieceDetectedConductance", RobotMap.vacuumGamePieceDetectedConductance);
   }
 
   public void grabGamePiece() {
@@ -150,13 +182,13 @@ public class Vacuum extends Subsystem {
   public void holdGamePiece() {
 
     /*
-     * Close the venting solenoid so we can maintain pulling a vacuum with the vacuum
-     * motor.
+     * Close the venting solenoid so we can maintain pulling a vacuum with the
+     * vacuum motor.
      */
     m_ventSolenoid.set(false);
     /*
-     * Turn on the vacuum motor to start pulling a vacuum and hold onto a game
-     * piece already in the suction cups.
+     * Turn on the vacuum motor to start pulling a vacuum and hold onto a game piece
+     * already in the suction cups.
      */
     m_vacuumTalon.set(RobotMap.vacuumSustainHoldSpeed);
 
@@ -173,7 +205,7 @@ public class Vacuum extends Subsystem {
      * Open the venting solenoid for this vacuum system to allow the game piece to
      * fall off the suction cup by breaking the vacuum in this system.
      */
-    m_ventSolenoid.set(true);
+    m_ventSolenoid.set(true, 5000);
     /*
      * Reset the timestamp to 0 so we can detect the first time we turn on the
      * vacuum motor (to measure the time the motor is on)
@@ -262,11 +294,14 @@ public class Vacuum extends Subsystem {
     SmartDashboard.putNumber(m_subsystemName + "VacuumMotorConductance", conductance);
     SmartDashboard.putNumber(m_subsystemName + "VacuumMotorAverageConductance", m_averageConductance.getAverage());
 
+    m_ventSolenoid.periodic();
   }
 
   @Override
   public void initDefaultCommand() {
-    /* Subsystems don't NEED a default command, so don't bother specifying one here. */
+    /*
+     * Subsystems don't NEED a default command, so don't bother specifying one here.
+     */
   }
 
 }
