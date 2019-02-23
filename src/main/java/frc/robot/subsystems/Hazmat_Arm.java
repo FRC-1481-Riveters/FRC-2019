@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,7 +31,15 @@ public class Hazmat_Arm extends Subsystem {
   private boolean hasRecentlyTrippedFwdLimitSwitch = false;
   private boolean hasRecentlyTrippedRevLimitSwitch = false;
   
-  private ArrayList<Integer> hazmatPositions = new ArrayList<>();
+  private ArrayList<Position> hazmatPositions = new ArrayList<>();
+  protected class Position {
+   public int EncoderCounts;
+   public String EncoderCountHazmatWord;
+   public Position (int HazmatPosition, String HazmatPositionWord){
+     EncoderCounts = HazmatPosition;
+     EncoderCountHazmatWord = HazmatPositionWord;
+   }
+  }
 
   private enum PerformanceLevel {
     limited, full
@@ -97,13 +106,15 @@ public class Hazmat_Arm extends Subsystem {
      * list is sorted by the value of the position later, so the order that the
      * positions are added isn't important.
      */
-    hazmatPositions.add(RobotMap.hazmatPodIntake);
-    hazmatPositions.add(RobotMap.hazmatPodLoadStart);
-    hazmatPositions.add(RobotMap.hazmatHatchBottom);
-    hazmatPositions.add(RobotMap.hazmatHatch1Delivery);
-    hazmatPositions.add(RobotMap.hazmatRocket1Pod);
-    hazmatPositions.add(RobotMap.hazmatRocket2Hatch);
-    hazmatPositions.add(RobotMap.hazmatRocket2Pod);
+    hazmatPositions.add(new Position (RobotMap.hazmatPodIntake, "hazmatPodIntake"));
+    hazmatPositions.add(new Position (RobotMap.hazmatPodLoadStart, "hazmatPodLoadStart"));
+    hazmatPositions.add(new Position (RobotMap.hazmatHatchBottom, "hazmatHatchBottom"));
+    hazmatPositions.add(new Position (RobotMap.hazmatHatch1Delivery, "hazmatHatch1Delivery"));
+    hazmatPositions.add(new Position (RobotMap.hazmatRocket1Pod, "hazmatRocket1Pod"));
+    hazmatPositions.add(new Position (RobotMap.hazmatRocket2Hatch, "hazmatRocket2Hatch"));
+    hazmatPositions.add(new Position (RobotMap.hazmatRocket2Pod, "hazmatRocket2Pod"));
+
+
 
     /*
      * Sort the hazmatPositions list by the value of its positions. This is super
@@ -111,7 +122,7 @@ public class Hazmat_Arm extends Subsystem {
      * that the list be in ascending order.
      */
     hazmatPositions.trimToSize();
-    Collections.sort(hazmatPositions);
+//    Collections.sort(hazmatPositions);
   }
 
   public void stepToNextIndexedPosition(stepDirection direction) {
@@ -156,13 +167,14 @@ public class Hazmat_Arm extends Subsystem {
        */
       for (int index = 0; index < hazmatPositions.size(); ++index) {
         /* Check if this fixed position is higher than our current position... */
-        if (hazmatPositions.get(index) > currentPosition) {
+        if (hazmatPositions.get(index).EncoderCounts > currentPosition) {
           /*
            * ... it *is* higher than our current position. Move to this new position right
            * away.
            */
-          setTargetPosition(hazmatPositions.get(index));
+          setTargetPosition(hazmatPositions.get(index).EncoderCounts);
 
+          SmartDashboard.putString("HazmatArmTargetName", hazmatPositions.get(index).EncoderCountHazmatWord);
           /*
            * Since we've found our new position, and set our arm moving to this new
            * position, we don't need to search any longer for any other positions, so bail
@@ -194,12 +206,13 @@ public class Hazmat_Arm extends Subsystem {
        */
       for (int index = hazmatPositions.size() - 1; index >= 0; --index) {
         /* Check if this fixed position is lower than our current position... */
-        if (hazmatPositions.get(index) < currentPosition) {
+        if (hazmatPositions.get(index).EncoderCounts < currentPosition) {
           /*
            * ... it *is* lower than our current position. Move to this new position right
            * away.
            */
-          setTargetPosition(hazmatPositions.get(index));
+          setTargetPosition(hazmatPositions.get(index).EncoderCounts);
+          SmartDashboard.putString("HazmatArmTargetName", hazmatPositions.get(index).EncoderCountHazmatWord);
           break;
         }
       }
