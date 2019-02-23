@@ -170,4 +170,8 @@ public class RobotMap {
 
   public static double cheeseyDriveTrhreshold = 0.5;
   public static double cheeseyDriveFactor = 0.5;
+
+
+  // Auto assist calibrations
+  public static int autoassistVisionButton = 1;
 }
