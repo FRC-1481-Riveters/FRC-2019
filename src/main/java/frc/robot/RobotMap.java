@@ -68,6 +68,9 @@ public class RobotMap {
   public static int climbJackLimitSwitchRetractInput = 2;
   public static double climbJackSpeed = 10.0;
   public static int climbJackRate = 250;
+  public static boolean climbJackLimitSwitch = false;
+  public static int climbJackEndofTravel = 50000;
+  public static double climbJackSlowRate = 5.0;
 
   public final static int PID_PRIMARY = 0;
   public final static int kTimeoutMs = 30;
@@ -79,6 +82,7 @@ public class RobotMap {
   public static int hazmatPodIntake = 100; // 100 is good according to drive team
   public static int hazmatPodLoadStart = 0; // Cargo arm folded in
   public static int hazmatHatchBottom = 159;
+  public static int hazmatHatch1Delivery = 212;
   public static int hazmatRocket1Pod = 492;
   public static int hazmatRocket2Hatch = 1002;
   public static int hazmatRocket2Pod = 1300;
