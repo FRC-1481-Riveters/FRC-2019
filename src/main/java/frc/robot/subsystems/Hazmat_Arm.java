@@ -122,7 +122,13 @@ public class Hazmat_Arm extends Subsystem {
      * that the list be in ascending order.
      */
     hazmatPositions.trimToSize();
-//    Collections.sort(hazmatPositions);
+    /*
+     * Because the objects that make up hazmatPositions, "Positions" don't have
+     * accessor functions to read the positions values, just create a lamba function
+     * that compares two objects' EncoderCounts values together and let the
+     * Collections.sort() function perform its bubble sort on the objects.
+     */
+    Collections.sort(hazmatPositions, (o1, o2) -> o1.EncoderCounts - o2.EncoderCounts);
   }
 
   public void stepToNextIndexedPosition(stepDirection direction) {
