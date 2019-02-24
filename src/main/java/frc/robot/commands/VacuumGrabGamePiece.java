@@ -22,7 +22,17 @@ public class VacuumGrabGamePiece extends Command {
     m_vacuums.add(Robot.m_HatchCoverVacuum);
   }
 
+  public VacuumGrabGamePiece(double timeout) {
+    super(timeout);
+
+    effectSubsystemRequires();
+  }
+
   public VacuumGrabGamePiece() {
+    effectSubsystemRequires();
+  }
+
+  private void effectSubsystemRequires() {
     // Use requires() here to declare subsystem dependencies
     for (Vacuum vacuum : m_vacuums) {
       requires(vacuum);
@@ -103,7 +113,7 @@ public class VacuumGrabGamePiece extends Command {
       }
     }
 
-    return isDetectedGamePiece;
+    return (isTimedOut() || isDetectedGamePiece);
   }
 
   // Called once after isFinished returns true
