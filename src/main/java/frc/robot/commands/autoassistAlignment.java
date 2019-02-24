@@ -94,7 +94,7 @@ public class autoassistAlignment extends Command {
     // and direction you are facing
 
     double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
-    Robot.m_drive.driveDirection((float) throttleJoystick, (float) m_output);
+    Robot.m_drive.driveDirection(throttleJoystick, m_output);
 
     SmartDashboard.putNumber("autoAssistdriveOutput", m_output);
 

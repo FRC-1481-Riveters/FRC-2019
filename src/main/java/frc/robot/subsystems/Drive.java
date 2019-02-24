@@ -78,7 +78,7 @@ public class Drive extends Subsystem {
 		setDefaultCommand(new DriveCommandJoystick());
 	}
 
-	public void driveDirection(float FRSpeed, float turningSpeed, float LRSpeed) {
+	public void driveDirection(double FRSpeed, double turningSpeed, double LRSpeed) {
 
 		/*
 		 * Invoke arcadeDrive with squareInputs set to true to improve steering and
@@ -92,7 +92,7 @@ public class Drive extends Subsystem {
 		m_drive.arcadeDrive(turningSpeed, -FRSpeed, true);
 	}
 
-	public void driveDirection(float FRSpeed, float turningSpeed) {
+	public void driveDirection(double FRSpeed, double turningSpeed) {
 
 		/*
 		 * Invoke arcadeDrive with squareInputs set to true to improve steering and
