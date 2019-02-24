@@ -27,7 +27,8 @@ import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
 
 import edu.wpi.first.wpilibj.Filesystem;
-import java.io.File;
+
+import frc.robot.commands.*;
 
 
 import parameterhelper.PersistantParameters;
@@ -99,6 +100,9 @@ public class Robot extends TimedRobot {
     camera.setResolution(160, 120);
     camera.setFPS(30);
 
+
+    SmartDashboard.putData("autoassistAlignment", new autoassistAlignment());
+ 
   }
 
   /**
