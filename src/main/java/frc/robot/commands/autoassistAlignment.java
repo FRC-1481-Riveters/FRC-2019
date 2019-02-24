@@ -14,6 +14,8 @@ import frc.robot.RobotMap;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.EntryListenerFlags;
+
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -21,26 +23,21 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class autoassistAlignment extends Command {
   private PIDController m_PidControllerLeftRight;
-  private double m_setpoint = 0;
-  private mysteryPIDSource m_gyroTurning = new mysteryPIDSource(); // fix later
+  private gyroPIDSource m_gyroTurning = new gyroPIDSource();
   private double m_output;
   private pidOutput m_pidOutput = new pidOutput();
   private NetworkTableEntry targetErrorEntry;
   private NetworkTableEntry targetProcessingTimeEntry;
 
-  private class mysteryPIDSource implements PIDSource {
-
+  private class gyroPIDSource implements PIDSource {
     @Override
     public double pidGet() {
       return Robot.m_gyro.getGyroHeading();
-
     }
-
     @Override
     public PIDSourceType getPIDSourceType() {
       return PIDSourceType.kDisplacement;
     }
-
     @Override
     public void setPIDSourceType(PIDSourceType pidSource) {
       /* don't care about this */
@@ -57,37 +54,30 @@ public class autoassistAlignment extends Command {
   public autoassistAlignment() {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
+
     m_PidControllerLeftRight = new PIDController(0.2, 0, 0, m_gyroTurning, m_pidOutput);
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     NetworkTable visionTable = ntinst.getTable("Vision");
     targetErrorEntry = visionTable.getEntry("targetError");
     targetProcessingTimeEntry = visionTable.getEntry("targetProcessingTime");
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
 
-    // does this subtract the processing time from the duration of time
-    // when do I put the gyro diary at ?
-    // timestamp of when the rpi minus the duration of time
+    targetProcessingTimeEntry.addListener(event -> {
+      double targetHeading = getTargetHeading();
+      m_PidControllerLeftRight.setSetpoint(targetHeading);
+      SmartDashboard.putNumber("autoAssistTargetHeading", targetHeading);
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-
-    m_PidControllerLeftRight.setSetpoint(getTargetHeading());
-
     m_PidControllerLeftRight.enable();
-   
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    double targetHeading = getTargetHeading();
-    m_PidControllerLeftRight.setSetpoint(targetHeading);
-    SmartDashboard.putNumber("autoAssistTargetHeading", targetHeading);
-
 
     // while driving in joystick you need drive.java and the usage of button 0
     // you need joystick to feed to drive
