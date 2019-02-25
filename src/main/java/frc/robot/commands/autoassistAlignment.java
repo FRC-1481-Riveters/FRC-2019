@@ -62,7 +62,7 @@ public class autoassistAlignment extends Command {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
 
-    m_PidControllerLeftRight = new PIDController(0.2, 0, 0, m_gyroTurning, m_pidOutput, 0.02);
+    m_PidControllerLeftRight = new PIDController(0.05, 0, 0, m_gyroTurning, m_pidOutput, 0.02);
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     NetworkTable visionTable = ntinst.getTable("Vision");
     targetInformation = visionTable.getEntry("targetInformation");
@@ -198,7 +198,14 @@ public class autoassistAlignment extends Command {
     // and direction you are facing
 
     double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
-    Robot.m_drive.driveDirection(throttleJoystick, m_output);
+    /*
+     * Invoke the linear drive controller that doesn't perform any squaring of the
+     * drive commands to make the PID's control of the steering easier to tune.
+     * 
+     * However, retain the squaring of the throttle joystick to make it easier for
+     * the driver to control their speed while driving with the autoassistAlignment.
+     */
+    Robot.m_drive.driveDirectionLinear(Math.pow(throttleJoystick, 2.0), m_output);
 
     SmartDashboard.putNumber("autoAssistdriveOutput", m_output);
 
