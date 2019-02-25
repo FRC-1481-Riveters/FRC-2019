@@ -10,42 +10,38 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-import frc.robot.commands.doNothingGyro;
 import gyrohelper.GyroDiary;
 
-/**
- * Add your docs here.
- */
 public class Gyro extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-  AHRS ahrs = new AHRS(SPI.Port.kMXP);
-  GyroDiary diary =  new GyroDiary();
-  double lastPrintedHeading;
+
+  AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
+  
+  GyroDiary m_diary = new GyroDiary();
+  double m_lastPrintedHeading;
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    setDefaultCommand(new doNothingGyro());
-
   }
 
   public void periodic() {
-    // Override me!
-    double currentHeading = ahrs.getAngle();
-    if (Math.abs(currentHeading - lastPrintedHeading) > 0.1) {
-      lastPrintedHeading = currentHeading;
-      System.out.println(lastPrintedHeading);
+
+    double currentHeading = getGyroHeading();
+
+    if (Math.abs(currentHeading - m_lastPrintedHeading) > 0.1) {
+      m_lastPrintedHeading = currentHeading;
+      System.out.println(m_lastPrintedHeading);
     }
-    diary.add((float) currentHeading);
+
+    m_diary.add(currentHeading);
 
   }
 
   public double getGyroHeading() {
-    return ahrs.getAngle();
+    return m_ahrs.getYaw();
   }
-  public double gyroDiary(long timeStamp){
-    return diary.getHeadingAtTimeStamp(timeStamp);
+
+  public double gyroDiary(long timeStamp) {
+    return m_diary.getHeadingAtTimeStamp(timeStamp);
   }
-    
+
 }
