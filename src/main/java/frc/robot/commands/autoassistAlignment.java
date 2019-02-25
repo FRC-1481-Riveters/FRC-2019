@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class autoassistAlignment extends Command {
   private PIDController m_PidControllerLeftRight;
   private gyroPIDSource m_gyroTurning = new gyroPIDSource();
-  private double m_output;
+  protected double m_output;
   private pidOutput m_pidOutput = new pidOutput();
   private NetworkTableEntry targetInformation;
   private NetworkTableEntry autoAssistPID_Kp;
@@ -32,8 +32,9 @@ public class autoassistAlignment extends Command {
   private NetworkTableEntry autoAssistPID_Kd;
   private double m_targetHeading;
   private long m_targetHeadingTimestamp;
+  private double m_cameraAngleOffset = 0.0;
 
-  private class gyroPIDSource implements PIDSource {
+  protected class gyroPIDSource implements PIDSource {
     @Override
     public double pidGet() {
       return getCurrentHeading();
@@ -50,7 +51,7 @@ public class autoassistAlignment extends Command {
     }
   }
 
-  private class pidOutput implements PIDOutput {
+  protected class pidOutput implements PIDOutput {
     @Override
     public void pidWrite(double output) {
       m_output = output;
@@ -159,8 +160,12 @@ public class autoassistAlignment extends Command {
          * the image was taken by the vision coprocessor. Then, simply determine the
          * targetHeading the coprocessor computed + the heading of the robot when it
          * took the picture to figure out the new heading of the robot.
+         * 
+         * Also, compensate for any offset error that the camara's mount is causing.
+         * This is when the camera is not quite perfectly facing directly forward along
+         * the axis of the robot.
          */
-        m_targetHeading = getPreviousRobotHeading(m_targetHeadingTimestamp) + targetHeadingAtTimestamp;
+        m_targetHeading = getPreviousRobotHeading(m_targetHeadingTimestamp) + targetHeadingAtTimestamp + m_cameraAngleOffset;
 
         /* Tell the PID that's steering the robot where its new heading is. */
         m_PidControllerLeftRight.setSetpoint(m_targetHeading);
@@ -178,6 +183,9 @@ public class autoassistAlignment extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    /* Load the latest camara angle offset from the parameters. */
+    m_cameraAngleOffset = Robot.m_parameters.getDouble("visionCameraAngleOffset", 0.0);
+    
     m_PidControllerLeftRight.enable();
   }
 
@@ -198,7 +206,7 @@ public class autoassistAlignment extends Command {
 
   }
 
-  private double getCurrentHeading() {
+  protected double getCurrentHeading() {
     return Robot.m_gyro.getGyroHeading();
   }
 
