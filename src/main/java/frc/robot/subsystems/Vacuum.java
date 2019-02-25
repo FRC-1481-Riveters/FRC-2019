@@ -15,6 +15,7 @@ import frc.robot.Robot;
 import edu.wpi.first.wpilibj.Solenoid;
 import java.util.LinkedList;
 import java.util.Collections;
+import edu.wpi.first.wpilibj.Preferences;
 
 
 public class Vacuum extends Subsystem {
@@ -152,8 +153,7 @@ public class Vacuum extends Subsystem {
      * If we don't have a calibration for this pump stored in a file, just use the
      * default value from RobotMap, which is vacuumGamePieceDetectedConductance.
      */
-    m_vacuumGamePieceDetectedConductance = Robot.m_parameters
-        .getDouble("vacuum" + name + "GamePieceDetectedConductance", RobotMap.vacuumGamePieceDetectedConductance);
+    m_vacuumGamePieceDetectedConductance = Preferences.getInstance().getDouble("vacuum" + name + "GamePieceDetectedConductance", RobotMap.vacuumGamePieceDetectedConductance);
   }
 
   public void grabGamePiece() {

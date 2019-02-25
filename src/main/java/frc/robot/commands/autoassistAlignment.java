@@ -21,6 +21,9 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
+import edu.wpi.first.wpilibj.Preferences;
+
+
 public class autoassistAlignment extends Command {
   private PIDController m_PidControllerLeftRight;
   private gyroPIDSource m_gyroTurning = new gyroPIDSource();
@@ -184,7 +187,7 @@ public class autoassistAlignment extends Command {
   @Override
   protected void initialize() {
     /* Load the latest camara angle offset from the parameters. */
-    m_cameraAngleOffset = Robot.m_parameters.getDouble("visionCameraAngleOffset", 0.0);
+    m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
     
     m_PidControllerLeftRight.enable();
   }
