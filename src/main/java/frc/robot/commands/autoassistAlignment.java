@@ -217,15 +217,13 @@ public class autoassistAlignment extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-
-    m_PidControllerLeftRight.disable();
+    m_PidControllerLeftRight.reset();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
-  protected void interrupted() {
-    
-    m_PidControllerLeftRight.disable();
+  protected void interrupted() {    
+    m_PidControllerLeftRight.reset();
   }
 }
