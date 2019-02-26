@@ -201,11 +201,25 @@ public class Vacuum extends Subsystem {
      * piece.
      */
     m_vacuumTalon.set(0.0);
-    /*
-     * Open the venting solenoid for this vacuum system to allow the game piece to
-     * fall off the suction cup by breaking the vacuum in this system.
+    
+    /* The Pneumatic Control Module can only sink a total of 500 mA, total, across all solenoids.
+     * However, each of the solenoids draws 4.8 W (0.4 A).
+     * 
+     * If we drive both of them, we're overbudget on current for the PCM. Try to avoid this.
+     * 
+     * If the vacuum is already off, don't activate the solenoid as there's no vacuum to release
+     * from the system. This conserves current going through the PCM's solenoid driver for solenoids
+     * that shouldn't need release control.
      */
-    m_ventSolenoid.set(true, 5000);
+    if (m_vacuumState != state.off) {
+      /*
+       * Open the venting solenoid for this vacuum system to allow the game piece to
+       * fall off the suction cup by breaking the vacuum in this system. The solenoid
+       * will run for a short length of time, vacuumSolenoidOnTimeToVentVacuum, and
+       * automatically turn off later.
+       */
+      m_ventSolenoid.set(true, RobotMap.vacuumSolenoidOnTimeToVentVacuum);
+    }
     /*
      * Reset the timestamp to 0 so we can detect the first time we turn on the
      * vacuum motor (to measure the time the motor is on)

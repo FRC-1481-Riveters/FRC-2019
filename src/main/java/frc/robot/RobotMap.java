@@ -156,6 +156,9 @@ public class RobotMap {
   public static int vacuumGrabGamePieceButton = 7;
   public static int vacuumDropGamePieceButton = 8;
   public static long vacuumPumpSpinUpTime = 500; // milliseconds before measuring the pump's impedance
+  
+  //milliseconds to activate vacuum-breaking solenoid valve when e.g. dropping a game piece
+  public static long vacuumSolenoidOnTimeToVentVacuum = 750; 
   /*
    * Minimum number of "testForGamePiece()" detections in a row that indicate that
    * the game piece is in place.
