@@ -32,7 +32,7 @@ public class DriveOffPlatform extends CommandGroup {
     addSequential(new VacuumGrabGamePiece(3.0));
 
     /* Drive off the platform for 2.0 seconds at 30% speed. */
-    addSequential(new DriveForATime(2.0, 0.3));
+    addSequential(new DriveForATime(2.4, -0.45));
 
   }
 }

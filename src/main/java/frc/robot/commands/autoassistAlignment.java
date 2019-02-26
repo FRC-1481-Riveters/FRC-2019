@@ -208,7 +208,8 @@ public class autoassistAlignment extends Command {
      * However, retain the squaring of the throttle joystick to make it easier for
      * the driver to control their speed while driving with the autoassistAlignment.
      */
-    Robot.m_drive.driveDirectionLinear(Math.pow(throttleJoystick, 2.0), m_output);
+    Robot.m_drive.driveDirectionLinear(
+        Math.pow(throttleJoystick, 2.0) * Math.signum(throttleJoystick) * RobotMap.detailDriveGain, m_output);
 
     SmartDashboard.putNumber("autoAssistdriveOutput", m_output);
 
@@ -221,7 +222,7 @@ public class autoassistAlignment extends Command {
   }
 
   private double getPreviousRobotHeading(long timeStamp) {
-    return Robot.m_gyro.gyroDiary(timeStamp);
+    return Robot.m_gyro.getGyroHeading();
   }
 
   // Make this return true when this Command no longer needs to run execute()
