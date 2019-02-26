@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import gyrohelper.GyroDiary;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTable;
 
 public class Gyro extends Subsystem {
 
@@ -19,6 +22,14 @@ public class Gyro extends Subsystem {
   GyroDiary m_diary = new GyroDiary();
   double m_lastPrintedHeading;
 
+  private NetworkTableEntry m_gyroNetworkDebug;
+
+  public Gyro() {
+
+    NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
+    NetworkTable SmartDashboard = ntinst.getTable("SmartDashboard");
+    m_gyroNetworkDebug = SmartDashboard.getEntry("gyroHeading");
+  }
   @Override
   public void initDefaultCommand() {
   }
@@ -30,6 +41,8 @@ public class Gyro extends Subsystem {
     if (Math.abs(currentHeading - m_lastPrintedHeading) > 0.1) {
       m_lastPrintedHeading = currentHeading;
       System.out.println(m_lastPrintedHeading);
+
+      m_gyroNetworkDebug.setNumber(currentHeading);
     }
 
     m_diary.add(currentHeading);

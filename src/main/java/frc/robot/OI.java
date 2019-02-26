@@ -138,6 +138,6 @@ public class OI {
         ButtonVacuumGrabGamePiece.whenPressed(new VacuumGrabGamePiece());
         ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());
 
-        ButtonAutoassistVision.whenPressed(new autoassistAlignment());
+        ButtonAutoassistVision.whileHeld(new autoassistAlignment());
     }
 }
