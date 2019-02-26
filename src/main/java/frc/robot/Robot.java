@@ -24,6 +24,8 @@ import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
 
+import frc.robot.commands.DriveOffPlatform;
+
 import frc.robot.commands.*;
 
 
@@ -124,8 +126,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
-
+    m_autonomousCommand = new DriveOffPlatform();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
