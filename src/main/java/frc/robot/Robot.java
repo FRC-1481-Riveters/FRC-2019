@@ -23,6 +23,7 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
+import frc.robot.subsystems.Indicators;
 
 import frc.robot.commands.DriveOffPlatform;
 
@@ -48,6 +49,7 @@ public class Robot extends TimedRobot {
   public static CargoIntakeRoller m_CargoIntakeRoller;
   public static Vacuum m_HatchCoverVacuum;
   public static Vacuum m_CargoVacuum;
+  public static Indicators m_indicators;
 
 
   Command m_autonomousCommand;
@@ -63,6 +65,7 @@ public class Robot extends TimedRobot {
     m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
     m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");
 
+    m_indicators = new Indicators();
     m_drive = new Drive();
     m_climb_jack = new Climb_Jack();
     m_hazmat_arm = new Hazmat_Arm();

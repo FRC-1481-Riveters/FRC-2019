@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.Solenoid;
 import java.util.LinkedList;
 import java.util.Collections;
 import edu.wpi.first.wpilibj.Preferences;
+import frc.robot.subsystems.Indicators;
+
 
 
 public class Vacuum extends Subsystem {
@@ -193,6 +195,8 @@ public class Vacuum extends Subsystem {
     m_vacuumTalon.set(RobotMap.vacuumSustainHoldSpeed);
 
     m_vacuumState = state.holding;
+
+    Robot.m_indicators.setIndicator(Indicators.Color.red);
   }
 
   public void releaseGamePiece() {
@@ -227,6 +231,8 @@ public class Vacuum extends Subsystem {
     m_timeStampOfEnable = 0;
 
     m_vacuumState = state.off;
+
+    Robot.m_indicators.setIndicator(Indicators.Color.off);
   }
 
   public boolean isDetectsGamePiece() {

@@ -177,4 +177,9 @@ public class RobotMap {
 
   // Auto assist calibrations
   public static int autoassistVisionButton = 1;
+
+  //  Iindicators
+  public static int solenoidLEDRed = 3;
+  public static int solenoidLEDGreen = 4;
+  public static int solenoidLEDBlue = 5;
 }
