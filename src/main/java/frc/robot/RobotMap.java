@@ -30,6 +30,9 @@ public class RobotMap {
   public static int driverControllerAxisFrontAndBack = 1;
   public static int driverControllerAxisLeftAndRight = 4;
 
+  /* This button initiates the GameOver sequence */
+  public static int gameOverButton = 3;
+  
   /*
    * This button makes the robot turn slower when the button is pressed. Drive
    * team calls this the "Detail Drive"
@@ -178,7 +181,7 @@ public class RobotMap {
   // Auto assist calibrations
   public static int autoassistVisionButton = 1;
 
-  //  Iindicators
+  //  Indicators
   public static int solenoidLEDRed = 3;
   public static int solenoidLEDGreen = 4;
   public static int solenoidLEDBlue = 5;

@@ -23,6 +23,7 @@ import frc.robot.commands.CargoPivotArmStartPositionCommand;
 import frc.robot.commands.VacuumGrabGamePiece;
 import frc.robot.commands.VacuumReleaseAllGamePiece;
 import frc.robot.commands.autoassistAlignment;
+import frc.robot.commands.GameOverCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -114,6 +115,8 @@ public class OI {
             RobotMap.vacuumDropGamePieceButton);
 
     private Button ButtonAutoassistVision = new JoystickButton(driverController, RobotMap.autoassistVisionButton);
+    
+    private Button ButtonGameOver = new JoystickButton(driverController, RobotMap.gameOverButton);
 
     public void rumbleDriver(long durationMilliseconds) {
 
@@ -139,5 +142,7 @@ public class OI {
         ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());
 
         ButtonAutoassistVision.whileHeld(new autoassistAlignment());
+        
+        ButtonGameOver.whenPressed(new GameOverCommand());
     }
 }
