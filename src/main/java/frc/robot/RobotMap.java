@@ -31,7 +31,7 @@ public class RobotMap {
   public static int driverControllerAxisLeftAndRight = 4;
 
   /* This button initiates the GameOver sequence */
-  public static int gameOverButton = 3;
+  public static int gameOverButton = 4;
   
   /*
    * This button makes the robot turn slower when the button is pressed. Drive
