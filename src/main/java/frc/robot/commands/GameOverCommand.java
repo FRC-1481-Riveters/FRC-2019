@@ -35,7 +35,7 @@ public class GameOverCommand extends CommandGroup {
      * Negative speed values move forward.
      * Positive speed values move backwards. 
      */
-    addParallel(new DriveForATime(0.3, 0.4));
+    addParallel(new DriveForATime(0.15, 0.4));
 
   }
 }

@@ -88,14 +88,14 @@ public class RobotMap {
   public static int hazmatHatch1Delivery = 310;
   public static int hazmatRocket1Pod = 522;
   public static int hazmatRocket2Hatch = 1002;
-  public static int hazmatRocket2Pod = 1300;
+  public static int hazmatRocket2Pod = 1270;
   public static int hazmatMinHeightAboveCargoArm = 600; // TODO: find the true value of these motors
   public static int hazmatTargetHeightAboveCargoArm = hazmatMinHeightAboveCargoArm + 100;
   /*
    * this is the number of counts of error that hazmat will tolerate before saying
    * its reached its target location.
    */
-  public static int hazmatPositionTolerance = 50;
+  public static int hazmatPositionTolerance = 20 ;
   public static int hazmatArmUpButton = 4;
   public static int hazmatArmDownButton = 2;
   // public static int hazmatDeliverButton = 3;
