@@ -7,44 +7,35 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class GameOverCommand extends Command {
-
-double m_driveSpeed;
-
+public class GameOverCommand extends CommandGroup {
+  /**
+   * This class is a sequence that:
+   * 
+   * 1) Starts the climbjacks moving up to 
+   * 
+   * 2) Then drives the robot backwards at a set speed and duration that's been
+   * tuned to effectively move the robot a few inches to allow the jacks to 
+   * lift up off the L1 platform.
+   */
   public GameOverCommand() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.m_drive);
-  }
+    // Add Commands here:
+    // e.g. addSequential(new Command1());
+    // e.g. addParallel(new Command1());
 
-  // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {
-  }
+    /*
+     * Start moving the climb jacks up to clear L1 platform during the end game for 0.5 seconds.
+     * negative speeds retract the climb jacks
+     * positive speeds extend the climb jacks
+     */
+    addParallel(new JackJogDuration(0.5,-1.0));
 
-  // Called repeatedly when this Command is scheduled to run
-  @Override
-  protected void execute() {
-    Robot.m_drive.driveDirection(m_driveSpeed, 0.0);
-  }
+    /* Drive back on the platform for 0.3 seconds at 40% speed. 
+     * Negative speed values move forward.
+     * Positive speed values move backwards. 
+     */
+    addParallel(new DriveForATime(0.15, 0.4));
 
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    return false;
-  }
-
-  // Called once after isFinished returns true
-  @Override
-  protected void end() {
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
   }
 }

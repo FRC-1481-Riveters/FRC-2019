@@ -30,6 +30,9 @@ public class RobotMap {
   public static int driverControllerAxisFrontAndBack = 1;
   public static int driverControllerAxisLeftAndRight = 4;
 
+  /* This button initiates the GameOver sequence */
+  public static int gameOverButton = 4;
+  
   /*
    * This button makes the robot turn slower when the button is pressed. Drive
    * team calls this the "Detail Drive"
@@ -85,14 +88,14 @@ public class RobotMap {
   public static int hazmatHatch1Delivery = 310;
   public static int hazmatRocket1Pod = 522;
   public static int hazmatRocket2Hatch = 1002;
-  public static int hazmatRocket2Pod = 1300;
+  public static int hazmatRocket2Pod = 1270;
   public static int hazmatMinHeightAboveCargoArm = 600; // TODO: find the true value of these motors
   public static int hazmatTargetHeightAboveCargoArm = hazmatMinHeightAboveCargoArm + 100;
   /*
    * this is the number of counts of error that hazmat will tolerate before saying
    * its reached its target location.
    */
-  public static int hazmatPositionTolerance = 50;
+  public static int hazmatPositionTolerance = 20 ;
   public static int hazmatArmUpButton = 4;
   public static int hazmatArmDownButton = 2;
   // public static int hazmatDeliverButton = 3;
@@ -178,7 +181,7 @@ public class RobotMap {
   // Auto assist calibrations
   public static int autoassistVisionButton = 1;
 
-  //  Iindicators
+  //  Indicators
   public static int solenoidLEDRed = 3;
   public static int solenoidLEDGreen = 4;
   public static int solenoidLEDBlue = 5;
