@@ -60,6 +60,7 @@ public class OI {
 
     public void periodic() {
         driverController.periodic();
+        operatorController.periodic();
     }
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a
@@ -89,7 +90,7 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
     public RumbleTimerJoystick driverController = new RumbleTimerJoystick(RobotMap.driverController);
-    public Joystick operatorController = new Joystick(RobotMap.operatorController);
+    public RumbleTimerJoystick operatorController = new RumbleTimerJoystick(RobotMap.operatorController);
 
     private Button ButtonHazmatJogExtend = new JoystickButton(operatorController, RobotMap.hazmatJogExtendButton);
     private Button ButtonHazmatJogRetract = new JoystickButton(operatorController, RobotMap.hazmatJogRetractButton);
@@ -112,14 +113,17 @@ public class OI {
     private Button ButtonVacuumGrabGamePiece = new JoystickButton(driverController, RobotMap.vacuumGrabGamePieceButton);
     private Button ButtonVacuumReleaseGamePiece = new JoystickButton(driverController,
             RobotMap.vacuumDropGamePieceButton);
-
+            
     private Button ButtonAutoassistVision = new JoystickButton(driverController, RobotMap.autoassistVisionButton);
 
     public void rumbleDriver(long durationMilliseconds) {
 
         driverController.rumbleTime(durationMilliseconds);
     }
-
+    public void rumbleOperator(long durationMilliseconds){
+        operatorController.rumbleTime(durationMilliseconds);
+}
+    
     public OI() {
 
         ButtonHazmatJogExtend.whileHeld(new HazmatJogExtendCommand());

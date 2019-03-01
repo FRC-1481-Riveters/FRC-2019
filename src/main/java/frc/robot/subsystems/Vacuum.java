@@ -288,6 +288,7 @@ public class Vacuum extends Subsystem {
       if (!m_newGamePieceDetected) {
         m_newGamePieceDetected = true;
         Robot.m_oi.rumbleDriver(RobotMap.vacuumGamePieceDetectedJoystickRumbleTime);
+        Robot.m_oi.rumbleOperator(RobotMap.vacuumGamePieceDetectedJoystickRumbleTime);
       }
 
       holdGamePiece();
