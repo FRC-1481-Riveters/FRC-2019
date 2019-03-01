@@ -25,11 +25,11 @@ public class GameOverCommand extends CommandGroup {
     // e.g. addParallel(new Command1());
 
     /*
-     * Start moving the climb jacks up to clear L1 platform during the end game for 0.5 seconds.
+     * Start moving the climb jacks up to clear L1 platform during the end game for 1.5 seconds.
      * negative speeds retract the climb jacks
      * positive speeds extend the climb jacks
      */
-    addParallel(new JackJogDuration(0.5,-1.0));
+    addParallel(new JackJogDuration(1.5,-1.0));
 
     /* Drive back on the platform for 0.3 seconds at 40% speed. 
      * Negative speed values move forward.
