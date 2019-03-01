@@ -167,6 +167,7 @@ public class Vacuum extends Subsystem {
     if (m_timeStampOfEnable == 0) {
       m_timeStampOfEnable = System.currentTimeMillis();
     }
+    Robot.m_indicators.setIndicator(Indicators.Color.blue);
     /*
      * Close the venting solenoid so we can start pulling a vacuum with the vacuum
      * motor.
@@ -179,6 +180,8 @@ public class Vacuum extends Subsystem {
     m_vacuumTalon.set(RobotMap.vacuumInitialHoldSpeed);
 
     m_vacuumState = state.grabbing;
+
+    
   }
 
   public void holdGamePiece() {

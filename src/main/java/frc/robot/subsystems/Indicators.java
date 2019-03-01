@@ -40,7 +40,7 @@ public class Indicators extends Subsystem {
     if (color != Color.off) {
       m_LEDs.get(color).set(true);
     }
-
+   
   }
 
   @Override

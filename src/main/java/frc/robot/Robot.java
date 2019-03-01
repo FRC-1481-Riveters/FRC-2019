@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
      * = new MyAutoCommand(); break; case "Default Auto": default:
-     * autonomousCommand = new ExampleCommand(); break; }
+     * autonomousCommand = new ExampleCommand(); break; }v
      */
 
     // schedule the autonomous command (example)

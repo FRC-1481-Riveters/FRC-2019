@@ -69,6 +69,7 @@ public class VacuumGrabGamePiece extends Command {
        */
       for (Vacuum vacuum : m_vacuums) {
         vacuum.holdGamePiece();
+        
       }
     } else {
 
