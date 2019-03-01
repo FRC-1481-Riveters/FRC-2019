@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
  
     // Set the resolution
     camera.setResolution(160, 120);
-    camera.setFPS(30);
+    camera.setFPS(10);
 
 
     SmartDashboard.putData("autoassistAlignment", new autoassistAlignment());
