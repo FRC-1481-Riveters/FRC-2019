@@ -26,6 +26,7 @@ public class Climb_Jack extends Subsystem {
   //private static DigitalInput m_limitSwitchExtended = new DigitalInput(RobotMap.climbJackLimitSwitchExtendInput);
   //private static DigitalInput m_limitSwitchRetract = new DigitalInput(RobotMap.climbJackLimitSwitchRetractInput);
   int m_lastClimbJackTargetPosition;
+  
   public Climb_Jack() {
   
     m_lastClimbJackTargetPosition = getActualPosition();
@@ -100,27 +101,41 @@ public class Climb_Jack extends Subsystem {
     
   }
 
+  public void openLoopJog(double speed) {
+
+    double jogSpeed = speed;
+
+    m_climbJack_talon.set(ControlMode.PercentOutput, jogSpeed);
+
+    /* Update the current target position with the actual position so the jacks don't
+     * improperly move if the system changes back to a closed-loop mode with a call
+     * to setTargetPosition().
+     */
+    m_lastClimbJackTargetPosition = getActualPosition();
+  }
+  
   public void setTargetPosition(int TargetPosition) {
 
-  if (TargetPosition < RobotMap.climbJackJogRetractedLimit)  {
-    TargetPosition = RobotMap.climbJackJogRetractedLimit;
-  }
-  if (TargetPosition > RobotMap.climbJackMaxExtend){
-    TargetPosition = RobotMap.climbJackMaxExtend;
-  }
-  m_climbJack_talon.set(ControlMode.Position, TargetPosition);
+    if (TargetPosition < RobotMap.climbJackJogRetractedLimit) {
+      TargetPosition = RobotMap.climbJackJogRetractedLimit;
+    }
+    if (TargetPosition > RobotMap.climbJackMaxExtend) {
+      TargetPosition = RobotMap.climbJackMaxExtend;
+    }
+    m_climbJack_talon.set(ControlMode.Position, TargetPosition);
     m_lastClimbJackTargetPosition = TargetPosition;
 
   }
+
   public int getTargetPosition() {
 
     return m_lastClimbJackTargetPosition;
-     
-      }
-  
-      public int getActualPosition() {
-  
-        return m_climbJack_talon.getSensorCollection().getQuadraturePosition();
-         
-          }
+
+  }
+
+  public int getActualPosition() {
+
+    return m_climbJack_talon.getSensorCollection().getQuadraturePosition();
+
+  }
 }

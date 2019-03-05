@@ -15,6 +15,9 @@ import frc.robot.Robot;
 import edu.wpi.first.wpilibj.Solenoid;
 import java.util.LinkedList;
 import java.util.Collections;
+import edu.wpi.first.wpilibj.Preferences;
+import frc.robot.subsystems.Indicators;
+
 
 
 public class Vacuum extends Subsystem {
@@ -152,8 +155,7 @@ public class Vacuum extends Subsystem {
      * If we don't have a calibration for this pump stored in a file, just use the
      * default value from RobotMap, which is vacuumGamePieceDetectedConductance.
      */
-    m_vacuumGamePieceDetectedConductance = Robot.m_parameters
-        .getDouble("vacuum" + name + "GamePieceDetectedConductance", RobotMap.vacuumGamePieceDetectedConductance);
+    m_vacuumGamePieceDetectedConductance = Preferences.getInstance().getDouble("vacuum" + name + "GamePieceDetectedConductance", RobotMap.vacuumGamePieceDetectedConductance);
   }
 
   public void grabGamePiece() {
@@ -165,6 +167,7 @@ public class Vacuum extends Subsystem {
     if (m_timeStampOfEnable == 0) {
       m_timeStampOfEnable = System.currentTimeMillis();
     }
+    Robot.m_indicators.setIndicator(Indicators.Color.blue);
     /*
      * Close the venting solenoid so we can start pulling a vacuum with the vacuum
      * motor.
@@ -177,6 +180,8 @@ public class Vacuum extends Subsystem {
     m_vacuumTalon.set(RobotMap.vacuumInitialHoldSpeed);
 
     m_vacuumState = state.grabbing;
+
+    
   }
 
   public void holdGamePiece() {
@@ -193,6 +198,8 @@ public class Vacuum extends Subsystem {
     m_vacuumTalon.set(RobotMap.vacuumSustainHoldSpeed);
 
     m_vacuumState = state.holding;
+
+    Robot.m_indicators.setIndicator(Indicators.Color.red);
   }
 
   public void releaseGamePiece() {
@@ -201,11 +208,25 @@ public class Vacuum extends Subsystem {
      * piece.
      */
     m_vacuumTalon.set(0.0);
-    /*
-     * Open the venting solenoid for this vacuum system to allow the game piece to
-     * fall off the suction cup by breaking the vacuum in this system.
+    
+    /* The Pneumatic Control Module can only sink a total of 500 mA, total, across all solenoids.
+     * However, each of the solenoids draws 4.8 W (0.4 A).
+     * 
+     * If we drive both of them, we're overbudget on current for the PCM. Try to avoid this.
+     * 
+     * If the vacuum is already off, don't activate the solenoid as there's no vacuum to release
+     * from the system. This conserves current going through the PCM's solenoid driver for solenoids
+     * that shouldn't need release control.
      */
-    m_ventSolenoid.set(true, 5000);
+    if (m_vacuumState != state.off) {
+      /*
+       * Open the venting solenoid for this vacuum system to allow the game piece to
+       * fall off the suction cup by breaking the vacuum in this system. The solenoid
+       * will run for a short length of time, vacuumSolenoidOnTimeToVentVacuum, and
+       * automatically turn off later.
+       */
+      m_ventSolenoid.set(true, RobotMap.vacuumSolenoidOnTimeToVentVacuum);
+    }
     /*
      * Reset the timestamp to 0 so we can detect the first time we turn on the
      * vacuum motor (to measure the time the motor is on)
@@ -213,6 +234,8 @@ public class Vacuum extends Subsystem {
     m_timeStampOfEnable = 0;
 
     m_vacuumState = state.off;
+
+    Robot.m_indicators.setIndicator(Indicators.Color.off);
   }
 
   public boolean isDetectsGamePiece() {
@@ -268,6 +291,7 @@ public class Vacuum extends Subsystem {
       if (!m_newGamePieceDetected) {
         m_newGamePieceDetected = true;
         Robot.m_oi.rumbleDriver(RobotMap.vacuumGamePieceDetectedJoystickRumbleTime);
+        Robot.m_oi.rumbleOperator(RobotMap.vacuumGamePieceDetectedJoystickRumbleTime);
       }
 
       holdGamePiece();

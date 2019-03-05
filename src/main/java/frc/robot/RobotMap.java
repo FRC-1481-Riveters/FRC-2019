@@ -30,6 +30,9 @@ public class RobotMap {
   public static int driverControllerAxisFrontAndBack = 1;
   public static int driverControllerAxisLeftAndRight = 4;
 
+  /* This button initiates the GameOver sequence */
+  public static int gameOverButton = 4;
+  
   /*
    * This button makes the robot turn slower when the button is pressed. Drive
    * team calls this the "Detail Drive"
@@ -83,16 +86,16 @@ public class RobotMap {
   public static int hazmatPodLoadStart = 0; // Cargo arm folded in
   public static int hazmatHatchBottom = 159;
   public static int hazmatHatch1Delivery = 310;
-  public static int hazmatRocket1Pod = 492;
+  public static int hazmatRocket1Pod = 522;
   public static int hazmatRocket2Hatch = 1002;
-  public static int hazmatRocket2Pod = 1300;
+  public static int hazmatRocket2Pod = 1270;
   public static int hazmatMinHeightAboveCargoArm = 600; // TODO: find the true value of these motors
   public static int hazmatTargetHeightAboveCargoArm = hazmatMinHeightAboveCargoArm + 100;
   /*
    * this is the number of counts of error that hazmat will tolerate before saying
    * its reached its target location.
    */
-  public static int hazmatPositionTolerance = 50;
+  public static int hazmatPositionTolerance = 20 ;
   public static int hazmatArmUpButton = 4;
   public static int hazmatArmDownButton = 2;
   // public static int hazmatDeliverButton = 3;
@@ -156,6 +159,9 @@ public class RobotMap {
   public static int vacuumGrabGamePieceButton = 7;
   public static int vacuumDropGamePieceButton = 8;
   public static long vacuumPumpSpinUpTime = 500; // milliseconds before measuring the pump's impedance
+  
+  //milliseconds to activate vacuum-breaking solenoid valve when e.g. dropping a game piece
+  public static long vacuumSolenoidOnTimeToVentVacuum = 750; 
   /*
    * Minimum number of "testForGamePiece()" detections in a row that indicate that
    * the game piece is in place.
@@ -174,4 +180,9 @@ public class RobotMap {
 
   // Auto assist calibrations
   public static int autoassistVisionButton = 1;
+
+  //  Indicators
+  public static int solenoidLEDRed = 3;
+  public static int solenoidLEDGreen = 4;
+  public static int solenoidLEDBlue = 5;
 }

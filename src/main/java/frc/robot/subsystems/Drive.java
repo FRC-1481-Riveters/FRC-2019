@@ -78,11 +78,11 @@ public class Drive extends Subsystem {
 		setDefaultCommand(new DriveCommandJoystick());
 	}
 
-	public void driveDirection(float FRSpeed, float turningSpeed, float LRSpeed) {
+	public void driveDirection(double FRSpeed, double turningSpeed, double LRSpeed) {
 
 		/*
 		 * Invoke arcadeDrive with squareInputs set to true to improve steering and
-		 * control at low speeds
+		 * control at low speeds with joysticks.
 		 */
 		// Add some Cheesey Drive
 		// When FRSpeed > 0.5, Increase turningSpeed proportionately to improve turning at speed
@@ -92,12 +92,21 @@ public class Drive extends Subsystem {
 		m_drive.arcadeDrive(turningSpeed, -FRSpeed, true);
 	}
 
-	public void driveDirection(float FRSpeed, float turningSpeed) {
+	public void driveDirection(double FRSpeed, double turningSpeed) {
 
 		/*
 		 * Invoke arcadeDrive with squareInputs set to true to improve steering and
-		 * control at low speeds
+		 * control at low speeds with joysticks.
 		 */
 		m_drive.arcadeDrive(turningSpeed, -FRSpeed, true);
 	}
+	
+	 public void driveDirectionLinear(double FRSpeed, double turningSpeed) {
+
+	    /*
+	     * Invoke arcadeDrive without any quadratic biasing to make the drive
+	     * more linear for automated control systems.
+	     */
+	    m_drive.arcadeDrive(turningSpeed, -FRSpeed, false);
+	  }
 }

@@ -13,9 +13,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.io.File;
-
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
 
 import frc.robot.subsystems.Drive;
@@ -25,12 +24,11 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
+import frc.robot.subsystems.Indicators;
 
-import edu.wpi.first.wpilibj.Filesystem;
-import java.io.File;
+import frc.robot.commands.*;
 
 
-import parameterhelper.PersistantParameters;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -50,9 +48,8 @@ public class Robot extends TimedRobot {
   public static CargoIntakeRoller m_CargoIntakeRoller;
   public static Vacuum m_HatchCoverVacuum;
   public static Vacuum m_CargoVacuum;
+  public static Indicators m_indicators;
 
-  public static PersistantParameters m_parameters;
-  
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -64,24 +61,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    /*
-     * Create a new parameters object and load all the parameters into memory. This
-     * pathname resolves to
-     * 
-     * /home/lvuser/depoy/parameters.ini
-     * 
-     * If you want a file deployed into the /home/lvusers/depoy directory, you just
-     * have to store it in the FRC-2019\src\main\depoy directory in the source code
-     * and the deploy scripts will deploy it automatically.
-     * 
-     * (Look for example.txt. it's in this directory too.)
-     */
-    m_parameters = new PersistantParameters(
-        new File(Filesystem.getDeployDirectory(), RobotMap.parametersFileName).getAbsolutePath());
-
     m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
     m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");
 
+    m_indicators = new Indicators();
     m_drive = new Drive();
     m_climb_jack = new Climb_Jack();
     m_hazmat_arm = new Hazmat_Arm();
@@ -97,8 +80,19 @@ public class Robot extends TimedRobot {
  
     // Set the resolution
     camera.setResolution(160, 120);
-    camera.setFPS(30);
+    camera.setFPS(10);
+    try {
 
+      VideoMode vm = camera.getVideoMode();
+      System.out.println(String.format("RoboRIO Camera details: PixelFormat=%s,width=%d,height=%d,FPS=%d",
+          vm.pixelFormat.toString(), vm.width, vm.height, vm.fps));
+
+    } catch (Exception e) {
+      System.out.println(String.format("Couldn't get camera details: %s", e.toString()));
+    }
+
+    SmartDashboard.putData("autoassistAlignment", new autoassistAlignment());
+ 
   }
 
   /**
@@ -142,13 +136,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
-
+    m_autonomousCommand = new DriveOffThenRegularDriveAuton();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
      * = new MyAutoCommand(); break; case "Default Auto": default:
-     * autonomousCommand = new ExampleCommand(); break; }
+     * autonomousCommand = new ExampleCommand(); break; }v
      */
 
     // schedule the autonomous command (example)

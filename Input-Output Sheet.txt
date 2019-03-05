@@ -37,6 +37,10 @@ List of encoders
     Cargo Arm encoder - to stop at specific angles
 
 List of solenoids
+5   Blue LED display
+4   Green LED display
+3   Red LED display
+2   
 1   Hazmat cargo/ball suction system
 0   Hazmat hatch suction system
 

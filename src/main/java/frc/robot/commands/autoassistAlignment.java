@@ -14,26 +14,33 @@ import frc.robot.RobotMap;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.EntryListenerFlags;
+
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
+import edu.wpi.first.wpilibj.Preferences;
+
+
 public class autoassistAlignment extends Command {
   private PIDController m_PidControllerLeftRight;
-  private double m_setpoint = 0;
-  private mysteryPIDSource m_gyroTurning = new mysteryPIDSource(); // fix later
-  private double m_output;
+  private gyroPIDSource m_gyroTurning = new gyroPIDSource();
+  protected double m_output;
   private pidOutput m_pidOutput = new pidOutput();
-  private NetworkTableEntry targetErrorEntry;
-  private NetworkTableEntry targetProcessingTimeEntry;
+  private NetworkTableEntry targetInformation;
+  private NetworkTableEntry autoAssistPID_Kp;
+  private NetworkTableEntry autoAssistPID_Ki;
+  private NetworkTableEntry autoAssistPID_Kd;
+  private double m_targetHeading;
+  private long m_targetHeadingTimestamp;
+  private double m_cameraAngleOffset = 0.0;
 
-  private class mysteryPIDSource implements PIDSource {
-
+  protected class gyroPIDSource implements PIDSource {
     @Override
     public double pidGet() {
-      return Robot.m_gyro.getGyroHeading();
-
+      return getCurrentHeading();
     }
 
     @Override
@@ -47,7 +54,7 @@ public class autoassistAlignment extends Command {
     }
   }
 
-  private class pidOutput implements PIDOutput {
+  protected class pidOutput implements PIDOutput {
     @Override
     public void pidWrite(double output) {
       m_output = output;
@@ -57,44 +64,144 @@ public class autoassistAlignment extends Command {
   public autoassistAlignment() {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
-    m_PidControllerLeftRight = new PIDController(0.2, 0, 0, m_gyroTurning, m_pidOutput);
+
+    m_PidControllerLeftRight = new PIDController(0.05, 0, 0, m_gyroTurning, m_pidOutput, 0.02);
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     NetworkTable visionTable = ntinst.getTable("Vision");
-    targetErrorEntry = visionTable.getEntry("targetError");
-    targetProcessingTimeEntry = visionTable.getEntry("targetProcessingTime");
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    targetInformation = visionTable.getEntry("targetInformation");
 
-    // does this subtract the processing time from the duration of time
-    // when do I put the gyro diary at ?
-    // timestamp of when the rpi minus the duration of time
+    NetworkTable smartDashNetworkTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");
+
+    /*
+     * Create some controls for the PID controlling the autoassist drive so we can
+     * tune them on a real robot.
+     */
+    autoAssistPID_Kp = smartDashNetworkTable.getEntry("autoAssistPID_Kp");
+    autoAssistPID_Ki = smartDashNetworkTable.getEntry("autoAssistPID_Ki");
+    autoAssistPID_Kd = smartDashNetworkTable.getEntry("autoAssistPID_Kd");
+
+    /*
+     * Initialize the dashboard controls with the current configuration from the PID
+     * so they have realistic values.
+     */
+    autoAssistPID_Kp.setDouble(m_PidControllerLeftRight.getP());
+    autoAssistPID_Ki.setDouble(m_PidControllerLeftRight.getI());
+    autoAssistPID_Kd.setDouble(m_PidControllerLeftRight.getD());
+
+    /*
+     * When the autoAssistPID_Kp value changes, update the PID with the new value
+     */
+    autoAssistPID_Kp.addListener(event -> {
+      m_PidControllerLeftRight.setP(autoAssistPID_Kp.getDouble(0.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    /*
+     * When the autoAssistPID_Ki value changes, update the PID with the new value
+     */
+    autoAssistPID_Ki.addListener(event -> {
+      m_PidControllerLeftRight.setI(autoAssistPID_Ki.getDouble(0.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    /*
+     * When the autoAssistPID_Kd value changes, update the PID with the new value
+     */
+    autoAssistPID_Kd.addListener(event -> {
+      m_PidControllerLeftRight.setD(autoAssistPID_Kd.getDouble(0.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    /*
+     * When new targetInformation data arrives from the coprocessor, compute the new
+     * heading and set the PID's setpoint to this new heading so the robot will
+     * start steering toward the vision target.
+     */
+    targetInformation.addListener(event -> {
+
+      try {
+        /*
+         * Extract the two numbers from the targetInformation array. For example, we'll
+         * get an array of doubles that looks like this:
+         * 
+         * [3.141568,150.0]
+         * 
+         * Where 3.141568 is the heading of the target that the vision system found and
+         * 150 is the time the vision system took to process that image; it's the age of
+         * that target heading.
+         * 
+         * aNumbers[0] = 3.141568
+         * 
+         * aNumbers[1] = 150.0
+         */
+        double[] aNumbers = new double[2];
+        aNumbers = targetInformation.getDoubleArray(new double[] { 0.0, 0.0 } /* Use 0 as the default values */);
+
+        /*
+         * Copy the values to variables with clearer names.
+         */
+        double targetHeadingAtTimestamp = aNumbers[0];
+        long targetHeadingAge = (long) aNumbers[1];
+
+        /*
+         * Determine the timestamp, in terms of the roborio's clock, of the
+         * targetHeading received from the vision processor. Just subtract the age of
+         * the targetHeading from the roborio's timestamp (last_change) that represents
+         * when the message was received from the vision coprocessor. This should be
+         * very close to when the vision coprocessor started working on the image that
+         * it used to determine the heading of the target.
+         */
+        m_targetHeadingTimestamp = targetInformation.getInfo().last_change - targetHeadingAge;
+
+        /*
+         * Now look back in time to the heading of the robot (its "pose") at the time
+         * the image was taken by the vision coprocessor. Then, simply determine the
+         * targetHeading the coprocessor computed + the heading of the robot when it
+         * took the picture to figure out the new heading of the robot.
+         * 
+         * Also, compensate for any offset error that the camara's mount is causing.
+         * This is when the camera is not quite perfectly facing directly forward along
+         * the axis of the robot.
+         */
+        m_targetHeading = getPreviousRobotHeading(m_targetHeadingTimestamp) + targetHeadingAtTimestamp + m_cameraAngleOffset;
+
+        /* Tell the PID that's steering the robot where its new heading is. */
+        m_PidControllerLeftRight.setSetpoint(m_targetHeading);
+        SmartDashboard.putNumber("autoAssistTargetHeading", m_targetHeading);
+
+      } catch (Exception e) {
+        System.out.println(String.format("Couldn't parse \"%s\" from vision coprocessor %s",
+            targetInformation.getString(""), e.toString()));
+      }
+
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-
-    m_PidControllerLeftRight.setSetpoint(getTargetHeading());
+    /* Load the latest camara angle offset from the parameters. */
+    m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
 
     m_PidControllerLeftRight.enable();
-   
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
 
-    double targetHeading = getTargetHeading();
-    m_PidControllerLeftRight.setSetpoint(targetHeading);
-    SmartDashboard.putNumber("autoAssistTargetHeading", targetHeading);
-
-
     // while driving in joystick you need drive.java and the usage of button 0
     // you need joystick to feed to drive
     // and direction you are facing
 
     double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
-    Robot.m_drive.driveDirection((float) throttleJoystick, (float) m_output);
+    /*
+     * Invoke the linear drive controller that doesn't perform any squaring of the
+     * drive commands to make the PID's control of the steering easier to tune.
+     * 
+     * However, retain the squaring of the throttle joystick to make it easier for
+     * the driver to control their speed while driving with the autoassistAlignment.
+     */
+    Robot.m_drive.driveDirectionLinear(
+        Math.pow(throttleJoystick, 2.0) * Math.signum(throttleJoystick) * RobotMap.detailDriveGain, m_output);
 
     SmartDashboard.putNumber("autoAssistdriveOutput", m_output);
 
@@ -102,28 +209,12 @@ public class autoassistAlignment extends Command {
 
   }
 
-  private double getTargetHeading() {
-
-    double Gyroheading = getCurrentHeading();
-
-    /*
-     * Compute the timestamp, in terms of the roborio's timebase, when the raspberry
-     * pi's vision target was computed.
-     */
-    long messageTimeStamp = (long) (targetProcessingTimeEntry.getInfo().last_change
-        - targetProcessingTimeEntry.getDouble(0));
-
-    double targetheading = getPreviousRobotHeading(messageTimeStamp) + targetErrorEntry.getDouble(Gyroheading);
-
-    return targetheading;
-  }
-
-  private double getCurrentHeading() {
+  protected double getCurrentHeading() {
     return Robot.m_gyro.getGyroHeading();
   }
 
   private double getPreviousRobotHeading(long timeStamp) {
-    return Robot.m_gyro.gyroDiary(timeStamp);
+    return Robot.m_gyro.getGyroHeading();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -137,15 +228,13 @@ public class autoassistAlignment extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-
-    m_PidControllerLeftRight.disable();
+    m_PidControllerLeftRight.reset();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-
-    m_PidControllerLeftRight.disable();
+    m_PidControllerLeftRight.reset();
   }
 }

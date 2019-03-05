@@ -23,6 +23,7 @@ import frc.robot.commands.CargoPivotArmStartPositionCommand;
 import frc.robot.commands.VacuumGrabGamePiece;
 import frc.robot.commands.VacuumReleaseAllGamePiece;
 import frc.robot.commands.autoassistAlignment;
+import frc.robot.commands.GameOverCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -60,6 +61,7 @@ public class OI {
 
     public void periodic() {
         driverController.periodic();
+        operatorController.periodic();
     }
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a
@@ -89,7 +91,7 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
     public RumbleTimerJoystick driverController = new RumbleTimerJoystick(RobotMap.driverController);
-    public Joystick operatorController = new Joystick(RobotMap.operatorController);
+    public RumbleTimerJoystick operatorController = new RumbleTimerJoystick(RobotMap.operatorController);
 
     private Button ButtonHazmatJogExtend = new JoystickButton(operatorController, RobotMap.hazmatJogExtendButton);
     private Button ButtonHazmatJogRetract = new JoystickButton(operatorController, RobotMap.hazmatJogRetractButton);
@@ -112,14 +114,19 @@ public class OI {
     private Button ButtonVacuumGrabGamePiece = new JoystickButton(driverController, RobotMap.vacuumGrabGamePieceButton);
     private Button ButtonVacuumReleaseGamePiece = new JoystickButton(driverController,
             RobotMap.vacuumDropGamePieceButton);
-
+            
     private Button ButtonAutoassistVision = new JoystickButton(driverController, RobotMap.autoassistVisionButton);
+    
+    private Button ButtonGameOver = new JoystickButton(driverController, RobotMap.gameOverButton);
 
     public void rumbleDriver(long durationMilliseconds) {
 
         driverController.rumbleTime(durationMilliseconds);
     }
-
+    public void rumbleOperator(long durationMilliseconds){
+        operatorController.rumbleTime(durationMilliseconds);
+}
+    
     public OI() {
 
         ButtonHazmatJogExtend.whileHeld(new HazmatJogExtendCommand());
@@ -138,6 +145,8 @@ public class OI {
         ButtonVacuumGrabGamePiece.whenPressed(new VacuumGrabGamePiece());
         ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());
 
-        ButtonAutoassistVision.whenPressed(new autoassistAlignment());
+        ButtonAutoassistVision.whileHeld(new autoassistAlignment());
+        
+        ButtonGameOver.whenPressed(new GameOverCommand());
     }
 }

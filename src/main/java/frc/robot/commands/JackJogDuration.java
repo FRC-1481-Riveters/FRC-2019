@@ -8,14 +8,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.RobotMap;
 import frc.robot.Robot;
 
-public class DriveCommandJoystick extends Command {
-  public DriveCommandJoystick() {
-    requires(Robot.m_drive);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+public class JackJogDuration extends Command {
+  double m_speed;
+
+  public JackJogDuration(double timeout, double speed) {
+    
+    setTimeout(timeout);
+    
+    /* Set the speed of the movement in % output of the drive system. */
+    m_speed = speed;
+
+    requires(Robot.m_climb_jack);
   }
 
   // Called just before this Command runs the first time
@@ -26,35 +31,25 @@ public class DriveCommandJoystick extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    // Read the axes of the joysticks
-    double throttleJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisFrontAndBack);
-    double steerJoystick = Robot.m_oi.driverController.getRawAxis(RobotMap.driverControllerAxisLeftAndRight);
-
-    boolean driveFullSpeedButton = Robot.m_oi.driverController.getRawButton(RobotMap.driverControllerDetailDriverButton);
-
-    if (!driveFullSpeedButton) {
-      Robot.m_drive.driveDirection(( throttleJoystick* RobotMap.detailDriveGain), (steerJoystick * RobotMap.detailDriveGain));
-    } else {
-      Robot.m_drive.driveDirection( throttleJoystick, steerJoystick);
-
-    }
+    Robot.m_climb_jack.openLoopJog(m_speed);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return isTimedOut();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.m_climb_jack.openLoopJog(0.0);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.m_climb_jack.openLoopJog(0.0);
   }
 }

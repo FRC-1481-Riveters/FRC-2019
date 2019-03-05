@@ -2,15 +2,15 @@
 package gyrohelper;
 
 class GyroReading {
-    public float angle;
+    public double angle;
     public long timeStamp;
 
-    public GyroReading(float newAngle, long newTimeStamp) {
+    public GyroReading(double newAngle, long newTimeStamp) {
         angle = newAngle;
         timeStamp = newTimeStamp;
     }
 
     public String toString() {
-        return new String().format("angle=%f,timeStamp=%d", angle, timeStamp);
+        return String.format("angle=%f,timeStamp=%d", angle, timeStamp);
     }
 }
