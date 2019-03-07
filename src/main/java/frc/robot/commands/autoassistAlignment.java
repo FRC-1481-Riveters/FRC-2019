@@ -118,27 +118,30 @@ public class autoassistAlignment extends Command {
 
       try {
         /*
-         * Extract the two numbers from the targetInformation array. For example, we'll
-         * get an array of doubles that looks like this:
+         * Extract the three numbers from the targetInformation array. For example,
+         * we'll get an array of doubles that looks like this:
          * 
-         * [3.141568,150.0]
+         * [3.141568,150.0,15.6]
          * 
          * Where 3.141568 is the heading of the target that the vision system found and
-         * 150 is the time the vision system took to process that image; it's the age of
-         * that target heading.
+         * 150 is the time the vision system took to process that image and 15.6 is the
+         * distance to the target in inches; it's the age of that target heading.
          * 
          * aNumbers[0] = 3.141568
          * 
          * aNumbers[1] = 150.0
+         * 
+         * aNumbers[2] = 15.6
          */
-        double[] aNumbers = new double[2];
-        aNumbers = targetInformation.getDoubleArray(new double[] { 0.0, 0.0 } /* Use 0 as the default values */);
+        double[] aNumbers = new double[3];
+        aNumbers = targetInformation.getDoubleArray(new double[] { 0.0, 0.0, 0.0 } /* Use 0 as the default values */);
 
         /*
          * Copy the values to variables with clearer names.
          */
         double targetHeadingAtTimestamp = aNumbers[0];
         long targetHeadingAge = (long) aNumbers[1];
+        double targetDistanceAtTimestamp = aNumbers[2];
 
         /*
          * Determine the timestamp, in terms of the roborio's clock, of the
