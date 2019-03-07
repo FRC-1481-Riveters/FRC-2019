@@ -75,6 +75,8 @@ public class RobotMap {
   public static int climbJackEndofTravel = 50000;
   public static double climbJackSlowRate = 5.0;
 
+  public static double teleopTimeLeft = 135; //seconds 
+
   public final static int PID_PRIMARY = 0;
   public final static int kTimeoutMs = 30;
   public final static double joystickIsActive = 0.1;
@@ -161,7 +163,7 @@ public class RobotMap {
   public static long vacuumPumpSpinUpTime = 500; // milliseconds before measuring the pump's impedance
   
   //milliseconds to activate vacuum-breaking solenoid valve when e.g. dropping a game piece
-  public static long vacuumSolenoidOnTimeToVentVacuum = 750; 
+  public static long vacuumSolenoidOnTimeToVentVacuum = 5000; //750 
   /*
    * Minimum number of "testForGamePiece()" detections in a row that indicate that
    * the game piece is in place.
@@ -173,6 +175,7 @@ public class RobotMap {
   public static int gamePieceDetectionMinimumCounts = 20;
 
   public static long vacuumGamePieceDetectedJoystickRumbleTime = 2000; // milliseconds
+  public static long vacuumGamePieceReleaseJoystickRumbleTime = 2000; // milliseconds
 
   public static double cheeseyDriveTrhreshold = 0.5;
   public static double cheeseyDriveFactor = 0.5;
