@@ -10,6 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Hazmat_Arm;
+import frc.robot.subsystems.Indicators;
+import frc.robot.RobotMap;
 
 public class HazmatGoDownCommand extends Command {
   public HazmatGoDownCommand() {
@@ -27,6 +29,10 @@ public class HazmatGoDownCommand extends Command {
   @Override
   protected void execute() {
     Robot.m_hazmat_arm.stepToNextIndexedPosition(Hazmat_Arm.stepDirection.stepDown);
+    if(Robot.m_hazmat_arm.getTargetPosition() == RobotMap.hazmatHatchBottom)
+    {
+      //Robot.m_indicators.setIndicator(Indicators.Color.green);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

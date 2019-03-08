@@ -26,7 +26,14 @@ public class JackJogExtendCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-  Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + RobotMap.climbJackRate) ;
+    if (Robot.m_climb_jack.getTargetPosition()< RobotMap.climbJackEndOfExtend) {
+      Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + RobotMap.climbJackRate) ;
+    }
+  else {
+    Robot.m_climb_jack.setTargetPosition(Robot.m_climb_jack.getTargetPosition() + RobotMap.climbJackRateSlow) ;
+  }
+
+  
   }
 
   // Make this return true when this Command no longer needs to run execute()

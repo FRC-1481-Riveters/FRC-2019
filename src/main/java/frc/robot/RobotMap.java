@@ -62,6 +62,7 @@ public class RobotMap {
   public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
   public static int climbJackMaxExtend = 53437;
+  public static int climbJackEndOfExtend =  3700;
   public static int climbJackJogRetractedLimit = 0;
   public static int climbJackJogExtendAxis = 3; // right trigger
   public static int climbJackJogRetractAxis = 2; // left trigger
@@ -71,6 +72,7 @@ public class RobotMap {
   public static int climbJackLimitSwitchRetractInput = 2;
   public static double climbJackSpeed = 10.0;
   public static int climbJackRate = 250;
+  public static int climbJackRateSlow = 125;
   public static boolean climbJackLimitSwitch = false;
   public static int climbJackEndofTravel = 50000;
   public static double climbJackSlowRate = 5.0;
@@ -186,6 +188,6 @@ public class RobotMap {
 
   //  Indicators
   public static int solenoidLEDRed = 3;
-  public static int solenoidLEDGreen = 4;
+  public static int solenoidLEDGreen = 2;
   public static int solenoidLEDBlue = 5;
 }
