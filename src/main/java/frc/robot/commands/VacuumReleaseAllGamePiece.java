@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Vacuum;
 import java.util.ArrayList;
+import frc.robot.RobotMap;
 
 public class VacuumReleaseAllGamePiece extends Command {
 
@@ -36,6 +37,7 @@ public class VacuumReleaseAllGamePiece extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_oi.rumbleDriver(RobotMap.vacuumGamePieceReleaseJoystickRumbleTime);
     for (Vacuum vacuum : m_vacuums) {
       vacuum.releaseGamePiece();
     }

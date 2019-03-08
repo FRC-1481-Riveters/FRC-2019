@@ -118,35 +118,30 @@ public class autoassistAlignment extends Command {
 
       try {
         /*
-         * Extract the two numbers from the targetInformation string. For example, we'll
-         * get a string that looks like this:
+         * Extract the three numbers from the targetInformation array. For example,
+         * we'll get an array of doubles that looks like this:
          * 
-         * 3.141568,150
+         * [3.141568,150.0,15.6]
          * 
          * Where 3.141568 is the heading of the target that the vision system found and
-         * 150 is the time the vision system took to process that image; it's the age of
-         * that target heading. Use the String.split() function to split the string from
-         * the coprocessor into two different strings right at the ','. The ',' is not
-         * included in either string; it's discarded by split(). Save the two strings
-         * into the array of strings strNumbers[]. The first number that was detected,
-         * the heading, is now in strNumbers[0], for example "3.141568". The second
-         * number that was detected, the age, is now in strNumbers[1], for example
-         * "150". These are still strings, not real numbers yet.
+         * 150 is the time the vision system took to process that image and 15.6 is the
+         * distance to the target in inches; it's the age of that target heading.
          * 
-         * strNumbers[0] = "3.141568"
+         * aNumbers[0] = 3.141568
          * 
-         * strNumbers[1] = "150"
+         * aNumbers[1] = 150.0
+         * 
+         * aNumbers[2] = 15.6
          */
-        String[] strNumbers = targetInformation.getString("").split(",");
+        double[] aNumbers = new double[3];
+        aNumbers = targetInformation.getDoubleArray(new double[] { 0.0, 0.0, 0.0 } /* Use 0 as the default values */);
 
         /*
-         * Convert the strings into real numbers useful for math using the parseDouble()
-         * and parseLong() functions. (Double and Long types are special classes that
-         * mimic the simpler behavior of double and long, but also have helpful methods
-         * like parseDouble() and parseLong() to convert strings to real numbers.)
+         * Copy the values to variables with clearer names.
          */
-        double targetHeadingAtTimestamp = Double.parseDouble(strNumbers[0]);
-        long targetHeadingAge = Long.parseLong(strNumbers[1]);
+        double targetHeadingAtTimestamp = aNumbers[0];
+        long targetHeadingAge = (long) aNumbers[1];
+        double targetDistanceAtTimestamp = aNumbers[2];
 
         /*
          * Determine the timestamp, in terms of the roborio's clock, of the
@@ -188,7 +183,7 @@ public class autoassistAlignment extends Command {
   protected void initialize() {
     /* Load the latest camara angle offset from the parameters. */
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
-    
+
     m_PidControllerLeftRight.enable();
   }
 
@@ -242,7 +237,7 @@ public class autoassistAlignment extends Command {
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
-  protected void interrupted() {    
+  protected void interrupted() {
     m_PidControllerLeftRight.reset();
   }
 }

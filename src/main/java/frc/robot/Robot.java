@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
 
 import frc.robot.subsystems.Drive;
@@ -24,8 +25,6 @@ import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
 import frc.robot.subsystems.Indicators;
-
-import frc.robot.commands.DriveOffPlatform;
 
 import frc.robot.commands.*;
 
@@ -82,7 +81,15 @@ public class Robot extends TimedRobot {
     // Set the resolution
     camera.setResolution(160, 120);
     camera.setFPS(10);
+    try {
 
+      VideoMode vm = camera.getVideoMode();
+      System.out.println(String.format("RoboRIO Camera details: PixelFormat=%s,width=%d,height=%d,FPS=%d",
+          vm.pixelFormat.toString(), vm.width, vm.height, vm.fps));
+
+    } catch (Exception e) {
+      System.out.println(String.format("Couldn't get camera details: %s", e.toString()));
+    }
 
     SmartDashboard.putData("autoassistAlignment", new autoassistAlignment());
  

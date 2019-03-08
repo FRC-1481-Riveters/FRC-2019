@@ -341,8 +341,8 @@ public class Hazmat_Arm extends Subsystem {
       /* While in limited mode, reduce the maximum output of the arm's Talon so it doesn't 
        * damage anything with quick movements or high torque.
        */
-      m_hazmat_arm_talon.configPeakOutputForward(0.2);
-      m_hazmat_arm_talon.configPeakOutputReverse(-0.2);
+      m_hazmat_arm_talon.configPeakOutputForward(0.4); // 0.2
+      m_hazmat_arm_talon.configPeakOutputReverse(-0.4); // -0.2
       
       m_currentLevel = PerformanceLevel.limited;
       break;
@@ -350,8 +350,8 @@ public class Hazmat_Arm extends Subsystem {
       /* While in full mode, run the system at the maximum output of the arm's Talon so it
        * has full torque and maximum energy to move quickly.
        */
-      m_hazmat_arm_talon.configPeakOutputForward(0.5);
-      m_hazmat_arm_talon.configPeakOutputReverse(-0.5);
+      m_hazmat_arm_talon.configPeakOutputForward(0.7); // 0.5
+      m_hazmat_arm_talon.configPeakOutputReverse(-0.7); // -0.5
       
       m_currentLevel = PerformanceLevel.full;
       break;
