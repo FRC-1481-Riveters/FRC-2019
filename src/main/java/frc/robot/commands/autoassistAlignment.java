@@ -65,7 +65,7 @@ public class autoassistAlignment extends Command {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
 
-    m_PidControllerLeftRight = new PIDController(0.05, 0, 0, m_gyroTurning, m_pidOutput, 0.02);
+    m_PidControllerLeftRight = new PIDController(0.03, 0, 0, m_gyroTurning, m_pidOutput, 0.02);
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     NetworkTable visionTable = ntinst.getTable("Vision");
     targetInformation = visionTable.getEntry("targetInformation");
