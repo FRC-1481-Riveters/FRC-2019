@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.Robot;
 
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -109,7 +108,6 @@ public class Hazmat_Arm extends Subsystem {
     hazmatPositions.add(new Position (RobotMap.hazmatPodIntake, "hazmatPodIntake"));
     hazmatPositions.add(new Position (RobotMap.hazmatPodLoadStart, "hazmatPodLoadStart"));
     hazmatPositions.add(new Position (RobotMap.hazmatHatchBottom, "hazmatHatchBottom"));
-    hazmatPositions.add(new Position (RobotMap.hazmatHatch1Delivery, "hazmatHatch1Delivery"));
     hazmatPositions.add(new Position (RobotMap.hazmatRocket1Pod, "hazmatRocket1Pod"));
     hazmatPositions.add(new Position (RobotMap.hazmatRocket2Hatch, "hazmatRocket2Hatch"));
     hazmatPositions.add(new Position (RobotMap.hazmatRocket2Pod, "hazmatRocket2Pod"));
