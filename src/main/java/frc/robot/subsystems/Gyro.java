@@ -15,37 +15,46 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Gyro extends Subsystem {
 
   AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
-  
+
   GyroDiary m_diary = new GyroDiary();
   double m_lastPrintedHeading;
 
   private NetworkTableEntry m_gyroNetworkDebug;
+
+  private GyroDiaryTask m_updateGyroDiaryTask = new GyroDiaryTask();
+  private Timer m_gyroUpdateTimer = new Timer();
+
+  protected class GyroDiaryTask extends TimerTask {
+    public void run() {
+      m_diary.add(getGyroHeading());
+    }
+  }
 
   public Gyro() {
 
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     NetworkTable SmartDashboard = ntinst.getTable("SmartDashboard");
     m_gyroNetworkDebug = SmartDashboard.getEntry("gyroHeading");
+
+    /*
+     * Schedule a background task that runs every 20 ms, starting immediately, to
+     * update the gyro diary with a reading from the gyro
+     */
+    m_gyroUpdateTimer.schedule(m_updateGyroDiaryTask, 0, 20);
+
   }
+
   @Override
   public void initDefaultCommand() {
   }
 
   public void periodic() {
-
-    double currentHeading = getGyroHeading();
-
-    if (Math.abs(currentHeading - m_lastPrintedHeading) > 0.1) {
-      m_lastPrintedHeading = currentHeading;
-      System.out.println(m_lastPrintedHeading);
-
-      m_gyroNetworkDebug.setNumber(currentHeading);
-    }
-
-    m_diary.add(currentHeading);
 
   }
 
