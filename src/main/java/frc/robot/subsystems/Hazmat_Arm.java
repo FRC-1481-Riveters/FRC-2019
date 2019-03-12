@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -16,10 +17,12 @@ import com.ctre.phoenix.motorcontrol.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.EntryListenerFlags;
 
 public class Hazmat_Arm extends Subsystem {
   private static WPI_TalonSRX m_hazmat_arm_talon = new WPI_TalonSRX(RobotMap.hazmatArm_Talon);
-
 
   public enum stepDirection {
     stepUp, stepDown
@@ -27,57 +30,104 @@ public class Hazmat_Arm extends Subsystem {
 
   private int m_targetPosition;
 
-  private boolean hasRecentlyTrippedFwdLimitSwitch = false;
-  private boolean hasRecentlyTrippedRevLimitSwitch = false;
-  
   private ArrayList<Position> hazmatPositions = new ArrayList<>();
+
   protected class Position {
-   public int EncoderCounts;
-   public String EncoderCountHazmatWord;
-   public Position (int HazmatPosition, String HazmatPositionWord){
-     EncoderCounts = HazmatPosition;
-     EncoderCountHazmatWord = HazmatPositionWord;
-   }
+    public int EncoderCounts;
+    public String EncoderCountHazmatWord;
+
+    public Position(int HazmatPosition, String HazmatPositionWord) {
+      EncoderCounts = HazmatPosition;
+      EncoderCountHazmatWord = HazmatPositionWord;
+    }
   }
 
   private enum PerformanceLevel {
     limited, full
   }
-  
+
   private PerformanceLevel m_currentLevel = PerformanceLevel.limited;
+
+  private NetworkTableEntry hazmatArmMotor_Kp;
+  private NetworkTableEntry hazmatArmMotor_Ki;
+  private NetworkTableEntry hazmatArmMotor_Kd;
+  private NetworkTableEntry hazmatArmMotor_Kf;
 
   public Hazmat_Arm() {
 
-    SmartDashboard.putNumber("HazmatArmMotorKF", 0.0);
-    SmartDashboard.putNumber("HazmatArmMotorKp", 6.0);
-    SmartDashboard.putNumber("HazmatArmMotorKI", 0.0);
-    SmartDashboard.putNumber("HazmatArmMotorKD", 0.0);
-
     /* Configure the close loop gains for slot 0 */
     m_hazmat_arm_talon.selectProfileSlot(0, 0);
-    
-    m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("HazmatArmMotorKF", 0.0));
-    m_hazmat_arm_talon.config_kP(0, SmartDashboard.getNumber("HazmatArmMotorKp", 6.0));
-    m_hazmat_arm_talon.config_kI(0, SmartDashboard.getNumber("HazmatArmMotorKI", 0.0));
-    m_hazmat_arm_talon.config_kD(0, SmartDashboard.getNumber("HazmatArmMotorKD", 0.0));
+
+    NetworkTable smartDashNetworkTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");
 
     /*
-     * This is the maximum velocity of the arm in units of encoder counts per 100 ms (a decisecond)
+     * Get a reference to the four PID calibrations we're using for the Hazmat arm
+     * so we can capture and detect changes to these values when they change on the
+     * dashboard.
+     */
+    hazmatArmMotor_Kp = smartDashNetworkTable.getEntry("HazmatArmMotorKp");
+    hazmatArmMotor_Ki = smartDashNetworkTable.getEntry("HazmatArmMotorKi");
+    hazmatArmMotor_Kd = smartDashNetworkTable.getEntry("HazmatArmMotorKd");
+    hazmatArmMotor_Kf = smartDashNetworkTable.getEntry("HazmatArmMotorKf");
+
+    /* Set these NetworkTable signals to their initial values.. */
+    hazmatArmMotor_Kp.setDouble(6.0);
+    hazmatArmMotor_Ki.setDouble(0.0);
+    hazmatArmMotor_Kd.setDouble(0.0);
+    hazmatArmMotor_Kf.setDouble(0.0);
+
+    /* ... and read these initial values to set them in the Talon's PID. */
+    m_hazmat_arm_talon.config_kP(0, hazmatArmMotor_Kp.getDouble(6.0));
+    m_hazmat_arm_talon.config_kI(0, hazmatArmMotor_Ki.getDouble(0.0));
+    m_hazmat_arm_talon.config_kD(0, hazmatArmMotor_Kd.getDouble(0.0));
+    m_hazmat_arm_talon.config_kF(0, hazmatArmMotor_Kf.getDouble(0.0));
+    
+    /*
+     * Add listeners that will update the Talon's PID's configuration, in the
+     * background, when the signal changes over the NetworkTable, e.g. if a client
+     * (like a computer) updates the value during e.g. tuning.
      * 
-     * The entire range of motion is about 1760 encoder counts.
-     * Design for traversing this in 1.2 seconds
+     * These listeners run in the background and sleep until a change is made. Then
+     * they wake-up, execute the code (to update the Talon's PID's configuration)
+     * then go back to sleep until the value changes again.
+     */
+
+    hazmatArmMotor_Kp.addListener(event -> {
+      m_hazmat_arm_talon.config_kP(0, SmartDashboard.getNumber("HazmatArmMotorKp", 6.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    hazmatArmMotor_Ki.addListener(event -> {
+      m_hazmat_arm_talon.config_kI(0, SmartDashboard.getNumber("HazmatArmMotorKi", 0.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    hazmatArmMotor_Kd.addListener(event -> {
+      m_hazmat_arm_talon.config_kD(0, SmartDashboard.getNumber("HazmatArmMotorKd", 0.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    hazmatArmMotor_Kf.addListener(event -> {
+      m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("HazmatArmMotorKf", 0.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    /*
+     * This is the maximum velocity of the arm in units of encoder counts per 100 ms
+     * (a decisecond)
      * 
-     * That's 1760 counts / 1.2 seconds * 1 second / 10 deciseconds = 147 counts / decisecond
+     * The entire range of motion is about 1760 encoder counts. Design for
+     * traversing this in 1.2 seconds
+     * 
+     * That's 1760 counts / 1.2 seconds * 1 second / 10 deciseconds = 147 counts /
+     * decisecond
      * 
      */
     m_hazmat_arm_talon.configMotionCruiseVelocity(147);
 
     /*
-     * This is the maximum acceleration of the arm in units of encoder counts per 100 ms (a decisecond)
+     * This is the maximum acceleration of the arm in units of encoder counts per
+     * 100 ms (a decisecond)
      * 
      */
     m_hazmat_arm_talon.configMotionAcceleration(200);
-    
+
     m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     /* Feedback device of remote talon */
@@ -88,7 +138,6 @@ public class Hazmat_Arm extends Subsystem {
     m_hazmat_arm_talon.configNominalOutputReverse(0.0);
     m_hazmat_arm_talon.setSensorPhase(true);
     m_hazmat_arm_talon.setInverted(false);
-
 
     /*
      * Initialize the arm's performance to a safe output that can't damage itself if
@@ -105,19 +154,19 @@ public class Hazmat_Arm extends Subsystem {
      * list is sorted by the value of the position later, so the order that the
      * positions are added isn't important.
      */
-    hazmatPositions.add(new Position (RobotMap.hazmatPodIntake, "hazmatPodIntake"));
-    hazmatPositions.add(new Position (RobotMap.hazmatPodLoadStart, "hazmatPodLoadStart"));
-    hazmatPositions.add(new Position (RobotMap.hazmatHatchBottom, "hazmatHatchBottom"));
-    hazmatPositions.add(new Position (RobotMap.hazmatRocket1Pod, "hazmatRocket1Pod"));
-    hazmatPositions.add(new Position (RobotMap.hazmatRocket2Hatch, "hazmatRocket2Hatch"));
-    hazmatPositions.add(new Position (RobotMap.hazmatRocket2Pod, "hazmatRocket2Pod"));
-
-
+    hazmatPositions.add(new Position(RobotMap.hazmatPodIntake, "hazmatPodIntake"));
+    hazmatPositions.add(new Position(RobotMap.hazmatPodLoadStart, "hazmatPodLoadStart"));
+    hazmatPositions.add(new Position(RobotMap.hazmatHatchBottom, "hazmatHatchBottom"));
+    hazmatPositions.add(new Position(RobotMap.hazmatRocket1Pod, "hazmatRocket1Pod"));
+    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Hatch, "hazmatRocket2Hatch"));
+    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Pod, "hazmatRocket2Pod"));
 
     /*
      * Sort the hazmatPositions list by the value of its positions. This is super
      * important as the stepping function stepToNextIndexedPosition() *requires*
-     * that the list be in ascending order.
+     * that the list be in ascending order, but first, trim down the List's size to
+     * exactly the number of elements that have been added. This makes access to the
+     * list (later) more efficient.
      */
     hazmatPositions.trimToSize();
     /*
@@ -130,11 +179,11 @@ public class Hazmat_Arm extends Subsystem {
   }
 
   public void stepToNextIndexedPosition(stepDirection direction) {
-    
+
     /*
      * Check if the system is running in full performance mode. If it isn't, don't
-     * allow the tap-up/tap-down functionality, only tolerate jogging, which use small
-     * relative movements.
+     * allow the tap-up/tap-down functionality, only tolerate jogging, which use
+     * small relative movements.
      */
     if (getPerformanceLevel() != PerformanceLevel.full) {
       System.out.println("HazmatArm: Rejected stepping while in low performance mode.");
@@ -228,68 +277,8 @@ public class Hazmat_Arm extends Subsystem {
 
   public void periodic() {
 
-    m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("HazmatArmMotorKF", 0.0));
-    m_hazmat_arm_talon.config_kP(0, SmartDashboard.getNumber("HazmatArmMotorKp", 6.0));
-    m_hazmat_arm_talon.config_kI(0, SmartDashboard.getNumber("HazmatArmMotorKI", 0.0));
-    m_hazmat_arm_talon.config_kD(0, SmartDashboard.getNumber("HazmatArmMotorKD", 0.0));
-
     SmartDashboard.putNumber("HazmatArmEncoderCounts", getActualPosition());
     SmartDashboard.putNumber("HazmatTargetPositionCounts", getTargetPosition());
-
-    /*
-     * Check if the hazmat_arm has hit its lower limit switch. If it has: 1) Reset
-     * the arm's encoder count; this IS the arm's zero point. 2) Increase the arm's
-     * performance by switching from the limited PID output limits to the full speed
-     * that the arm can support.
-     * 
-     * Check if the hazmat_arm has hit its upper limit switch. If it has: 1) Reset
-     * the arm's encoder count; this IS the arm's upper limit point. 2) Increase the
-     * arm's performance by switching from the limited PID output limits to the full
-     * speed that the arm can support.
-     * 
-     * 
-     * However, only reset the encoder once per limit switch trip. This helps
-     * improve the accuracy of the encoder counts on the Talon as the RoboRIO's lag
-     * in processing the limit switch tripping could cause the Talon to constantly
-     * reset its encoder counts even when the limit switch isn't tripped.
-     * 
-     * Use hasRecentlyTrippedRevLimitSwitch and hasRecentlyTrippedRevLimitSwitch to do this.
-     */
-    if (m_hazmat_arm_talon.getSensorCollection().isRevLimitSwitchClosed()) {
-
-      if (!hasRecentlyTrippedRevLimitSwitch) {
-        hasRecentlyTrippedRevLimitSwitch = true;
-        
-        m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(RobotMap.hazmatJogLowerLimit, 0);
-
-        /*
-         * We've found our zero position. We know exactly where the arm is located.
-         * Enable the arm's full performance now that we know it's working properly.
-         */
-        setPerformanceLevel(PerformanceLevel.full);
-      }
-
-    } else {
-      hasRecentlyTrippedRevLimitSwitch = false;
-    }
-    
-    if (m_hazmat_arm_talon.getSensorCollection().isFwdLimitSwitchClosed()) {
-
-      if (!hasRecentlyTrippedFwdLimitSwitch) {
-        hasRecentlyTrippedFwdLimitSwitch = true;
-        
-        m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(RobotMap.hazmatJogUpperLimit, 0);
-
-        /*
-         * We've found our upper position. We know exactly where the arm is located.
-         * Enable the arm's full performance now that we know it's working properly.
-         */
-        setPerformanceLevel(PerformanceLevel.full);
-      }
-
-    } else {
-      hasRecentlyTrippedFwdLimitSwitch = false;
-    }
 
   }
 
@@ -336,21 +325,23 @@ public class Hazmat_Arm extends Subsystem {
 
     switch (level) {
     case limited:
-      /* While in limited mode, reduce the maximum output of the arm's Talon so it doesn't 
-       * damage anything with quick movements or high torque.
+      /*
+       * While in limited mode, reduce the maximum output of the arm's Talon so it
+       * doesn't damage anything with quick movements or high torque.
        */
       m_hazmat_arm_talon.configPeakOutputForward(0.4); // 0.2
       m_hazmat_arm_talon.configPeakOutputReverse(-0.4); // -0.2
-      
+
       m_currentLevel = PerformanceLevel.limited;
       break;
     case full:
-      /* While in full mode, run the system at the maximum output of the arm's Talon so it
-       * has full torque and maximum energy to move quickly.
+      /*
+       * While in full mode, run the system at the maximum output of the arm's Talon
+       * so it has full torque and maximum energy to move quickly.
        */
       m_hazmat_arm_talon.configPeakOutputForward(0.7); // 0.5
       m_hazmat_arm_talon.configPeakOutputReverse(-0.7); // -0.5
-      
+
       m_currentLevel = PerformanceLevel.full;
       break;
     }
