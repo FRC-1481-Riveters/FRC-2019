@@ -52,7 +52,7 @@ public class Climb_Jack extends Subsystem {
     climbJackMotor_Kp = smartDashNetworkTable.getEntry("climbJackMotorKp");
     climbJackMotor_Ki = smartDashNetworkTable.getEntry("climbJackMotorKI");
     climbJackMotor_Kd = smartDashNetworkTable.getEntry("climbJackMotorKD");
-    climbJackMotor_Kf = smartDashNetworkTable.getEntry("climbJackMotorKp");
+    climbJackMotor_Kf = smartDashNetworkTable.getEntry("climbJackMotorKF");
 
     /* Set these NetworkTable signals to their initial values.. */
     climbJackMotor_Kp.setDouble(0.6);
