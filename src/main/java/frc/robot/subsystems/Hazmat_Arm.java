@@ -318,7 +318,7 @@ public class Hazmat_Arm extends Subsystem {
      * reports rotation. It's backwards compared to how the code expects the sensor
      * to rotate.
      */
-    return -m_hazmat_arm_talon.getSensorCollection().getQuadraturePosition();
+    return -m_hazmat_arm_talon.getSelectedSensorPosition();
   }
 
   private void setPerformanceLevel(PerformanceLevel level) {
