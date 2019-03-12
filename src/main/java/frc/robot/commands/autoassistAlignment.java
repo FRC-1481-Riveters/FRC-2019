@@ -181,6 +181,9 @@ public class autoassistAlignment extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+
+    Robot.m_gyro.resetGyroHeading();
+    
     /* Load the latest camara angle offset from the parameters. */
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
 
