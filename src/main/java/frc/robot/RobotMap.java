@@ -88,7 +88,7 @@ public class RobotMap {
   // define solenoids here
   public static int hazmatPodIntake = 100; // 100 is good according to drive team
   public static int hazmatPodLoadStart = 0; // Cargo arm folded in
-  public static int hazmatHatchBottom = 159;
+  public static int hazmatHatchBottom = 203;
   public static int hazmatHatch1Delivery = 310;
   public static int hazmatRocket1Pod = 522;
   public static int hazmatRocket2Hatch = 1002;
