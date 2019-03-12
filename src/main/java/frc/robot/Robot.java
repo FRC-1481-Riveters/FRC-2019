@@ -25,7 +25,6 @@ import frc.robot.subsystems.Cargo_Arm;
 import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
 import frc.robot.subsystems.Indicators;
-import frc.robot.subsystems.Vision;
 
 import frc.robot.commands.*;
 
@@ -50,7 +49,6 @@ public class Robot extends TimedRobot {
   public static Vacuum m_HatchCoverVacuum;
   public static Vacuum m_CargoVacuum;
   public static Indicators m_indicators;
-  public static Vision m_vision;
 
 
   Command m_autonomousCommand;
@@ -63,7 +61,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    m_vision = new Vision();
     m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
     m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");
 
