@@ -53,6 +53,9 @@ public class Hazmat_Arm extends Subsystem {
   private NetworkTableEntry hazmatArmMotor_Kd;
   private NetworkTableEntry hazmatArmMotor_Kf;
 
+  private NetworkTableEntry hazmatArmMotor_MaxAccel;
+  private NetworkTableEntry hazmatArmMotor_MaxVel;
+
   public Hazmat_Arm() {
 
     /* Configure the close loop gains for slot 0 */
@@ -127,6 +130,20 @@ public class Hazmat_Arm extends Subsystem {
      * 
      */
     m_hazmat_arm_talon.configMotionAcceleration(200);
+
+    hazmatArmMotor_MaxAccel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxAccel");
+    hazmatArmMotor_MaxVel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxVel");
+
+    hazmatArmMotor_MaxAccel.setDouble(200.0);
+    hazmatArmMotor_MaxVel.setDouble(147.0);
+
+    hazmatArmMotor_MaxAccel.addListener(event -> {
+      m_hazmat_arm_talon.configMotionAcceleration((int) hazmatArmMotor_MaxAccel.getDouble(200));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    hazmatArmMotor_MaxVel.addListener(event -> {
+      m_hazmat_arm_talon.configMotionCruiseVelocity((int) hazmatArmMotor_MaxVel.getDouble(147.0));
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
     m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
@@ -339,8 +356,8 @@ public class Hazmat_Arm extends Subsystem {
        * While in full mode, run the system at the maximum output of the arm's Talon
        * so it has full torque and maximum energy to move quickly.
        */
-      m_hazmat_arm_talon.configPeakOutputForward(0.7); // 0.5
-      m_hazmat_arm_talon.configPeakOutputReverse(-0.7); // -0.5
+      m_hazmat_arm_talon.configPeakOutputForward(1.0);
+      m_hazmat_arm_talon.configPeakOutputReverse(-1.0);
 
       m_currentLevel = PerformanceLevel.full;
       break;
