@@ -10,7 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Hazmat_Arm;
-import frc.robot.subsystems.Indicators;
+import frc.robot.subsystems.HazmatIndicators;
 import frc.robot.RobotMap;
 
 public class HazmatGoUpCommand extends Command {
@@ -31,7 +31,7 @@ public class HazmatGoUpCommand extends Command {
     Robot.m_hazmat_arm.stepToNextIndexedPosition(Hazmat_Arm.stepDirection.stepUp);
     if(Robot.m_hazmat_arm.getTargetPosition() == RobotMap.hazmatHatchBottom)
     {
-      //Robot.m_indicators.setIndicator(Indicators.Color.green);
+      //Robot.m_indicators.setIndicator(HazmatIndicators.Color.green);
     }
   }
 

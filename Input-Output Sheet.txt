@@ -44,6 +44,14 @@ List of solenoids
 1   Hazmat cargo/ball suction system
 0   Hazmat hatch suction system
 
+List of PCM 1
+6  Purple LED display
+5  Blue LED display
+4  White LED display
+3  Red LED display
+2  Lime LED display
+1  Green LED display 
+ 
 ----------------------------------------------------------------------------------------------------------------------    
 
 

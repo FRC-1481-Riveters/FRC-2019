@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import frc.robot.subsystems.HazmatIndicators;
 
 
 public class Hazmat_Arm extends Subsystem {

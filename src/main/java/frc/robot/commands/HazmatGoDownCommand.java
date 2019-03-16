@@ -10,7 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Hazmat_Arm;
-import frc.robot.subsystems.Indicators;
+import frc.robot.subsystems.HazmatIndicators;
 import frc.robot.RobotMap;
 
 public class HazmatGoDownCommand extends Command {
