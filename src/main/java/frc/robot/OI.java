@@ -24,12 +24,16 @@ import frc.robot.commands.VacuumGrabGamePiece;
 import frc.robot.commands.VacuumReleaseAllGamePiece;
 import frc.robot.commands.autoassistAlignment;
 import frc.robot.commands.GameOverCommand;
+import frc.robot.commands.HazmatCalibrationCommand;
+import edu.wpi.first.wpilibj.buttons.InternalButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+
+    private long m_triggerHazmatCalibrationTimeStamp = 0;
 
     public class RumbleTimerJoystick extends Joystick {
 
@@ -62,6 +66,20 @@ public class OI {
     public void periodic() {
         driverController.periodic();
         operatorController.periodic();
+
+        if (operatorController.getRawButton(RobotMap.hazmatArmUpButton)
+                && operatorController.getRawButton(RobotMap.hazmatArmDownButton)) {
+
+            if (m_triggerHazmatCalibrationTimeStamp == 0) {
+                m_triggerHazmatCalibrationTimeStamp = System.currentTimeMillis();
+            }
+        } else {
+            m_triggerHazmatCalibrationTimeStamp = 0;
+        }
+
+        TriggerHazmatCalibration.setPressed(m_triggerHazmatCalibrationTimeStamp > 0 && (System.currentTimeMillis()
+                - m_triggerHazmatCalibrationTimeStamp) > RobotMap.hazMatOIEmergencyRecoveryDetectionTime);
+
     }
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a
@@ -111,6 +129,8 @@ public class OI {
     private Button ButtonCargoIntakeRollersSlow = new JoystickButton(driverController,
             RobotMap.cargoIntakeRollersSlowButton);
 
+    private InternalButton TriggerHazmatCalibration = new InternalButton();
+
     private Button ButtonVacuumGrabGamePiece = new JoystickButton(driverController, RobotMap.vacuumGrabGamePieceButton);
     private Button ButtonVacuumReleaseGamePiece = new JoystickButton(driverController,
             RobotMap.vacuumDropGamePieceButton);
@@ -123,10 +143,11 @@ public class OI {
 
         driverController.rumbleTime(durationMilliseconds);
     }
-    public void rumbleOperator(long durationMilliseconds){
+
+    public void rumbleOperator(long durationMilliseconds) {
         operatorController.rumbleTime(durationMilliseconds);
-}
-    
+    }
+
     public OI() {
 
         ButtonHazmatJogExtend.whileHeld(new HazmatJogExtendCommand());
@@ -146,7 +167,9 @@ public class OI {
         ButtonVacuumReleaseGamePiece.whenPressed(new VacuumReleaseAllGamePiece());
 
         ButtonAutoassistVision.whileHeld(new autoassistAlignment());
-        
+
         ButtonGameOver.whenPressed(new GameOverCommand());
+
+        TriggerHazmatCalibration.whileHeld(new HazmatCalibrationCommand());
     }
 }

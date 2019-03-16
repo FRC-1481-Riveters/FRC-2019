@@ -43,10 +43,10 @@ public class Hazmat_Arm extends Subsystem {
   }
 
   private enum PerformanceLevel {
-    limited, full
+    calibration, full, unknown
   }
 
-  private PerformanceLevel m_currentLevel = PerformanceLevel.limited;
+  private PerformanceLevel m_currentLevel = PerformanceLevel.unknown;
 
   private NetworkTableEntry hazmatArmMotor_Kp;
   private NetworkTableEntry hazmatArmMotor_Ki;
@@ -84,7 +84,7 @@ public class Hazmat_Arm extends Subsystem {
     m_hazmat_arm_talon.config_kI(0, hazmatArmMotor_Ki.getDouble(0.0));
     m_hazmat_arm_talon.config_kD(0, hazmatArmMotor_Kd.getDouble(0.0));
     m_hazmat_arm_talon.config_kF(0, hazmatArmMotor_Kf.getDouble(0.0));
-    
+
     /*
      * Add listeners that will update the Talon's PID's configuration, in the
      * background, when the signal changes over the NetworkTable, e.g. if a client
@@ -297,6 +297,12 @@ public class Hazmat_Arm extends Subsystem {
     SmartDashboard.putNumber("HazmatArmEncoderCounts", getActualPosition());
     SmartDashboard.putNumber("HazmatTargetPositionCounts", getTargetPosition());
 
+    if (getPerformanceLevel() == PerformanceLevel.calibration) {
+
+      m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0, 0);
+      m_hazmat_arm_talon.set(ControlMode.PercentOutput, RobotMap.hazmatCalibrationModeDrive);
+    }
+
   }
 
   @Override
@@ -310,6 +316,7 @@ public class Hazmat_Arm extends Subsystem {
     int safeTargetPosition = TargetPosition;
 
     if (getPerformanceLevel() == PerformanceLevel.full) {
+
       if (TargetPosition < RobotMap.hazmatJogLowerLimit) {
         safeTargetPosition = RobotMap.hazmatJogLowerLimit;
       }
@@ -317,9 +324,11 @@ public class Hazmat_Arm extends Subsystem {
       if (TargetPosition > RobotMap.hazmatJogUpperLimit) {
         safeTargetPosition = RobotMap.hazmatJogUpperLimit;
       }
+
+      m_hazmat_arm_talon.set(ControlMode.MotionMagic, safeTargetPosition);
+
     }
 
-    m_hazmat_arm_talon.set(ControlMode.MotionMagic, safeTargetPosition);
     m_targetPosition = safeTargetPosition;
 
   }
@@ -340,16 +349,20 @@ public class Hazmat_Arm extends Subsystem {
 
   private void setPerformanceLevel(PerformanceLevel level) {
 
+    if (level == m_currentLevel) {
+      return;
+    }
+
     switch (level) {
-    case limited:
+    case calibration:
       /*
-       * While in limited mode, reduce the maximum output of the arm's Talon so it
+       * While in calibration mode, reduce the maximum output of the arm's Talon so it
        * doesn't damage anything with quick movements or high torque.
        */
-      m_hazmat_arm_talon.configPeakOutputForward(0.4); // 0.2
-      m_hazmat_arm_talon.configPeakOutputReverse(-0.4); // -0.2
+      m_hazmat_arm_talon.configPeakOutputForward(0.2);
+      m_hazmat_arm_talon.configPeakOutputReverse(-0.2);
 
-      m_currentLevel = PerformanceLevel.limited;
+      m_currentLevel = PerformanceLevel.calibration;
       break;
     case full:
       /*
@@ -361,11 +374,23 @@ public class Hazmat_Arm extends Subsystem {
 
       m_currentLevel = PerformanceLevel.full;
       break;
+
+      case unknown:
+      break;
     }
+
 
   }
 
   private PerformanceLevel getPerformanceLevel() {
     return m_currentLevel;
+  }
+
+  public void setCalibrationMode(boolean enable) {
+    if (enable) {
+      setPerformanceLevel(PerformanceLevel.calibration);
+    } else {
+      setPerformanceLevel(PerformanceLevel.full);
+    }
   }
 }
