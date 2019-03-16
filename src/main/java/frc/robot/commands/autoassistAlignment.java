@@ -65,7 +65,7 @@ public class autoassistAlignment extends Command {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
 
-    m_PidControllerLeftRight = new PIDController(0.02, 0.00005, 0, m_gyroTurning, m_pidOutput, 0.02);
+    m_PidControllerLeftRight = new PIDController(0.03, 0.00008, 0, m_gyroTurning, m_pidOutput, 0.02);
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     NetworkTable visionTable = ntinst.getTable("Vision");
     targetInformation = visionTable.getEntry("targetInformation");
@@ -181,6 +181,9 @@ public class autoassistAlignment extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+
+    Robot.m_gyro.resetGyroHeading();
+    
     /* Load the latest camara angle offset from the parameters. */
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
 

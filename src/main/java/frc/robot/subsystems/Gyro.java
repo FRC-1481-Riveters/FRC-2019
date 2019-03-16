@@ -53,6 +53,11 @@ public class Gyro extends Subsystem {
     return m_ahrs.getYaw();
   }
 
+  public void resetGyroHeading() {
+    m_ahrs.zeroYaw();
+    m_diary.clear();
+  }
+
   public double gyroDiary(long timeStamp) {
     return m_diary.getHeadingAtTimeStamp(timeStamp);
   }

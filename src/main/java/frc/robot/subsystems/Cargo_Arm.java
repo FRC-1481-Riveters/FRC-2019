@@ -97,7 +97,7 @@ public class Cargo_Arm extends Subsystem {
 
   public int getActualPosition() {
 
-    return m_cargo_arm_right_talon.getSensorCollection().getQuadraturePosition();
+    return m_cargo_arm_right_talon.getSelectedSensorPosition();
 
   }
 }

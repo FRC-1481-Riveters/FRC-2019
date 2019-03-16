@@ -29,6 +29,7 @@ public class HazmatGetOutOfTheWayCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    setTimeout(1.0);
 
   }
 

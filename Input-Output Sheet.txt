@@ -87,6 +87,15 @@ Hazmat arm (copied on 30Jan by Karen)
 Cargo Intake Arm (copied by Karen on 30Jan)
     Inputs: buttons/joysticks of controller, encoders
 	  Outputs: cargo pivot arm motors, cargo arm intake motor
+	  
+   
+  public static int hazmatPodLoadStart = 0; off (no LED Lights)
+  public static int hazmatPodIntake = 100; lime
+  public static int hazmatHatchBottom = 203; blue
+  public static int hazmatHatch1Delivery = 310; red
+  public static int hazmatRocket1Pod = 522; purple
+  public static int hazmatRocket2Hatch = 1002; white
+  public static int hazmatRocket2Pod = 1270; green
 
 
 

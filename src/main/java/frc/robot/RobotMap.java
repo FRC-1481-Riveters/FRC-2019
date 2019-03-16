@@ -32,7 +32,7 @@ public class RobotMap {
 
   /* This button initiates the GameOver sequence */
   public static int gameOverButton = 4;
-  
+
   /*
    * This button makes the robot turn slower when the button is pressed. Drive
    * team calls this the "Detail Drive"
@@ -55,14 +55,14 @@ public class RobotMap {
    * 
    * See configOpenloopRamp() for more details.
    */
-  public static double driveFullThrottleRampTime = 0.025;
+  public static double driveFullThrottleRampTime = 0.1;
 
   public static int usbCamera = 1;
   // Climb Jack System Constants
   public static int climbJack_talon = 9;
   public static int ClimbJackFullyRetracted = 0;
   public static int climbJackMaxExtend = 53437;
-  public static int climbJackEndOfExtend =  3700;
+  public static int climbJackEndOfExtend = 3700;
   public static int climbJackJogRetractedLimit = 0;
   public static int climbJackJogExtendAxis = 3; // right trigger
   public static int climbJackJogRetractAxis = 2; // left trigger
@@ -77,7 +77,7 @@ public class RobotMap {
   public static int climbJackEndofTravel = 50000;
   public static double climbJackSlowRate = 5.0;
 
-  public static double teleopTimeLeft = 135; //seconds 
+  public static double teleopTimeLeft = 135; // seconds
 
   public final static int PID_PRIMARY = 0;
   public final static int kTimeoutMs = 30;
@@ -88,18 +88,23 @@ public class RobotMap {
   // define solenoids here
   public static int hazmatPodIntake = 100; // 100 is good according to drive team
   public static int hazmatPodLoadStart = 0; // Cargo arm folded in
-  public static int hazmatHatchBottom = 159;
+  public static int hazmatHatchBottom = 203;
   public static int hazmatHatch1Delivery = 310;
   public static int hazmatRocket1Pod = 522;
   public static int hazmatRocket2Hatch = 1002;
   public static int hazmatRocket2Pod = 1270;
   public static int hazmatMinHeightAboveCargoArm = 600; // TODO: find the true value of these motors
   public static int hazmatTargetHeightAboveCargoArm = hazmatMinHeightAboveCargoArm + 100;
+  // Number of ms of operator interface time before emergency recovery is
+  // initiated.
+  public static long hazMatOIEmergencyRecoveryDetectionTime = 2000;
+  // Drive strength to drive the hazmat arm during calibration mode.
+  public static double hazmatCalibrationModeDrive = -0.20;
   /*
    * this is the number of counts of error that hazmat will tolerate before saying
    * its reached its target location.
    */
-  public static int hazmatPositionTolerance = 20 ;
+  public static int hazmatPositionTolerance = 20;
   public static int hazmatArmUpButton = 4;
   public static int hazmatArmDownButton = 2;
   // public static int hazmatDeliverButton = 3;
@@ -127,10 +132,10 @@ public class RobotMap {
   public static int cargoPivotArmStartPosition = 0;
   public static int cargoPivotArmIntakePosition = 33000;
   public static int cargoPivotArmClimbPosition = 24000;
-  public static int cargoPivotArmRate = 600; 
-  public static int cargoPivotMaxRetract = 55000; 
+  public static int cargoPivotArmRate = 600;
+  public static int cargoPivotMaxRetract = 55000;
   public static int cargoPivotMaxExtend = 0;
-  public static int cargoLimitSwitchExtendInput = 4; 
+  public static int cargoLimitSwitchExtendInput = 4;
   public static int cargoLimitSwitchRetractInput = 5;
   public static int cargoIntakeSpinRate = 100;
   public static int CargoTargetPosition = 0;
@@ -163,9 +168,10 @@ public class RobotMap {
   public static int vacuumGrabGamePieceButton = 7;
   public static int vacuumDropGamePieceButton = 8;
   public static long vacuumPumpSpinUpTime = 500; // milliseconds before measuring the pump's impedance
-  
-  //milliseconds to activate vacuum-breaking solenoid valve when e.g. dropping a game piece
-  public static long vacuumSolenoidOnTimeToVentVacuum = 5000; //750 
+
+  // milliseconds to activate vacuum-breaking solenoid valve when e.g. dropping a
+  // game piece
+  public static long vacuumSolenoidOnTimeToVentVacuum = 5000; // 750
   /*
    * Minimum number of "testForGamePiece()" detections in a row that indicate that
    * the game piece is in place.
@@ -182,11 +188,10 @@ public class RobotMap {
   public static double cheeseyDriveTrhreshold = 0.5;
   public static double cheeseyDriveFactor = 0.5;
 
-
   // Auto assist calibrations
   public static int autoassistVisionButton = 1;
 
-  //  Indicators
+  // Indicators
   public static int solenoidLEDRed = 3;
   public static int solenoidLEDGreen = 2;
   public static int solenoidLEDBlue = 5;
