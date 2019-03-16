@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,7 +18,7 @@ import com.ctre.phoenix.motorcontrol.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import frc.robot.subsystems.HazmatIndicators;
-
+import frc.robot.subsystems.HazmatIndicators.Color;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.EntryListenerFlags;
@@ -36,10 +37,12 @@ public class Hazmat_Arm extends Subsystem {
   protected class Position {
     public int EncoderCounts;
     public String EncoderCountHazmatWord;
+    public HazmatIndicators.Color color;
 
-    public Position(int HazmatPosition, String HazmatPositionWord) {
+    public Position(int HazmatPosition, String HazmatPositionWord, HazmatIndicators.Color color) {
       EncoderCounts = HazmatPosition;
       EncoderCountHazmatWord = HazmatPositionWord;
+      this.color = color;
     }
   }
 
@@ -172,12 +175,12 @@ public class Hazmat_Arm extends Subsystem {
      * list is sorted by the value of the position later, so the order that the
      * positions are added isn't important.
      */
-    hazmatPositions.add(new Position(RobotMap.hazmatPodIntake, "hazmatPodIntake"));
-    hazmatPositions.add(new Position(RobotMap.hazmatPodLoadStart, "hazmatPodLoadStart"));
-    hazmatPositions.add(new Position(RobotMap.hazmatHatchBottom, "hazmatHatchBottom"));
-    hazmatPositions.add(new Position(RobotMap.hazmatRocket1Pod, "hazmatRocket1Pod"));
-    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Hatch, "hazmatRocket2Hatch"));
-    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Pod, "hazmatRocket2Pod"));
+    hazmatPositions.add(new Position(RobotMap.hazmatPodIntake, "hazmatPodIntake", Color.lime));
+    hazmatPositions.add(new Position(RobotMap.hazmatPodLoadStart, "hazmatPodLoadStart", Color.blue ));
+    hazmatPositions.add(new Position(RobotMap.hazmatHatchBottom, "hazmatHatchBottom", Color.red ));
+    hazmatPositions.add(new Position(RobotMap.hazmatRocket1Pod, "hazmatRocket1Pod", Color.purple ));
+    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Hatch, "hazmatRocket2Hatch", Color.white ));
+    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Pod, "hazmatRocket2Pod", Color.green));
 
     /*
      * Sort the hazmatPositions list by the value of its positions. This is super
@@ -246,6 +249,7 @@ public class Hazmat_Arm extends Subsystem {
           setTargetPosition(hazmatPositions.get(index).EncoderCounts);
 
           SmartDashboard.putString("HazmatArmTargetName", hazmatPositions.get(index).EncoderCountHazmatWord);
+          Robot.m_hazmatIndicators.setIndicator(hazmatPositions.get(index).color);
           /*
            * Since we've found our new position, and set our arm moving to this new
            * position, we don't need to search any longer for any other positions, so bail
@@ -284,6 +288,7 @@ public class Hazmat_Arm extends Subsystem {
            */
           setTargetPosition(hazmatPositions.get(index).EncoderCounts);
           SmartDashboard.putString("HazmatArmTargetName", hazmatPositions.get(index).EncoderCountHazmatWord);
+          Robot.m_hazmatIndicators.setIndicator(hazmatPositions.get(index).color);
           break;
         }
       }
