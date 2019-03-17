@@ -36,13 +36,23 @@ List of encoders
     Hazmat arm encoder  - to stop at specific heights
     Cargo Arm encoder - to stop at specific angles
 
-List of solenoids
+List of solenoids in PCM 0
 5   Blue LED display
 4   Green LED display
 3   Red LED display
 2   
 1   Hazmat cargo/ball suction system
 0   Hazmat hatch suction system
+
+List of solenoids in PCM 1
+0
+1
+2
+3
+4
+5
+6
+7  autoassist LED ring
 
 ----------------------------------------------------------------------------------------------------------------------    
 
