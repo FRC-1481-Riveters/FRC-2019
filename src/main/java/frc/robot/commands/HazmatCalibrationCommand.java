@@ -21,6 +21,13 @@ public class HazmatCalibrationCommand extends Command {
   @Override
   protected void initialize() {
     setTimeout(5.0);
+
+    /*
+     * Enable the arm's calibration mode sequence for the duration of this command.
+     * The subsystem runs its own calibration sequence and this command just enables
+     * the operator to use the controller to start and maintain the calibration
+     * sequence.
+     */
     Robot.m_hazmat_arm.setCalibrationMode(true);
   }
 
@@ -38,13 +45,39 @@ public class HazmatCalibrationCommand extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+
     Robot.m_hazmat_arm.setCalibrationMode(false);
+
+    /*
+     * Clear out the previous hazmat target position and reset it to the arm's
+     * current position. This keeps the arm from jumping up to its previously set
+     * target position (that might have been completely wrong during uncalibrated
+     * operation).
+     * 
+     * Ideally, the actualPosition is 0 because that's what the calibratin procedure
+     * ends with, but dont assume that and simply ask the arm where it *thinks* it
+     * is and set it to that same value so it stays there and doesn't move anywhere.
+     */
+    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getActualPosition());
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+
     Robot.m_hazmat_arm.setCalibrationMode(false);
+
+    /*
+     * Clear out the previous hazmat target position and reset it to the arm's
+     * current position. This keeps the arm from jumping up to its previously set
+     * target position (that might have been completely wrong during uncalibrated
+     * operation).
+     * 
+     * Ideally, the actualPosition is 0 because that's what the calibratin procedure
+     * ends with, but dont assume that and simply ask the arm where it *thinks* it
+     * is and set it to that same value so it stays there and doesn't move anywhere.
+     */
+    Robot.m_hazmat_arm.setTargetPosition(Robot.m_hazmat_arm.getActualPosition());
   }
 }
