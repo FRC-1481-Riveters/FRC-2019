@@ -146,12 +146,12 @@ public class autoassistAlignment extends Command {
         /*
          * Determine the timestamp, in terms of the roborio's clock, of the
          * targetHeading received from the vision processor. Just subtract the age of
-         * the targetHeading from the roborio's timestamp (last_change) that represents
-         * when the message was received from the vision coprocessor. This should be
-         * very close to when the vision coprocessor started working on the image that
-         * it used to determine the heading of the target.
+         * the targetHeading from the roborio's timestamp ( currentTimeMillis() ) that
+         * represents when the message was received from the vision coprocessor. This
+         * should be very close to when the vision coprocessor started working on the
+         * image that it used to determine the heading of the target.
          */
-        m_targetHeadingTimestamp = targetInformation.getInfo().last_change - targetHeadingAge;
+        m_targetHeadingTimestamp = System.currentTimeMillis() - targetHeadingAge;
 
         /*
          * Now look back in time to the heading of the robot (its "pose") at the time
@@ -163,7 +163,8 @@ public class autoassistAlignment extends Command {
          * This is when the camera is not quite perfectly facing directly forward along
          * the axis of the robot.
          */
-        m_targetHeading = getPreviousRobotHeading(m_targetHeadingTimestamp) + targetHeadingAtTimestamp + m_cameraAngleOffset;
+        m_targetHeading = getPreviousRobotHeading(m_targetHeadingTimestamp) + targetHeadingAtTimestamp
+            + m_cameraAngleOffset;
 
         /* Tell the PID that's steering the robot where its new heading is. */
         m_PidControllerLeftRight.setSetpoint(m_targetHeading);
@@ -174,7 +175,7 @@ public class autoassistAlignment extends Command {
             targetInformation.getString(""), e.toString()));
       }
 
-    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate | EntryListenerFlags.kImmediate);
 
   }
 
@@ -183,7 +184,7 @@ public class autoassistAlignment extends Command {
   protected void initialize() {
 
     Robot.m_gyro.resetGyroHeading();
-    
+
     /* Load the latest camara angle offset from the parameters. */
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
 

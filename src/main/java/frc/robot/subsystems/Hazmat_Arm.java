@@ -303,6 +303,14 @@ public class Hazmat_Arm extends Subsystem {
     SmartDashboard.putNumber("HazmatArmEncoderCounts", getActualPosition());
     SmartDashboard.putNumber("HazmatTargetPositionCounts", getTargetPosition());
 
+    /*
+     * While the hazmat arm is in calibration mode, slowly move the arm down toward
+     * the mechanical stops without using the encoder counts (use
+     * ControlMode.PercentOutput). Also, as you're moving, reset the encoder counts
+     * so that whent the calibration mode ends, the arm will be resting on its
+     * mechanical stops (its starting position) and the counts will be 0; just like
+     * after a perfect power-on.
+     */
     if (getPerformanceLevel() == PerformanceLevel.calibration) {
 
       m_hazmat_arm_talon.getSensorCollection().setQuadraturePosition(0, 0);
@@ -381,11 +389,11 @@ public class Hazmat_Arm extends Subsystem {
       m_currentLevel = PerformanceLevel.full;
       break;
 
-      case unknown:
+    case unknown:
       break;
     }
 
-
+    
   }
 
   private PerformanceLevel getPerformanceLevel() {
@@ -394,6 +402,15 @@ public class Hazmat_Arm extends Subsystem {
 
   public void setCalibrationMode(boolean enable) {
     if (enable) {
+      /*
+       * During the calibration process, the arm will slowly move down toward its
+       * initial position while resetting the quadrature encoder to 0.
+       * 
+       * This way, when the calibration sequence runs long enough for the arm to rest
+       * on its mechanical stops at the bottom of its travel, and the encoder counters
+       * have been reset to zero, it'll be in the same state it starts in; at its
+       * rest, with encoder counts at 0.
+       */
       setPerformanceLevel(PerformanceLevel.calibration);
     } else {
       setPerformanceLevel(PerformanceLevel.full);

@@ -67,16 +67,64 @@ public class OI {
         driverController.periodic();
         operatorController.periodic();
 
+        /*
+         * This is how you can trigger Commands when 2 real buttons are pressed (or
+         * something like a joystick axis must be at least a certain minimum value, e.g.
+         * > 10%.)
+         * 
+         * Determine if the TriggerHazmatCalibration button is being pressed. This
+         * button is an InternalButton; it doesn't exist on any real device, like a
+         * joystick. It's a virtual button. It's triggered when both the Hazmat step up
+         * AND step down buttons are pressed for at least
+         * hazMatOIEmergencyRecoveryDetectionTime ms long (requiring both buttons to be
+         * held, and held for a length of time keeps the operator from accidentally
+         * entering Hazmat calibration mode while they're driving around and messing up
+         * a perfectly calibrated Hazmat arm.)
+         * 
+         * 
+         */
+
         if (operatorController.getRawButton(RobotMap.hazmatArmUpButton)
                 && operatorController.getRawButton(RobotMap.hazmatArmDownButton)) {
 
+            /*
+             * Both buttons are being held. If this is the first time the buttons have been
+             * pressed simultaneously, save a copy of the current system timestamp. We'll
+             * use this timestamp later to determine how long the buttons have been held.
+             */
+
             if (m_triggerHazmatCalibrationTimeStamp == 0) {
+                /*
+                 * This is the first time that periodic() has run since both buttons were
+                 * pressed simultaneously. Get a copy of the timestamp so we can use it later to
+                 * determine how long both buttons have been pressed.
+                 */
                 m_triggerHazmatCalibrationTimeStamp = System.currentTimeMillis();
             }
         } else {
+            /*
+             * The buttons aren't being held simultaneously right now. Reset the timestamp
+             * so we're ready for the next time the operator presses both buttons at the
+             * same time.
+             */
             m_triggerHazmatCalibrationTimeStamp = 0;
         }
 
+        /*
+         * If both buttons have been held for at least
+         * hazMatOIEmergencyRecoveryDetectionTime ms, set the virtual InternalButton
+         * TriggerHazmatCalibration to pressed. The InternalButton logic does the rest
+         * to call the calibration command.
+         * 
+         * If the m_triggerHazmatCalibrationTimeStamp is 0, the buttons aren't being
+         * held together at all. Set the pressed() interface to false.
+         * 
+         * If the time since the first timestamp of the first time we pressed both
+         * buttons together isn't more than hazMatOIEmergencyRecoveryDetectionTime
+         * earlier than the current time (i.e. we haven't waited long enough to be sure
+         * that the operator really really wanted to press both buttons) set the
+         * pressed() interface to false.
+         */
         TriggerHazmatCalibration.setPressed(m_triggerHazmatCalibrationTimeStamp > 0 && (System.currentTimeMillis()
                 - m_triggerHazmatCalibrationTimeStamp) > RobotMap.hazMatOIEmergencyRecoveryDetectionTime);
 
@@ -98,7 +146,7 @@ public class OI {
     // three ways:
 
     // Start the command when the button is pressed and let it run the command
-    // until it is finished as determined by it's isFinished method.
+    // until it is finished as determined by its isFinished method.
     // button.whenPressed(new ExampleCommand());
 
     // Run the command while the button is being held down and interrupt it once
@@ -106,7 +154,7 @@ public class OI {
     // button.whileHeld(new ExampleCommand());
 
     // Start the command when the button is released and let it run the command
-    // until it is finished as determined by it's isFinished method.
+    // until it is finished as determined by its isFinished method.
     // button.whenReleased(new ExampleCommand());
     public RumbleTimerJoystick driverController = new RumbleTimerJoystick(RobotMap.driverController);
     public RumbleTimerJoystick operatorController = new RumbleTimerJoystick(RobotMap.operatorController);
@@ -134,9 +182,9 @@ public class OI {
     private Button ButtonVacuumGrabGamePiece = new JoystickButton(driverController, RobotMap.vacuumGrabGamePieceButton);
     private Button ButtonVacuumReleaseGamePiece = new JoystickButton(driverController,
             RobotMap.vacuumDropGamePieceButton);
-            
+
     private Button ButtonAutoassistVision = new JoystickButton(driverController, RobotMap.autoassistVisionButton);
-    
+
     private Button ButtonGameOver = new JoystickButton(driverController, RobotMap.gameOverButton);
 
     public void rumbleDriver(long durationMilliseconds) {

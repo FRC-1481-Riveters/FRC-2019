@@ -26,6 +26,7 @@ import frc.robot.subsystems.CargoIntakeRoller;
 import frc.robot.subsystems.Vacuum;
 import frc.robot.subsystems.HazmatIndicators;
 import frc.robot.subsystems.Indicators;
+import frc.robot.subsystems.AutoAssist;
 
 import frc.robot.commands.*;
 
@@ -50,7 +51,12 @@ public class Robot extends TimedRobot {
   public static Vacuum m_HatchCoverVacuum;
   public static Vacuum m_CargoVacuum;
   public static Indicators m_indicators;
+
   public static HazmatIndicators m_hazmatIndicators;
+  public static AutoAssist m_autoAssist;
+
+ 
+
 
 
   Command m_autonomousCommand;
@@ -63,6 +69,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
+    m_autoAssist = new AutoAssist();
     m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
     m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");
 
@@ -118,6 +125,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    
+    m_autoAssist.disabledInit();
   }
 
   @Override
@@ -150,6 +159,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.start();
     }
+
+    m_autoAssist.autonomousInit();
   }
 
   /**
@@ -169,6 +180,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_autoAssist.teleopInit();
   }
 
   /**
