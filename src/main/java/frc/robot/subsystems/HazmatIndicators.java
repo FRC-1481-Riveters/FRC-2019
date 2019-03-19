@@ -16,12 +16,12 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class HazmatIndicators extends Subsystem {
-  private Solenoid m_redHazmatLED = new Solenoid(RobotMap.solenoidHazmatLEDRed);
-  private Solenoid m_blueHazmatLED = new Solenoid(RobotMap.solenoidHazmatLEDBlue);
-  private Solenoid m_greenHazmatLED = new Solenoid(RobotMap.solenoidHazmatLEDGreen);
-  private Solenoid m_purpleHazmatLED = new Solenoid(RobotMap.solenoidLEDPurple);
-  private Solenoid m_whiteHazmatLED = new Solenoid(RobotMap.solenoidLEDWhite);
-  private Solenoid m_limeHazmatLED = new Solenoid(RobotMap.solenoidLEDLime);
+  private Solenoid m_redHazmatLED = new Solenoid(RobotMap.HazmatIndicatorPCMId, RobotMap.solenoidHazmatLEDRed);
+  private Solenoid m_blueHazmatLED = new Solenoid(RobotMap.HazmatIndicatorPCMId, RobotMap.solenoidHazmatLEDBlue);
+  private Solenoid m_greenHazmatLED = new Solenoid(RobotMap.HazmatIndicatorPCMId, RobotMap.solenoidHazmatLEDGreen);
+  private Solenoid m_purpleHazmatLED = new Solenoid(RobotMap.HazmatIndicatorPCMId, RobotMap.solenoidLEDPurple);
+  private Solenoid m_whiteHazmatLED = new Solenoid(RobotMap.HazmatIndicatorPCMId, RobotMap.solenoidLEDWhite);
+  private Solenoid m_limeHazmatLED = new Solenoid(RobotMap.HazmatIndicatorPCMId, RobotMap.solenoidLEDLime);
 
   public enum Color {
     off, red, blue, green, purple, white, lime

@@ -207,4 +207,5 @@ public class RobotMap {
   public static int solenoidLEDPurple = 6; // check with robot for correct number 
   public static int solenoidLEDWhite = 4; // check with robot for correct number
   public static int solenoidLEDLime = 2 ; // check with robot for correct number
+  public static int HazmatIndicatorPCMId = 1;
 }
