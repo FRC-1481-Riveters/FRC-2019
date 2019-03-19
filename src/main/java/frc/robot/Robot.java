@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     m_autoAssist = new AutoAssist();
     m_HatchCoverVacuum = new Vacuum(RobotMap.vacuumHatchCoverCANId,RobotMap.solenoidHatchCoverID,"HatchCover");
     m_CargoVacuum = new  Vacuum(RobotMap.vacuumCargoCANId,RobotMap.solenoidCargoID,"Cargo");
-
+    m_indicators = new Indicators();
     m_hazmatIndicators = new HazmatIndicators();
     m_drive = new Drive();
     m_climb_jack = new Climb_Jack();
