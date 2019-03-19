@@ -81,7 +81,7 @@ public class Vacuum extends Subsystem {
   // here. Call these from Commands.
 
   private WPI_TalonSRX m_vacuumTalon;
-  private TimedSolenoid m_ventSolenoid;
+  private Solenoid m_ventSolenoid;
   private String m_subsystemName;
   private long m_timeStampOfEnable = 0;
   private RunningAverage m_averageConductance = new RunningAverage();
@@ -97,34 +97,6 @@ public class Vacuum extends Subsystem {
 
   private state m_vacuumState = state.off;
 
-  public class TimedSolenoid extends Solenoid {
-
-    private long m_timeStampTimeout;
-    private boolean m_setState;
-
-    public TimedSolenoid(int channel) {
-      super(channel);
-    }
-
-    public void set(boolean state, long durationMilliseconds) {
-
-      long newTimestamp = durationMilliseconds + System.currentTimeMillis();
-
-      m_timeStampTimeout = Math.max(m_timeStampTimeout, newTimestamp);
-
-      m_setState = state;
-      set(m_setState);
-    }
-
-    public void periodic() {
-      if (m_timeStampTimeout != 0 && System.currentTimeMillis() > m_timeStampTimeout) {
-        m_timeStampTimeout = 0;
-        m_setState = !m_setState;
-        set(m_setState);
-      }
-    }
-  }
-
   public Vacuum(int TalonCANID, int solenoidID, String name) {
 
     /*
@@ -132,7 +104,7 @@ public class Vacuum extends Subsystem {
      * so we can use them later.
      */
     m_vacuumTalon = new WPI_TalonSRX(TalonCANID);
-    m_ventSolenoid = new TimedSolenoid(solenoidID);
+    m_ventSolenoid = new Solenoid(solenoidID);
 
     m_subsystemName = name;
 
@@ -225,7 +197,8 @@ public class Vacuum extends Subsystem {
        * will run for a short length of time, vacuumSolenoidOnTimeToVentVacuum, and
        * automatically turn off later.
        */
-      m_ventSolenoid.set(true, RobotMap.vacuumSolenoidOnTimeToVentVacuum);
+      m_ventSolenoid.setPulseDuration(RobotMap.vacuumSolenoidOnTimeToVentVacuum / 1000.0);
+      m_ventSolenoid.startPulse();
     }
     /*
      * Reset the timestamp to 0 so we can detect the first time we turn on the
@@ -318,7 +291,6 @@ public class Vacuum extends Subsystem {
     SmartDashboard.putNumber(m_subsystemName + "VacuumMotorConductance", conductance);
     SmartDashboard.putNumber(m_subsystemName + "VacuumMotorAverageConductance", m_averageConductance.getAverage());
 
-    m_ventSolenoid.periodic();
   }
 
   @Override
