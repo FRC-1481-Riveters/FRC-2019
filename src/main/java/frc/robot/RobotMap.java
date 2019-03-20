@@ -202,10 +202,10 @@ public class RobotMap {
 
   // HazmatIndicators
   public static int solenoidHazmatLEDRed = 3;
-  public static int solenoidHazmatLEDBlue = 5;
+  public static int solenoidHazmatLEDBlue = 2;
   public static int solenoidHazmatLEDGreen = 1;
   public static int solenoidLEDPurple = 6; // check with robot for correct number 
   public static int solenoidLEDWhite = 4; // check with robot for correct number
-  public static int solenoidLEDLime = 2 ; // check with robot for correct number
+  public static int solenoidLEDLime = 5 ; // check with robot for correct number
   public static int HazmatIndicatorPCMId = 1;
 }
