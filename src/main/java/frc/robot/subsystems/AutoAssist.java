@@ -11,10 +11,51 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.RobotMap;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class AutoAssist extends Subsystem {
 
   private Solenoid m_autoassistCameraLightControl = new Solenoid(RobotMap.autoAssistCameraPCMId,
       RobotMap.autoAssistCameraSolenoidId);
+
+  /*
+   * Create a networktable entry called autoAssistConnectionTest for use by the
+   * RPi to see if the connection has gone stale. This message is always sent no
+   * later than once every 500 ms (give or take).
+   */
+  NetworkTableEntry autoAssistConnectionTest = NetworkTableInstance.getDefault().getTable("Vision")
+      .getEntry("autoAssistConnectionTest");
+
+  /*
+   * Create a timer that we can use to periodically send a new networktables
+   * message.
+   */
+  Timer backgroundTimer = new Timer();
+
+  protected class AutoAssistPeriodicTask extends TimerTask {
+    public void run() {
+      /*
+       * Update the network table message with a snapshot of the current system time.
+       * It doesn't matter what we're sending, as long is the value is changing, which
+       * will induce the networktables to send a fresh message.
+       */
+      autoAssistConnectionTest.setNumber(System.currentTimeMillis());
+    }
+  }
+
+  AutoAssistPeriodicTask backgroundTask = new AutoAssistPeriodicTask();
+
+  public AutoAssist() {
+    /*
+     * Start the timer without delay, but have the timer fire every 500 ms to call
+     * backgroundTask, which will fire off a new autoAssistConnectionTest message.
+     */
+    backgroundTimer.schedule(backgroundTask, 0, 500);
+  }
 
   public void disabledInit() {
 
