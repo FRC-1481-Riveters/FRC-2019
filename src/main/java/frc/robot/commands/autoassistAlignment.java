@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 
 import edu.wpi.first.wpilibj.Preferences;
 
-
 public class autoassistAlignment extends Command {
   private PIDController m_PidControllerLeftRight;
   private gyroPIDSource m_gyroTurning = new gyroPIDSource();
@@ -65,7 +64,10 @@ public class autoassistAlignment extends Command {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
 
-    m_PidControllerLeftRight = new PIDController(0.03, 0.00008, 0, m_gyroTurning, m_pidOutput, 0.02);
+    m_PidControllerLeftRight = new PIDController(0.03, 0.00008, 0, m_gyroTurning, m_pidOutput);
+    m_PidControllerLeftRight.setInputRange(-180.0, 180.0);
+    m_PidControllerLeftRight.setContinuous();
+
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     NetworkTable visionTable = ntinst.getTable("Vision");
     targetInformation = visionTable.getEntry("targetInformation");
@@ -183,11 +185,10 @@ public class autoassistAlignment extends Command {
   @Override
   protected void initialize() {
 
-    Robot.m_gyro.resetGyroHeading();
-
     /* Load the latest camara angle offset from the parameters. */
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
 
+    m_PidControllerLeftRight.reset();
     m_PidControllerLeftRight.enable();
   }
 
@@ -235,13 +236,13 @@ public class autoassistAlignment extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    m_PidControllerLeftRight.reset();
+    m_PidControllerLeftRight.disable();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    m_PidControllerLeftRight.reset();
+    m_PidControllerLeftRight.disable();
   }
 }
