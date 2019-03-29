@@ -16,9 +16,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import java.util.LinkedList;
 import java.util.Collections;
 import edu.wpi.first.wpilibj.Preferences;
-import frc.robot.subsystems.Indicators;
-
-
 
 public class Vacuum extends Subsystem {
 
@@ -90,6 +87,7 @@ public class Vacuum extends Subsystem {
   private boolean m_newGamePieceDetected = false;
 
   private double m_vacuumGamePieceDetectedConductance;
+  private double m_vacuumMotorPresentConductance;
 
   public enum state {
     off /* motor is off */, grabbing /* trying to pickup a piece */, holding
@@ -124,10 +122,24 @@ public class Vacuum extends Subsystem {
      * Every pump's motor is different, so look this value up on this robot for this
      * pump.
      * 
-     * If we don't have a calibration for this pump stored in a file, just use the
-     * default value from RobotMap, which is vacuumGamePieceDetectedConductance.
+     * If we don't have a calibration for this pump stored in a preference, just use
+     * the default value from RobotMap, which is vacuumGamePieceDetectedConductance.
      */
-    m_vacuumGamePieceDetectedConductance = Preferences.getInstance().getDouble("vacuum" + name + "GamePieceDetectedConductance", RobotMap.vacuumGamePieceDetectedConductance);
+    m_vacuumGamePieceDetectedConductance = Preferences.getInstance()
+        .getDouble("vacuum" + name + "GamePieceDetectedConductance", RobotMap.vacuumGamePieceDetectedConductance);
+
+    /*
+     * Set the threshold for this motor's "I am properly wired" vs "I am miswired"
+     * conductance value (which is related to current and the system voltage)
+     * 
+     * Every pump's motor is different, so look this value up on this robot for this
+     * pump.
+     * 
+     * If we don't have a calibration for this pump stored in a preference, just use
+     * the default value from RobotMap, which is vacuumMotorPresentConductance.
+     */
+    m_vacuumMotorPresentConductance = Preferences.getInstance().getDouble("vacuum" + name + "MotorPresentConductance",
+        RobotMap.vacuumMotorPresentConductance);
   }
 
   public void grabGamePiece() {
@@ -139,7 +151,7 @@ public class Vacuum extends Subsystem {
     if (m_timeStampOfEnable == 0) {
       m_timeStampOfEnable = System.currentTimeMillis();
     }
-    Robot.m_indicators.setIndicator(Indicators.Color.blue);
+
     /*
      * Close the venting solenoid so we can start pulling a vacuum with the vacuum
      * motor.
@@ -153,44 +165,42 @@ public class Vacuum extends Subsystem {
 
     m_vacuumState = state.grabbing;
 
-    
   }
 
   public void holdGamePiece() {
 
     /*
-     * Close the venting solenoid so we can maintain pulling a vacuum with the
-     * vacuum motor.
+     * Close the venting solenoid so we can maintain a vacuum with the vacuum motor.
      */
     m_ventSolenoid.set(false);
     /*
-     * Turn on the vacuum motor to start pulling a vacuum and hold onto a game piece
-     * already in the suction cups.
+     * Slow down the vacuum motor to quiet down the system, but still maintain a
+     * hold on a game piece already in the suction cups.
      */
     m_vacuumTalon.set(RobotMap.vacuumSustainHoldSpeed);
 
     m_vacuumState = state.holding;
-
-    Robot.m_indicators.setIndicator(Indicators.Color.red);
   }
 
   public void releaseGamePiece() {
     /*
-     * Turn off the motor to reduce the level of vacuum. We want to drop the game
-     * piece.
+     * Turn off the motor to eliminate a vacuum. We want to drop the game piece.
      */
     m_vacuumTalon.set(0.0);
-    
-    /* The Pneumatic Control Module can only sink a total of 500 mA, total, across all solenoids.
-     * However, each of the solenoids draws 4.8 W (0.4 A).
+
+    /*
+     * The Pneumatic Control Module can only sink a total of 500 mA, total, across
+     * all solenoids. However, each of the solenoids draws 4.8 W (0.4 A).
      * 
-     * If we drive both of them, we're overbudget on current for the PCM. Try to avoid this.
+     * If we drive both of them, we're overbudget on current for the PCM. Try to
+     * avoid this.
      * 
-     * If the vacuum is already off, don't activate the solenoid as there's no vacuum to release
-     * from the system. This conserves current going through the PCM's solenoid driver for solenoids
-     * that shouldn't need release control.
+     * If the vacuum is already off or isn't holding a game piece, don't activate
+     * the solenoid as there's no vacuum to release from the system. This conserves
+     * current going through the PCM's solenoid driver for solenoids that shouldn't
+     * need release control.
      */
-    if (m_vacuumState != state.off) {
+    if (m_vacuumState == state.holding) {
       /*
        * Open the venting solenoid for this vacuum system to allow the game piece to
        * fall off the suction cup by breaking the vacuum in this system. The solenoid
@@ -207,8 +217,6 @@ public class Vacuum extends Subsystem {
     m_timeStampOfEnable = 0;
 
     m_vacuumState = state.off;
-
-    Robot.m_indicators.setIndicator(Indicators.Color.off);
   }
 
   public boolean isDetectsGamePiece() {
@@ -226,21 +234,28 @@ public class Vacuum extends Subsystem {
     if (m_timeStampOfEnable > 0 && (System.currentTimeMillis() - m_timeStampOfEnable) > RobotMap.vacuumPumpSpinUpTime) {
       /*
        * If the motor is running for at least vacuumPumpSpinUpTime ms AND the output
-       * current is BELOW 2 amps (vacuumGamePieceDetectedCurrent) , you probably have
-       * a game piece.
+       * current is BELOW ~2 amps (vacuumGamePieceDetectedCurrent) but above a minimum
+       * "motor is wired correctly" conductance, you probably have a game piece.
        * 
        * If the motor is running for at least vacuumPumpSpinUpTime ms AND the output
-       * current is ABOVE 2 amps (vacuumGamePieceDetectedCurrent), you haven't got a
+       * current is ABOVE ~2 amps (vacuumGamePieceDetectedCurrent), you haven't got a
        * game piece.
+       * 
+       * These pumps work *less* when they're unable to pump air (because e.g. they've
+       * pulled a vacuum.)
+       * 
+       * It's weird. Trust me. This is how it works.
        * 
        * The vacuumPumpSpinUpTime ms gives the motor on the vacuum pump to spin up so
        * the current measurement from the Talon has had time to settle out to a
        * meaningful number.
        * 
-       * It's weird. Trust me. This is how it works.
        */
 
-      isDetected = m_averageConductance.getAverage() < m_vacuumGamePieceDetectedConductance;
+      double conductance = m_averageConductance.getAverage();
+
+      isDetected = (conductance < m_vacuumGamePieceDetectedConductance)
+          && (conductance > m_vacuumMotorPresentConductance);
     }
 
     return isDetected;
@@ -254,7 +269,9 @@ public class Vacuum extends Subsystem {
      * level. This level is enough to hold vacuum on the game piece but is not as
      * noisy as full vacuum speed.
      * 
-     * Also, request that the driver controller rumble for a few milliseconds.
+     * Also, request that the driver and operator controller rumble for a few
+     * milliseconds so they know right away when a game piece has been detected and
+     * held.
      */
 
     m_debouncedDetectedState.addNewValue(testForGamePiece());
@@ -277,6 +294,10 @@ public class Vacuum extends Subsystem {
     double currentBatteryVoltage = m_vacuumTalon.getBusVoltage();
     double currentTalonCurrent = m_vacuumTalon.getOutputCurrent();
 
+    /*
+     * Compute the conductance of the pump, which is less affected by drooping
+     * system voltages due to other actuators.
+     */
     double conductance;
     try {
       conductance = currentTalonCurrent / currentBatteryVoltage;

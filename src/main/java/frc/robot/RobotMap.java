@@ -161,6 +161,8 @@ public class RobotMap {
   public static double vacuumInitialHoldSpeed = 1.0; // %
   public static double vacuumSustainHoldSpeed = 0.2; // %
   public static double vacuumGamePieceDetectedConductance = 0.2; // mhos
+  /* This is the minimum conductance that a motor exhibits when it's properly wired. */
+  public static double vacuumMotorPresentConductance = 0.05; //mhos
   public static int vacuumHatchCoverCANId = 5;
   public static int vacuumCargoCANId = 6;
   public static int solenoidHatchCoverID = 0;
