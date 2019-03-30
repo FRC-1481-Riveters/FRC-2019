@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.RobotMap;
+import irsensor.IRSensor;
 
 /**
  * Add your docs here.
@@ -21,6 +22,8 @@ public class CargoIntakeRoller extends Subsystem {
   // here. Call these from Commands.
   public static WPI_TalonSRX m_cargo_arm_roller_talon = new WPI_TalonSRX(RobotMap.cargoIntakeArm_Talon);
 
+  private IRSensor m_irSensor = new IRSensor(0);
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -29,4 +32,8 @@ public class CargoIntakeRoller extends Subsystem {
   public void setSpeed(double IntakeRollerSpeed) {
     m_cargo_arm_roller_talon.set(ControlMode.PercentOutput, IntakeRollerSpeed);
   }
+
+  public boolean isCargoDetected() {
+    return m_irSensor.getRawVoltage() < RobotMap.intakeSensorBallPresent;
+   }
 }
