@@ -189,6 +189,27 @@ public class autoassistAlignment extends Command {
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
 
     m_PidControllerLeftRight.reset();
+    /*
+     * Initialize the setPoint to the robot's current heading. This way, the robot
+     * doesn't freak-out and use some possibly very old setpoint from e.g. its last
+     * autoassisted heading. Consider what happens when a legitimate autoassist is
+     * done before a new autoassist is requested. 1) The old autoassist computes an
+     * absolute heading that is the setpoint
+     * 
+     * 2) Time passes and the robot is driven to a new location with a different
+     * orientation, say the pickup station to the rocket.
+     * 
+     * 3) Now, if the reflective tape is completely covered, an no new target is
+     * available for the RPi, the robot will attempt to turn to the last, stale
+     * robot heading.
+     * 
+     * 
+     * Prevent this from happening by clearing out the old setPoint and
+     * reinitializing it to the robot's current heading when we initialize the
+     * command until the RPi gets a new image that it uses to compute the new target
+     * error.
+     */
+    m_PidControllerLeftRight.setSetpoint(getCurrentHeading());
     m_PidControllerLeftRight.enable();
   }
 
