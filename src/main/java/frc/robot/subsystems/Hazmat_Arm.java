@@ -115,6 +115,13 @@ public class Hazmat_Arm extends Subsystem {
       m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("HazmatArmMotorKf", 0.0));
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
+
+    hazmatArmMotor_MaxAccel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxAccel");
+    hazmatArmMotor_MaxVel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxVel");
+
+    hazmatArmMotor_MaxAccel.setDouble(250.0);
+    hazmatArmMotor_MaxVel.setDouble(400.0);
+
     /*
      * This is the maximum velocity of the arm in units of encoder counts per 100 ms
      * (a decisecond)
@@ -122,31 +129,26 @@ public class Hazmat_Arm extends Subsystem {
      * The entire range of motion is about 1760 encoder counts. Design for
      * traversing this in 1.2 seconds
      * 
-     * That's 1760 counts / 1.2 seconds * 1 second / 10 deciseconds = 147 counts /
+     * That's 1760 counts / 0.45 seconds * 1 second / 10 deciseconds = 400 counts /
      * decisecond
      * 
      */
-    m_hazmat_arm_talon.configMotionCruiseVelocity(147);
+    m_hazmat_arm_talon.configMotionCruiseVelocity((int)hazmatArmMotor_MaxVel.getDouble(400.0));
 
     /*
      * This is the maximum acceleration of the arm in units of encoder counts per
      * 100 ms (a decisecond)
      * 
      */
-    m_hazmat_arm_talon.configMotionAcceleration(200);
+    m_hazmat_arm_talon.configMotionAcceleration((int)hazmatArmMotor_MaxAccel.getDouble(250.0));
 
-    hazmatArmMotor_MaxAccel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxAccel");
-    hazmatArmMotor_MaxVel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxVel");
-
-    hazmatArmMotor_MaxAccel.setDouble(200.0);
-    hazmatArmMotor_MaxVel.setDouble(147.0);
-
+ 
     hazmatArmMotor_MaxAccel.addListener(event -> {
-      m_hazmat_arm_talon.configMotionAcceleration((int) hazmatArmMotor_MaxAccel.getDouble(200));
+      m_hazmat_arm_talon.configMotionAcceleration((int) hazmatArmMotor_MaxAccel.getDouble(250));
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
     hazmatArmMotor_MaxVel.addListener(event -> {
-      m_hazmat_arm_talon.configMotionCruiseVelocity((int) hazmatArmMotor_MaxVel.getDouble(147.0));
+      m_hazmat_arm_talon.configMotionCruiseVelocity((int) hazmatArmMotor_MaxVel.getDouble(400.0));
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
     m_hazmat_arm_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
