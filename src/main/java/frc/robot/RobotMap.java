@@ -43,7 +43,7 @@ public class RobotMap {
    * of the robot when it's drive at lower speeds (and the driver releases the
    * drivercontrollerDetailDriverButton)
    */
-  public static double detailDriveGain = 0.60;
+  public static double detailDriveGain = 0.75;
 
   public static int driverController = 0;
   public static int operatorController = 1;
