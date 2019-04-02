@@ -15,24 +15,26 @@ public class IRSensor extends SendableBase implements PIDSource {
   protected class SensorConstants {
     /*
      * These are the linearization constants that will fit the sensor's distance
-     * data to the inverse of a 2nd order polynomial to support the sensor's
+     * data to the inverse of a 3rd order polynomial to support the sensor's
      * transfer function of the form Distance in cm of Voltage in volts:
      * 
-     * Distance(Voltage) = 1 / (a*Voltage^2 + b*Voltage + c)
+     * Distance(Voltage) = 1 / (a*Voltage^3 + b*Voltage^2 + c*voltage + d)
      * 
      * Why is this an *inverted* polynomial? Well, that's because the sensor's
      * nature is to generate a reciprocal relationship between the distance measure
      * and the sensor's output voltage. This inverted relationship further fits a
-     * quadratic function really well.
+     * cubic function really well.
      */
-    public double a; // a * x^2 +
-    public double b; // b * x +
-    public double c; // c
+    public double a; // a * x^3 +
+    public double b; // b * x^2 +
+    public double c; // c * x +
+    public double d; // d
 
-    public SensorConstants(double a, double b, double c) {
+    public SensorConstants(double a, double b, double c, double d) {
       this.a = a;
       this.b = b;
       this.c = c;
+      this.d = d;
 
     }
   }
@@ -49,10 +51,10 @@ public class IRSensor extends SendableBase implements PIDSource {
    * distance.
    */
   private Map<sensorType, SensorConstants> m_sensorData = new HashMap<>() {
-    {/*                                                     a             b              c */
-      put(sensorType.GP2Y0A51SK0F, new SensorConstants(0.117807562, -0.007886101917, 0.05497839132));
-      put(sensorType.GP2Y0A41SK0F, new SensorConstants(0.01810830418, 0.02864561687, 0.03520263441));
-      put(sensorType.Unknown, new SensorConstants(0.0, 1.0, 0.0));
+    {/*                                                     a             b              c            d */
+      put(sensorType.GP2Y0A51SK0F, new SensorConstants(0.09978106474, -0.2796664032, 0.4242351842, -0.06078793247));
+      put(sensorType.GP2Y0A41SK0F, new SensorConstants(0.007868008148, -0.02931278423, 0.1183284175, -0.01775494828));
+      put(sensorType.Unknown, new SensorConstants(0.0, 0.0, 1.0, 0.0));
     }
   };
 
@@ -120,9 +122,10 @@ public class IRSensor extends SendableBase implements PIDSource {
     try {
       /* Compute the distance estimate for this sensor's voltage by running it through the following transfer function:
        * 
-       * Distance(Voltage) = 1 / (a*Voltage^2 + b*Voltage + c)
+       * Distance(Voltage) = 1 / (a*Voltage^3 + b*Voltage^2 + c*Voltage + d)
        */
-      return 1.0 / ((m_constants.a * Math.pow(voltage, 2.0)) + (m_constants.b * voltage) + m_constants.c);
+      return 1.0 / ((m_constants.a * Math.pow(voltage, 3.0)) + (m_constants.b * Math.pow(voltage, 2.0))
+          + (m_constants.c * voltage) + m_constants.d);
     } catch (ArithmeticException ex) {
       System.out.printf("IRSensor couldn't compute range from voltage %3.2f. Returned 0.0: %s", voltage, ex.toString());
     }
