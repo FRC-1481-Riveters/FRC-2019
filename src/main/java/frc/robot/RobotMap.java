@@ -44,6 +44,7 @@ public class RobotMap {
    * drivercontrollerDetailDriverButton)
    */
   public static double detailDriveGain = 0.75;
+  public static double detailDriveTurn = .6;
 
   public static int driverController = 0;
   public static int operatorController = 1;

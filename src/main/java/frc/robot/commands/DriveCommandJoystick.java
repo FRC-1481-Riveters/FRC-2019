@@ -34,7 +34,7 @@ public class DriveCommandJoystick extends Command {
     boolean driveFullSpeedButton = Robot.m_oi.driverController.getRawButton(RobotMap.driverControllerDetailDriverButton);
 
     if (!driveFullSpeedButton) {
-      Robot.m_drive.driveDirection(( throttleJoystick* RobotMap.detailDriveGain), (steerJoystick * RobotMap.detailDriveGain));
+      Robot.m_drive.driveDirection(( throttleJoystick* RobotMap.detailDriveGain), (steerJoystick * RobotMap.detailDriveTurn ));
     } else {
       Robot.m_drive.driveDirection( throttleJoystick, steerJoystick);
 
