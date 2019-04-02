@@ -243,7 +243,7 @@ public class GameOverCommand extends CommandGroup {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // e.g. addParallel(new Command1());
-
+addSequential(new DriveForATimeFiresOnce(1, -0.5));
     /*
      * Start moving the climb jacks up to clear L1 platform during the end game for
      * 1.5 seconds.
@@ -261,7 +261,7 @@ public class GameOverCommand extends CommandGroup {
      * 
      * Positive speed values move backwards.
      */
-    addParallel(new DriveForATimeFiresOnce(0.15, 0.4));
+    addParallel(new DriveForATimeFiresOnce(0.1, 0.4));
 
   }
 }
