@@ -131,7 +131,7 @@ public class RobotMap {
   public static int cargoPivotArmIntakePositionButton = 1;
   public static int cargoPivotArmClimbPositionButton = 3;
   public static int cargoPivotArmStartPosition = 0;
-  public static int cargoPivotArmIntakePosition = 34495;
+  public static int cargoPivotArmIntakePosition = 33000;
   public static int cargoPivotArmClimbPosition = 24000;
   public static int cargoPivotArmRate = 600;
   public static int cargoPivotMaxRetract = 55000;
