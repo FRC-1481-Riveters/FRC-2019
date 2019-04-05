@@ -73,6 +73,20 @@ public class Cargo_Arm extends Subsystem {
 
   }
 
+  public void openLoopJog(double speed) {
+
+    double jogSpeed = speed;
+
+    // set left talon to follow right talon
+    m_cargo_arm_left_talon.follow(m_cargo_arm_right_talon);
+
+    // invert left talon
+    m_cargo_arm_left_talon.setInverted(true);
+
+    m_cargo_arm_right_talon.set(ControlMode.PercentOutput, jogSpeed);
+  }
+
+
   public void setTargetPosition(int CargoTargetPosition) {
 
     if (CargoTargetPosition > RobotMap.cargoPivotMaxRetract) {
