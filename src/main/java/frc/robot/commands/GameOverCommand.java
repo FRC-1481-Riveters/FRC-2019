@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.JackJogDuration;
 import frc.robot.commands.DriveForATime;
 import frc.robot.Robot;
+import frc.robot.subsystems.Indicators;
 
 public class GameOverCommand extends CommandGroup {
 
@@ -42,6 +43,7 @@ public class GameOverCommand extends CommandGroup {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+      Robot.m_indicators.setIndicator(Indicators.Color.green);
       if (tooSoon()) {
         return;
       }
@@ -150,6 +152,7 @@ public class GameOverCommand extends CommandGroup {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+      Robot.m_indicators.setIndicator(Indicators.Color.green);
       if (tooSoon()) {
         return;
       }
@@ -354,9 +357,8 @@ public class GameOverCommand extends CommandGroup {
     // e.g. addSequential(new Command1());
     // e.g. addParallel(new Command1());
     // If cargo arm is up, then do not move cargo arm 
-    if (Robot.m_cargo_arm.getActualPosition() > frc.robot.RobotMap.cargoPivotArmOutOfWay){
-      addSequential(new CargoArmUp(1, 0.75));
-    }
+
+addSequential(new CargoArmUp(1, -0.75));
 
 addSequential(new DriveForATimeFiresOnce(1, -0.5));
     /*

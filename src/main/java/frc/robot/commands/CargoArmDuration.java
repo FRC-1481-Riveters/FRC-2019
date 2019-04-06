@@ -20,7 +20,7 @@ public class CargoArmDuration extends Command {
     /* Set the speed of the movement in % output of the drive system. */
     m_speed = speed;
 
-    requires(Robot.m_climb_jack);
+    requires(Robot.m_cargo_arm);
   }
 
   // Called just before this Command runs the first time
@@ -37,7 +37,13 @@ public class CargoArmDuration extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return isTimedOut();
+  boolean IsCargoOutOfWay = false;
+  
+    if (Robot.m_cargo_arm.getActualPosition() < frc.robot.RobotMap.cargoPivotArmOutOfWay){
+      IsCargoOutOfWay = true;
+    }
+    IsCargoOutOfWay = IsCargoOutOfWay || isTimedOut();
+    return IsCargoOutOfWay;
   }
 
   // Called once after isFinished returns true
