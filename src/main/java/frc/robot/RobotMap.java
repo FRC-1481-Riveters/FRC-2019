@@ -56,7 +56,7 @@ public class RobotMap {
    * 
    * See configOpenloopRamp() for more details.
    */
-  public static double driveFullThrottleRampTime = 0.1;
+  public static double driveFullThrottleRampTime = 0.150;
 
   public static int usbCamera = 1;
   // Climb Jack System Constants
