@@ -56,7 +56,7 @@ public class RobotMap {
    * 
    * See configOpenloopRamp() for more details.
    */
-  public static double driveFullThrottleRampTime = 0.1;
+  public static double driveFullThrottleRampTime = 0.150;
 
   public static int usbCamera = 1;
   // Climb Jack System Constants
@@ -133,6 +133,7 @@ public class RobotMap {
   public static int cargoPivotArmStartPosition = 0;
   public static int cargoPivotArmIntakePosition = 33000;
   public static int cargoPivotArmClimbPosition = 24000;
+  public static int cargoPivotArmOutOfWay = 40000;
   public static int cargoPivotArmRate = 600;
   public static int cargoPivotMaxRetract = 55000;
   public static int cargoPivotMaxExtend = 0;

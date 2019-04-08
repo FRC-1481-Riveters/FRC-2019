@@ -10,6 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.JackJogDuration;
 import frc.robot.commands.DriveForATime;
+import frc.robot.Robot;
+import frc.robot.subsystems.Indicators;
 
 public class GameOverCommand extends CommandGroup {
 
@@ -41,6 +43,7 @@ public class GameOverCommand extends CommandGroup {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+      Robot.m_indicators.setIndicator(Indicators.Color.green);
       if (tooSoon()) {
         return;
       }
@@ -149,6 +152,115 @@ public class GameOverCommand extends CommandGroup {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+      Robot.m_indicators.setIndicator(Indicators.Color.green);
+      if (tooSoon()) {
+        return;
+      }
+
+      super.execute();
+    }
+
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+      return tooSoon() || super.isFinished();
+    }
+
+    // Called once after isFinished returns true
+    @Override
+    protected void end() {
+      if (tooSoon()) {
+        return;
+      }
+
+      super.end();
+
+      m_lastFiredTimeStamp = System.currentTimeMillis();
+      m_isRunning = false;
+    }
+
+    // Called when another command which requires one or more of the same
+    // subsystems is scheduled to run
+    @Override
+    protected void interrupted() {
+      if (tooSoon()) {
+        return;
+      }
+
+      super.interrupted();
+
+      m_lastFiredTimeStamp = System.currentTimeMillis();
+      m_isRunning = false;
+    }
+
+    /*
+     * Determine if the operator has pressed the GameOver button within the last 60
+     * seconds.
+     */
+    public boolean tooSoon() {
+     
+      if (m_isRunning) {
+        /* We've already started running this command. Don't stop running it until 
+         * its end() or interrupted() is called.
+         * We don't want to run part of the command when the child command is not allowed to start
+         * juuuuuuuust before the 60 seconds ends, then the command IS allowed to start right
+         * in the middle of the child command running.
+         * This would result in some of the command executing (like the execute() or end() functions)
+         * without the initialize() function having run. That's bad. Don't let that happen.
+         */
+        return false;
+      }
+
+      if (m_lastFiredTimeStamp == 0) {
+        /* This is the first time the command has been run.
+         * Allow it to run by indicating that it's NOT too soon.
+         */
+        return false;
+      }
+      
+      if ((System.currentTimeMillis() - m_lastFiredTimeStamp) > 60000) {
+        /* The command has been run at least once before and it's
+         * been at least 60 seconds.
+         * It's NOT too soon to re-run this command. 
+         */
+        return false;
+      }
+      
+      /* This command should not run. It's too soon since the
+       * last time it was run.
+       */
+      return true;
+    }
+  }
+
+  protected class CargoArmUp extends CargoArmDuration {
+    long m_lastFiredTimeStamp = 0;
+    boolean m_isRunning = false;
+
+    public CargoArmUp(double timeout, double speed) {
+      super(timeout, speed);
+    }
+
+    // Called just before this Command runs the first time
+    @Override
+    protected void initialize() {
+      if (tooSoon()) {
+        return;
+      }
+
+      super.initialize();
+      
+      /* Since we've called the initialize() function, we're committed to running
+       * this command until it's done.
+       * Keep this child class from inadvertently timing out in the middle of running
+       * to make sure it completes its full execution and runs end() or interrupted() naturally.
+       */
+      m_isRunning = true;
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
       if (tooSoon()) {
         return;
       }
@@ -230,6 +342,7 @@ public class GameOverCommand extends CommandGroup {
   }
 
 
+
   /**
    * This class is a sequence that:
    * 
@@ -243,6 +356,10 @@ public class GameOverCommand extends CommandGroup {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // e.g. addParallel(new Command1());
+    // If cargo arm is up, then do not move cargo arm 
+
+addSequential(new CargoArmUp(1, -0.75));
+
 addSequential(new DriveForATimeFiresOnce(1, -0.5));
     /*
      * Start moving the climb jacks up to clear L1 platform during the end game for
