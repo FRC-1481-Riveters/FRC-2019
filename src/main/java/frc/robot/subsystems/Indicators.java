@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Solenoid;
 import java.util.HashMap;
+import java.util.Map;
 import frc.robot.RobotMap;
 
 
@@ -23,9 +24,9 @@ public class Indicators extends Subsystem {
 
   public enum Color {
     off, red, blue, green
-  };
+  }
 
-  private HashMap<Color, Solenoid> m_LEDs = new HashMap<>();
+  private Map<Color, Solenoid> m_LEDs = new HashMap<>();
 
   public Indicators() {
     m_LEDs.put(Color.red, m_redLED);
@@ -38,6 +39,14 @@ public class Indicators extends Subsystem {
     m_LEDs.forEach((key, value) -> m_LEDs.get(key).set(false));
 
     if (color != Color.off) {
+      /* Before turning on this LED's solenoid, clear any sticky faults that might
+       * have been detected in the past.
+       * 
+       * This will help the system update the solenoid channel "black list" and, if the
+       * solenoid channel had been shorted in the past, and the short has been cleared now,
+       * the LED will turn on.
+       */
+      m_LEDs.get(color).clearAllPCMStickyFaults();
       m_LEDs.get(color).set(true);
     }
    
