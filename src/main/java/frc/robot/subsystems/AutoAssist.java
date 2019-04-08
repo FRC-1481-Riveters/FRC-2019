@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.RobotMap;
 
@@ -16,6 +17,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+
 
 public class AutoAssist extends Subsystem {
 
@@ -61,6 +65,11 @@ public class AutoAssist extends Subsystem {
   }
 
   public void autonomousInit() {
+    
+    /* Start Shuffleboard recording (if shuffleboard is running on a connected computer) to capture
+     * the goings-on of this game.
+     */
+    Shuffleboard.startRecording();
   }
 
   public void teleopInit() {
@@ -78,10 +87,16 @@ public class AutoAssist extends Subsystem {
     
     
     if (running) {
+      /* Record an event in the Shuffleboard logfile that the autoAssist was activated so
+       * it can be easily found later.
+       */
+      Shuffleboard.addEventMarker("autoAssist activated", EventImportance.kNormal);
+      
       /* The autoassist is running. Enable the autoassist light because it helps
        * the camera see the reflective tape targets.
        */
       setAssistLightState(true);
+      
     } else {
       
       /* The autoassist isn't running. Disable the autoassist light, because we don't
@@ -90,6 +105,11 @@ public class AutoAssist extends Subsystem {
        * when it's on.
        */
       setAssistLightState(false);
+      
+      /* Record an event in the Shuffleboard logfile that the autoAssist was deactivated so
+       * we can bookend its performance easily.
+       */
+      Shuffleboard.addEventMarker("autoAssist deactivated", EventImportance.kNormal);
     }
   }
   
