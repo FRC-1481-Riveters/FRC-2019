@@ -186,10 +186,11 @@ public class autoassistAlignment extends Command {
   protected void initialize() {
 
     /*
-     * Turn on the autoassist lighting so the camera can see its retroreflective
-     * targets better
+     * Inform the sub-system that's helping us that we're now running the autoassist
+     * function. This way, the subsystem can take appropriate steps, like turning on the
+     * light, and other needful things that happen when the autoassist is running.
      */
-    Robot.m_autoAssist.setAssistLightState(true);
+    Robot.m_autoAssist.setAssistStatus(true);
 
     /* Load the latest camara angle offset from the parameters. */
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
@@ -266,10 +267,11 @@ public class autoassistAlignment extends Command {
     m_PidControllerLeftRight.disable();
 
     /*
-     * Turn off the very bright camera light so it doesn't distract other robots or
-     * harm volunteers with its high intensity.
+     * Inform the sub-system that's helping us that we're no longer running the autoassist
+     * function. This way, the subsystem can take appropriate steps, like turning off the
+     * light that happen when the autoassist isn't running.
      */
-    Robot.m_autoAssist.setAssistLightState(false);
+    Robot.m_autoAssist.setAssistStatus(false);
   }
 
   // Called when another command which requires one or more of the same
@@ -279,9 +281,10 @@ public class autoassistAlignment extends Command {
     m_PidControllerLeftRight.disable();
 
     /*
-     * Turn off the very bright camera light so it doesn't distract other robots or
-     * harm volunteers with its high intensity.
+     * Inform the sub-system that's helping us that we're no longer running the autoassist
+     * function. This way, the subsystem can take appropriate steps, like turning off the
+     * light that happen when the autoassist isn't running.
      */
-    Robot.m_autoAssist.setAssistLightState(false);
+    Robot.m_autoAssist.setAssistStatus(false);
   }
 }

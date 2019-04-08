@@ -40,7 +40,7 @@ public class AutoAssist extends Subsystem {
     public void run() {
       /*
        * Update the network table message with a snapshot of the current system time.
-       * This number is used by the RPi to sychronize its internal date clock and
+       * This number is used by the RPi to synchronize its internal date clock and
        * timestamp its video feed (and any log messages that are saved).
        */
       autoAssistConnectionTest.setNumber(System.currentTimeMillis());
@@ -70,7 +70,30 @@ public class AutoAssist extends Subsystem {
   public void initDefaultCommand() {
   }
 
-  public void setAssistLightState(boolean state) {
+  public void setAssistStatus(boolean running) {
+
+    /* The autoassist status has changed. Take appropriate steps to support this
+     * command in its new state (either running [running = true] or stopped [running = false])
+     */
+    
+    
+    if (running) {
+      /* The autoassist is running. Enable the autoassist light because it helps
+       * the camera see the reflective tape targets.
+       */
+      setAssistLightState(true);
+    } else {
+      
+      /* The autoassist isn't running. Disable the autoassist light, because we don't
+       * need it any longer, and it's very bright, which could confuse other robots' vision
+       * systems (if we're defending) or irritate the volunteers who have to look at it 
+       * when it's on.
+       */
+      setAssistLightState(false);
+    }
+  }
+  
+  private void setAssistLightState(boolean state) {
 
     /*
      * If we're trying to turn on the autoassist light, clear any faults on this
