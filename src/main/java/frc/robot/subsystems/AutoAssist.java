@@ -40,8 +40,8 @@ public class AutoAssist extends Subsystem {
     public void run() {
       /*
        * Update the network table message with a snapshot of the current system time.
-       * It doesn't matter what we're sending, as long is the value is changing, which
-       * will induce the networktables to send a fresh message.
+       * This number is used by the RPi to sychronize its internal date clock and
+       * timestamp its video feed (and any log messages that are saved).
        */
       autoAssistConnectionTest.setNumber(System.currentTimeMillis());
     }
@@ -58,49 +58,32 @@ public class AutoAssist extends Subsystem {
   }
 
   public void disabledInit() {
-
-    /*
-     * Turn off the camera light any time the module enters disabled mode because we
-     * don't need the light when we're not capable of moving.
-     */
-    m_autoassistCameraLightControl.set(false);
   }
 
   public void autonomousInit() {
-
-    /*
-     * Turn on the camera light any time the module enters auto mode because we need
-     * the light when we're capable of moving and using autoassist.
-     * 
-     * If there's any sticky faults due to e.g. an intermittent short on the PCM
-     * solenoid outputs, attempt to clear it before enabling this solenoid.
-     * 
-     * If the short circuit doesn't clear, the PCM will log a sticky fault again
-     * against this output channel and blacklist it (keep it from turning on to keep
-     * the rest of the non-shorted PCM's outputs working.)
-     */
-    m_autoassistCameraLightControl.clearAllPCMStickyFaults();
-    m_autoassistCameraLightControl.set(true);
   }
 
   public void teleopInit() {
-
-    /*
-     * Turn on the camera light any time the module enters teleop mode because we
-     * need the light when we're capable of moving and using autoassist.
-     * 
-     * If there's any sticky faults due to e.g. an intermittent short on the PCM
-     * solenoid outputs, attempt to clear it before enabling this solenoid.
-     * 
-     * If the short circuit doesn't clear, the PCM will log a sticky fault again
-     * against this output channel and blacklist it (keep it from turning on to keep
-     * the rest of the non-shorted PCM's outputs working.)
-     */
-    m_autoassistCameraLightControl.clearAllPCMStickyFaults();
-    m_autoassistCameraLightControl.set(true);
   }
 
   @Override
   public void initDefaultCommand() {
+  }
+
+  public void setAssistLightState(boolean state) {
+
+    /*
+     * If we're trying to turn on the autoassist light, clear any faults on this
+     * PCM. These faults might have been due to a temporary short on the PCM that's
+     * been cleared already. If we don't clear this sticky fault, the light might
+     * not turn on because the PCM will have placed it on its "black list" to keep
+     * the output driver from shorting out alllllll the outputs because of this
+     * output's previous shorted state.
+     */
+    if (state == true) {
+      m_autoassistCameraLightControl.clearAllPCMStickyFaults();
+    }
+
+    m_autoassistCameraLightControl.set(state);
   }
 }

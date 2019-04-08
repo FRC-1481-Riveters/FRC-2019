@@ -185,6 +185,12 @@ public class autoassistAlignment extends Command {
   @Override
   protected void initialize() {
 
+    /*
+     * Turn on the autoassist lighting so the camera can see its retroreflective
+     * targets better
+     */
+    Robot.m_autoAssist.setAssistLightState(true);
+
     /* Load the latest camara angle offset from the parameters. */
     m_cameraAngleOffset = Preferences.getInstance().getDouble("visionCameraAngleOffset", 0.0);
 
@@ -258,6 +264,12 @@ public class autoassistAlignment extends Command {
   @Override
   protected void end() {
     m_PidControllerLeftRight.disable();
+
+    /*
+     * Turn off the very bright camera light so it doesn't distract other robots or
+     * harm volunteers with its high intensity.
+     */
+    Robot.m_autoAssist.setAssistLightState(false);
   }
 
   // Called when another command which requires one or more of the same
@@ -265,5 +277,11 @@ public class autoassistAlignment extends Command {
   @Override
   protected void interrupted() {
     m_PidControllerLeftRight.disable();
+
+    /*
+     * Turn off the very bright camera light so it doesn't distract other robots or
+     * harm volunteers with its high intensity.
+     */
+    Robot.m_autoAssist.setAssistLightState(false);
   }
 }
