@@ -36,8 +36,23 @@ public class HazmatIndicators extends Subsystem {
   protected class HazmatIndicatorsPeriodicTask extends TimerTask {
     public void run() {
       if (m_currentLEDColor.name().contains("flashing")) {
+        /*
+         * Turn off the LED. The startPulse() function only works on a solenoid that's
+         * off.
+         */
+        m_LEDs.get(m_currentLEDColor).set(false);
 
+        /*
+         * Set the pulse duration to about half of the duty cycle which was set by the
+         * backgrounTimer's periodic rate. This way, you'll get about 50% on, and 50%
+         * off.
+         */
         m_LEDs.get(m_currentLEDColor).setPulseDuration(0.350);
+
+        /*
+         * Start the half duty cycle pulse, which is an on pulse. The PCM will turn it
+         * off automatically at the end of the pulse set by setPulseDuration()
+         */
         m_LEDs.get(m_currentLEDColor).startPulse();
       }
     }
@@ -77,12 +92,12 @@ public class HazmatIndicators extends Subsystem {
   public void setIndicator(Color color) {
 
     m_LEDs.forEach((key, value) -> m_LEDs.get(key).set(false));
-  
+
     if (color != Color.off) {
       m_LEDs.get(color).set(true);
     }
 
-    m_currentLEDColor = color; 
+    m_currentLEDColor = color;
   }
 
   @Override
