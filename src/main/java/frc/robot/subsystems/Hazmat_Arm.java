@@ -16,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 import frc.robot.subsystems.HazmatIndicators;
 import frc.robot.subsystems.HazmatIndicators.Color;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -30,19 +30,48 @@ public class Hazmat_Arm extends Subsystem {
     stepUp, stepDown
   }
 
+  private enum armControlType {
+    percent, position
+  }
+
   private int m_targetPosition;
+  private int m_currentArmCommandIndex;
 
-  private ArrayList<Position> hazmatPositions = new ArrayList<>();
+  private List<Command> hazmatCommands = new ArrayList<>();
 
-  protected class Position {
+  protected class Command {
     public int EncoderCounts;
-    public String EncoderCountHazmatWord;
+    public double driveStrength;
+    public armControlType controlType;
+    public String CommandNameString;
     public HazmatIndicators.Color color;
 
-    public Position(int HazmatPosition, String HazmatPositionWord, HazmatIndicators.Color color) {
+    /*
+     * Use this constructor to create a Hazmat position command. This position
+     * command uses an encoder reference value to drive the arm based on the encoder
+     * feedback.
+     */
+    public Command(String HazmatPositionWord, HazmatIndicators.Color color, int HazmatPosition) {
       EncoderCounts = HazmatPosition;
-      EncoderCountHazmatWord = HazmatPositionWord;
+      CommandNameString = HazmatPositionWord;
       this.color = color;
+      this.driveStrength = 0.0;
+      this.controlType = armControlType.position;
+    }
+
+    /*
+     * Use this constructor to create a hazmat fixed drive strength command. This
+     * drive command will drive the motor with a constant PWM value, which induces a
+     * constant current, which causes constant torque on the arm. The arm will move
+     * until it hits its mechanical stop. This is useful for pinning the arm against
+     * its top or bottom mechanical stops during e.g. defense play.
+     */
+    public Command(String HazmatPositionWord, HazmatIndicators.Color color, double driveStrength) {
+      EncoderCounts = 0;
+      CommandNameString = HazmatPositionWord;
+      this.color = color;
+      this.driveStrength = driveStrength;
+      this.controlType = armControlType.percent;
     }
   }
 
@@ -115,7 +144,6 @@ public class Hazmat_Arm extends Subsystem {
       m_hazmat_arm_talon.config_kF(0, SmartDashboard.getNumber("HazmatArmMotorKf", 0.0));
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
-
     hazmatArmMotor_MaxAccel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxAccel");
     hazmatArmMotor_MaxVel = smartDashNetworkTable.getEntry("HazmatArmMotorMaxVel");
 
@@ -133,16 +161,15 @@ public class Hazmat_Arm extends Subsystem {
      * decisecond
      * 
      */
-    m_hazmat_arm_talon.configMotionCruiseVelocity((int)hazmatArmMotor_MaxVel.getDouble(400.0));
+    m_hazmat_arm_talon.configMotionCruiseVelocity((int) hazmatArmMotor_MaxVel.getDouble(400.0));
 
     /*
      * This is the maximum acceleration of the arm in units of encoder counts per
      * 100 ms (a decisecond)
      * 
      */
-    m_hazmat_arm_talon.configMotionAcceleration((int)hazmatArmMotor_MaxAccel.getDouble(250.0));
+    m_hazmat_arm_talon.configMotionAcceleration((int) hazmatArmMotor_MaxAccel.getDouble(250.0));
 
- 
     hazmatArmMotor_MaxAccel.addListener(event -> {
       m_hazmat_arm_talon.configMotionAcceleration((int) hazmatArmMotor_MaxAccel.getDouble(250));
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
@@ -173,32 +200,26 @@ public class Hazmat_Arm extends Subsystem {
     m_targetPosition = getActualPosition();
 
     /*
-     * You can add a new position to the hazmatPosition ArrayList in any order. The
-     * list is sorted by the value of the position later, so the order that the
-     * positions are added isn't important.
+     * It's important to add the positions in the order they'll appear on the
+     * robot's tap up/tap down list. For instance, the first item add()'d' will be
+     * the first position on the tap up/tap down list and should at the bottom of
+     * the arm's travel. The last element will be the last item on the list, and
+     * should at the top of the arm's travel.
      */
-    hazmatPositions.add(new Position(RobotMap.hazmatPodIntake, "hazmatPodIntake", Color.lime));
-    hazmatPositions.add(new Position(RobotMap.hazmatPodLoadStart, "hazmatPodLoadStart", Color.blue ));
-    hazmatPositions.add(new Position(RobotMap.hazmatHatchBottom, "hazmatHatchBottom", Color.red ));
-    hazmatPositions.add(new Position(RobotMap.hazmatRocket1Pod, "hazmatRocket1Pod", Color.purple ));
-    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Hatch, "hazmatRocket2Hatch", Color.white ));
-    hazmatPositions.add(new Position(RobotMap.hazmatRocket2Pod, "hazmatRocket2Pod", Color.green));
+    hazmatCommands.add(
+        new Command("Defense low constant hold", Color.blue_flashing, RobotMap.hazmatLowConstantHoldDriveStrength));
+    hazmatCommands.add(new Command("hazmatPodLoadStart", Color.blue, RobotMap.hazmatPodLoadStart));
+    hazmatCommands.add(new Command("hazmatPodIntake", Color.lime, RobotMap.hazmatPodIntake));
+    hazmatCommands.add(new Command("hazmatHatchBottom", Color.red, RobotMap.hazmatHatchBottom));
+    hazmatCommands.add(new Command("hazmatRocket1Pod", Color.purple, RobotMap.hazmatRocket1Pod));
+    hazmatCommands.add(new Command("hazmatRocket2Hatch", Color.white, RobotMap.hazmatRocket2Hatch));
+    hazmatCommands.add(new Command("hazmatRocket2Pod", Color.green, RobotMap.hazmatRocket2Pod));
 
     /*
-     * Sort the hazmatPositions list by the value of its positions. This is super
-     * important as the stepping function stepToNextIndexedPosition() *requires*
-     * that the list be in ascending order, but first, trim down the List's size to
-     * exactly the number of elements that have been added. This makes access to the
-     * list (later) more efficient.
+     * Start the hazmat arm at the hazMat Pod Load Start, which is the lowest target
+     * set position, and likely to be where the robot will start from.
      */
-    hazmatPositions.trimToSize();
-    /*
-     * Because the objects that make up hazmatPositions, "Positions" don't have
-     * accessor functions to read the positions values, just create a lamba function
-     * that compares two objects' EncoderCounts values together and let the
-     * Collections.sort() function perform its bubble sort on the objects.
-     */
-    Collections.sort(hazmatPositions, (o1, o2) -> o1.EncoderCounts - o2.EncoderCounts);
+    m_currentArmCommandIndex = 1;
   }
 
   public void stepToNextIndexedPosition(stepDirection direction) {
@@ -214,90 +235,91 @@ public class Hazmat_Arm extends Subsystem {
     }
 
     /*
-     * Get a snapshot of our current target position. This is where the arm *thinks*
-     * it's supposed to go.
+     * Determine the next command we should execute. Just go, in order, up or down
+     * the hazmatCommands list, figure out what each command requires and have the
+     * arm perform that command.
+     * 
+     * Remember which command we're currently executing by storing the index of the
+     * command from the hazmatCommands List in the m_currentArmCommandIndex. This is
+     * just an integer that represents a place in the hazmatCommands List (Lists are
+     * like improved arrays).
+     * 
+     * If this is a Tap-down event, decrement the m_currentArmCommandIndex if we're
+     * above 0. If we're *at* zero don't go any lower (because there's no more
+     * commands below zero; that's the beginning of the list).
+     * 
+     * If this is a tap-up event, increment the m_currentArmCommandIndex if we're
+     * below the maximum number of elements in the command list. If we're already at
+     * the number of elements in the command list, don't go any higher (because
+     * there's no more commands above the last element in this list; it's the end of
+     * the list)
      */
-    int currentPosition = getTargetPosition();
-
-    /* Determine which way the command is telling us to step; up or down. */
     switch (direction) {
-    case stepUp:
-
-      /*
-       * Ok. We want to step up to the next fixed position. Try to figure out where
-       * the arm is are compared to all the fixed positions we know about. Remember,
-       * we might not be sitting right on a preset fixed position. Maybe we jogged to
-       * our current position. We could be anywhere.
-       * 
-       * Search the list of preset positions for the first fixed position that's
-       * *higher* than our current target position. When we find that next position
-       * (that's higher than where the arm is supposed to be sitting) set our new
-       * target position to that new, higher position.
-       */
-
-      /*
-       * Because the hazmatPosition ArrayList is sorted by position value, start with
-       * the smallest value on the list (which is at the beginning), and search up;
-       * moving to the next higher value with each increment. That way, we can just
-       * stop when we find a position that's higher than our current position.
-       */
-      for (int index = 0; index < hazmatPositions.size(); ++index) {
-        /* Check if this fixed position is higher than our current position... */
-        if (hazmatPositions.get(index).EncoderCounts > currentPosition) {
-          /*
-           * ... it *is* higher than our current position. Move to this new position right
-           * away.
-           */
-          setTargetPosition(hazmatPositions.get(index).EncoderCounts);
-
-          SmartDashboard.putString("HazmatArmTargetName", hazmatPositions.get(index).EncoderCountHazmatWord);
-          Robot.m_hazmatIndicators.setIndicator(hazmatPositions.get(index).color);
-          /*
-           * Since we've found our new position, and set our arm moving to this new
-           * position, we don't need to search any longer for any other positions, so bail
-           * out of this for loop with the "break" statement.
-           */
-          break;
-        }
-      }
-      break;
     case stepDown:
-
-      /*
-       * Ok. We want to step down to the next lower fixed position. Try to figure out
-       * where the arm is compared to all the fixed positions we know about. Remember,
-       * we might not be sitting right on a preset fixed position. Maybe we jogged to
-       * our current position. We could be anywhere.
-       * 
-       * Seach the list of preset positions for the first fixed position that's
-       * *lower* than our current target position. When we find that next position
-       * (that's lower than where the arm is supposed to be sitting) set our new
-       * target position to that new, lower position.
-       */
-
-      /*
-       * Because the hazmatPosition ArrayList is sorted by position value, start with
-       * the largest value in the list (which is at the end), and search down; moving
-       * to the next lower value with each decrement. That way, we can just stop when
-       * we find a position that's lower than our current position.
-       */
-      for (int index = hazmatPositions.size() - 1; index >= 0; --index) {
-        /* Check if this fixed position is lower than our current position... */
-        if (hazmatPositions.get(index).EncoderCounts < currentPosition) {
-          /*
-           * ... it *is* lower than our current position. Move to this new position right
-           * away.
-           */
-          setTargetPosition(hazmatPositions.get(index).EncoderCounts);
-          SmartDashboard.putString("HazmatArmTargetName", hazmatPositions.get(index).EncoderCountHazmatWord);
-          Robot.m_hazmatIndicators.setIndicator(hazmatPositions.get(index).color);
-          break;
-        }
+      if (m_currentArmCommandIndex > 0) {
+        m_currentArmCommandIndex--;
       }
       break;
+
+    case stepUp:
+      if (m_currentArmCommandIndex < (hazmatCommands.size() - 1)) {
+        m_currentArmCommandIndex++;
+      }
+      break;
+
     default:
       break;
     }
+
+    /*
+     * Update the SmartDashboard's text display for this position so we know exactly
+     * where we've been commanded.
+     * 
+     * Do this by looking up the CommandNameString that represents this new target
+     * position and printing it on the dashboard.
+     */
+
+    SmartDashboard.putString("HazmatArmTargetName", hazmatCommands.get(m_currentArmCommandIndex).CommandNameString);
+
+    /*
+     * Update the color on the hazmat indicator arm with the new color of this
+     * position. This helps the operator figure out where she's at simply by looking
+     * at the color or the position of the LED, which changes with each hazmat arm
+     * position.
+     */
+    Robot.m_hazmatIndicators.setIndicator(hazmatCommands.get(m_currentArmCommandIndex).color);
+
+    /*
+     * Set the hasmat arm's motor to the desired command position or drive strength.
+     * 
+     * Figure out which type of command (drive strength percentage or encoder count
+     * set position) by examining the controlType, which is either percent or
+     * position.
+     * 
+     * If it's percent, use the driveStrength value as a percentage to the motor
+     * controller to drive the motor at a constant PWM level, which drives a
+     * constant current, which drives a constant torque. This is most useful for
+     * "pinning" the arm to its upper or lower mechanical stop.
+     * 
+     * If it's position, use the EncoderCounts value as a set position to the motor
+     * controller to make the motor controller drive the arm until the feedback
+     * encoder count is equal or really close to this commanded position. This is
+     * useful for moving to set positions along the arm's travel that are useful for
+     * game play, like the Cargo pod position or the Level 2 hatch opening.
+     */
+    switch (hazmatCommands.get(m_currentArmCommandIndex).controlType) {
+    case percent:
+      setArmDriveStrength(hazmatCommands.get(m_currentArmCommandIndex).driveStrength);
+      break;
+
+    case position:
+      setTargetPosition(hazmatCommands.get(m_currentArmCommandIndex).EncoderCounts);
+      break;
+
+    default:
+      break;
+    }
+
   }
 
   public void periodic() {
@@ -324,6 +346,12 @@ public class Hazmat_Arm extends Subsystem {
   @Override
   public void initDefaultCommand() {
     /* This subsystem doesn't need a default command */
+
+  }
+
+  public void setArmDriveStrength(double strength) {
+
+    m_hazmat_arm_talon.set(ControlMode.PercentOutput, strength);
 
   }
 
@@ -395,7 +423,6 @@ public class Hazmat_Arm extends Subsystem {
       break;
     }
 
-    
   }
 
   private PerformanceLevel getPerformanceLevel() {
