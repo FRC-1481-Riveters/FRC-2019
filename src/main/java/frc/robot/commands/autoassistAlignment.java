@@ -64,7 +64,7 @@ public class autoassistAlignment extends Command {
     requires(Robot.m_gyro);
     requires(Robot.m_drive);
 
-    m_PidControllerLeftRight = new PIDController(0.03, 0.00008, 0, m_gyroTurning, m_pidOutput);
+    m_PidControllerLeftRight = new PIDController(0.025, 0.00008, 0, m_gyroTurning, m_pidOutput);
     m_PidControllerLeftRight.setInputRange(-180.0, 180.0);
     m_PidControllerLeftRight.setContinuous();
 
