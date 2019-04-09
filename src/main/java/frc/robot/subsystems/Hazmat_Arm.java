@@ -429,6 +429,11 @@ public class Hazmat_Arm extends Subsystem {
     return m_currentLevel;
   }
 
+  public boolean isDefensiveMode() {
+
+    return hazmatCommands.get(m_currentArmCommandIndex).controlType == armControlType.percent;
+  }
+
   public void setCalibrationMode(boolean enable) {
     if (enable) {
       /*
