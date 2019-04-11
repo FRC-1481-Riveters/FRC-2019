@@ -27,9 +27,9 @@ public class DriveOffPlatform extends CommandGroup {
 
     /*
      * Initiate vacuuming up a game piece that's already on the hazmat vacuum
-     * suction cups. Wait no longer than 3 seconds for the gamepiece to be detected.
+     * suction cups. Wait no longer than 0 seconds for the gamepiece to be detected.
      */
-    addSequential(new VacuumGrabGamePiece(3.0));
+    addSequential(new VacuumGrabGamePiece(0.0));
 
     /* Drive off the platform for 2.0 seconds at 30% speed. */
     addSequential(new DriveForATime(2.4, -0.45));
