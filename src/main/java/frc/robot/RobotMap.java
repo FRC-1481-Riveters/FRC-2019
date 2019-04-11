@@ -87,7 +87,7 @@ public class RobotMap {
   // suction arm constants
   public static int hazmatArm_Talon = 8;
 
-  public static double hazmatLowConstantHoldDriveStrength = -0.18; // Low defensive hold constant drive strength
+  public static double hazmatLowConstantHoldDriveStrength = -0.25; // Low defensive hold constant drive strength
   public static int hazmatPodLoadStart = 0; // Cargo arm folded in
   public static int hazmatPodIntake = 100; // 100 is good according to drive team
   public static int hazmatHatchBottom = 203;
