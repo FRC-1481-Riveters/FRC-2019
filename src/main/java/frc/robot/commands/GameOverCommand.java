@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.JackJogDuration;
 import frc.robot.commands.DriveForATime;
+import frc.robot.commands.DriveCommandJoystickLimited;
 import frc.robot.Robot;
 import frc.robot.subsystems.Indicators;
 
@@ -31,11 +32,12 @@ public class GameOverCommand extends CommandGroup {
       }
 
       super.initialize();
-      
-      /* Since we've called the initialize() function, we're committed to running
-       * this command until it's done.
-       * Keep this child class from inadvertently timing out in the middle of running
-       * to make sure it completes its full execution and runs end() or interrupted() naturally.
+
+      /*
+       * Since we've called the initialize() function, we're committed to running this
+       * command until it's done. Keep this child class from inadvertently timing out
+       * in the middle of running to make sure it completes its full execution and
+       * runs end() or interrupted() naturally.
        */
       m_isRunning = true;
     }
@@ -89,36 +91,39 @@ public class GameOverCommand extends CommandGroup {
      * seconds.
      */
     public boolean tooSoon() {
-     
+
       if (m_isRunning) {
-        /* We've already started running this command. Don't stop running it until 
-         * its end() or interrupted() is called.
-         * We don't want to run part of the command when the child command is not allowed to start
-         * juuuuuuuust before the 60 seconds ends, then the command IS allowed to start right
-         * in the middle of the child command running (because the 60 seconds timed out right there.)
-         * This would result in some of the command executing (like the execute() or end() functions)
-         * without the initialize() function having run. That's bad. Don't let that happen.
+        /*
+         * We've already started running this command. Don't stop running it until its
+         * end() or interrupted() is called. We don't want to run part of the command
+         * when the child command is not allowed to start juuuuuuuust before the 60
+         * seconds ends, then the command IS allowed to start right in the middle of the
+         * child command running (because the 60 seconds timed out right there.) This
+         * would result in some of the command executing (like the execute() or end()
+         * functions) without the initialize() function having run. That's bad. Don't
+         * let that happen.
          */
         return false;
       }
 
       if (m_lastFiredTimeStamp == 0) {
-        /* This is the first time the command has been run.
-         * Allow it to run by indicating that it's NOT too soon.
+        /*
+         * This is the first time the command has been run. Allow it to run by
+         * indicating that it's NOT too soon.
          */
         return false;
       }
-      
+
       if ((System.currentTimeMillis() - m_lastFiredTimeStamp) > 60000) {
-        /* The command has been run at least once before and it's
-         * been at least 60 seconds.
-         * It's NOT too soon to re-run this command. 
+        /*
+         * The command has been run at least once before and it's been at least 60
+         * seconds. It's NOT too soon to re-run this command.
          */
         return false;
       }
-      
-      /* This command should not run. It's too soon since the
-       * last time it was run.
+
+      /*
+       * This command should not run. It's too soon since the last time it was run.
        */
       return true;
     }
@@ -140,11 +145,12 @@ public class GameOverCommand extends CommandGroup {
       }
 
       super.initialize();
-      
-      /* Since we've called the initialize() function, we're committed to running
-       * this command until it's done.
-       * Keep this child class from inadvertently timing out in the middle of running
-       * to make sure it completes its full execution and runs end() or interrupted() naturally.
+
+      /*
+       * Since we've called the initialize() function, we're committed to running this
+       * command until it's done. Keep this child class from inadvertently timing out
+       * in the middle of running to make sure it completes its full execution and
+       * runs end() or interrupted() naturally.
        */
       m_isRunning = true;
     }
@@ -198,36 +204,38 @@ public class GameOverCommand extends CommandGroup {
      * seconds.
      */
     public boolean tooSoon() {
-     
+
       if (m_isRunning) {
-        /* We've already started running this command. Don't stop running it until 
-         * its end() or interrupted() is called.
-         * We don't want to run part of the command when the child command is not allowed to start
-         * juuuuuuuust before the 60 seconds ends, then the command IS allowed to start right
-         * in the middle of the child command running.
-         * This would result in some of the command executing (like the execute() or end() functions)
-         * without the initialize() function having run. That's bad. Don't let that happen.
+        /*
+         * We've already started running this command. Don't stop running it until its
+         * end() or interrupted() is called. We don't want to run part of the command
+         * when the child command is not allowed to start juuuuuuuust before the 60
+         * seconds ends, then the command IS allowed to start right in the middle of the
+         * child command running. This would result in some of the command executing
+         * (like the execute() or end() functions) without the initialize() function
+         * having run. That's bad. Don't let that happen.
          */
         return false;
       }
 
       if (m_lastFiredTimeStamp == 0) {
-        /* This is the first time the command has been run.
-         * Allow it to run by indicating that it's NOT too soon.
+        /*
+         * This is the first time the command has been run. Allow it to run by
+         * indicating that it's NOT too soon.
          */
         return false;
       }
-      
+
       if ((System.currentTimeMillis() - m_lastFiredTimeStamp) > 60000) {
-        /* The command has been run at least once before and it's
-         * been at least 60 seconds.
-         * It's NOT too soon to re-run this command. 
+        /*
+         * The command has been run at least once before and it's been at least 60
+         * seconds. It's NOT too soon to re-run this command.
          */
         return false;
       }
-      
-      /* This command should not run. It's too soon since the
-       * last time it was run.
+
+      /*
+       * This command should not run. It's too soon since the last time it was run.
        */
       return true;
     }
@@ -249,11 +257,12 @@ public class GameOverCommand extends CommandGroup {
       }
 
       super.initialize();
-      
-      /* Since we've called the initialize() function, we're committed to running
-       * this command until it's done.
-       * Keep this child class from inadvertently timing out in the middle of running
-       * to make sure it completes its full execution and runs end() or interrupted() naturally.
+
+      /*
+       * Since we've called the initialize() function, we're committed to running this
+       * command until it's done. Keep this child class from inadvertently timing out
+       * in the middle of running to make sure it completes its full execution and
+       * runs end() or interrupted() naturally.
        */
       m_isRunning = true;
     }
@@ -306,42 +315,42 @@ public class GameOverCommand extends CommandGroup {
      * seconds.
      */
     public boolean tooSoon() {
-     
+
       if (m_isRunning) {
-        /* We've already started running this command. Don't stop running it until 
-         * its end() or interrupted() is called.
-         * We don't want to run part of the command when the child command is not allowed to start
-         * juuuuuuuust before the 60 seconds ends, then the command IS allowed to start right
-         * in the middle of the child command running.
-         * This would result in some of the command executing (like the execute() or end() functions)
-         * without the initialize() function having run. That's bad. Don't let that happen.
+        /*
+         * We've already started running this command. Don't stop running it until its
+         * end() or interrupted() is called. We don't want to run part of the command
+         * when the child command is not allowed to start juuuuuuuust before the 60
+         * seconds ends, then the command IS allowed to start right in the middle of the
+         * child command running. This would result in some of the command executing
+         * (like the execute() or end() functions) without the initialize() function
+         * having run. That's bad. Don't let that happen.
          */
         return false;
       }
 
       if (m_lastFiredTimeStamp == 0) {
-        /* This is the first time the command has been run.
-         * Allow it to run by indicating that it's NOT too soon.
+        /*
+         * This is the first time the command has been run. Allow it to run by
+         * indicating that it's NOT too soon.
          */
         return false;
       }
-      
+
       if ((System.currentTimeMillis() - m_lastFiredTimeStamp) > 60000) {
-        /* The command has been run at least once before and it's
-         * been at least 60 seconds.
-         * It's NOT too soon to re-run this command. 
+        /*
+         * The command has been run at least once before and it's been at least 60
+         * seconds. It's NOT too soon to re-run this command.
          */
         return false;
       }
-      
-      /* This command should not run. It's too soon since the
-       * last time it was run.
+
+      /*
+       * This command should not run. It's too soon since the last time it was run.
        */
       return true;
     }
   }
-
-
 
   /**
    * This class is a sequence that:
@@ -356,11 +365,11 @@ public class GameOverCommand extends CommandGroup {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // e.g. addParallel(new Command1());
-    // If cargo arm is up, then do not move cargo arm 
+    // If cargo arm is up, then do not move cargo arm
 
-addSequential(new CargoArmUp(1, -0.75));
+    addSequential(new CargoArmUp(1, -0.75));
 
-addSequential(new DriveForATimeFiresOnce(1, -0.5));
+    addSequential(new DriveForATimeFiresOnce(1, -0.5));
     /*
      * Start moving the climb jacks up to clear L1 platform during the end game for
      * 1.5 seconds.
@@ -378,7 +387,19 @@ addSequential(new DriveForATimeFiresOnce(1, -0.5));
      * 
      * Positive speed values move backwards.
      */
-    addParallel(new DriveForATimeFiresOnce(0.1, 0.4));
+    addSequential(new DriveForATimeFiresOnce(0.1, 0.4));
+
+    /*
+     * Take control of the Drive sub-system to limit the driver from moving
+     * backwards on the platform inadvertantly when they might fall off.
+     * 
+     * Do this by limiting the direction of movement to only forward direction
+     * (which is ironically a negative value.)
+     * 
+     * Limit this for no more than 20 seconds, after which time the driver has
+     * probably gotten their senses back and won't move the joystick backwards.
+     */
+    addSequential(new DriveCommandJoystickLimited(20.0, -1.0, 0.0));
 
   }
 }
