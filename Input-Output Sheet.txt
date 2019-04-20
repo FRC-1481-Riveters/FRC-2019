@@ -45,14 +45,14 @@ List of solenoids in PCM 0
 0   Hazmat hatch suction system
 
 List of PCM 1
-7  autoassist LED ring
+7  autoassist LED ring, on when autoassist is enabled
 6  Purple LED display
 5  Blue LED display
 4  White LED display
 3  Red LED display
 2  Lime LED display
 1  Green LED display 
-0
+0  autoassist LED ring, on when robot is enabled
 
 
 ----------------------------------------------------------------------------------------------------------------------    

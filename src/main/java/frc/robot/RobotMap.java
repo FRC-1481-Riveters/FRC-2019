@@ -202,6 +202,7 @@ public class RobotMap {
 
   public static int autoAssistCameraPCMId = 1;
   public static int autoAssistCameraSolenoidId = 7;
+  public static int autoAssistCameraRobotInitiatedSolenoidId = 0;
 
   // Indicators
   public static int solenoidLEDRed = 3;

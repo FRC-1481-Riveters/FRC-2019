@@ -23,8 +23,11 @@ import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 
 public class AutoAssist extends Subsystem {
 
-  private Solenoid m_autoassistCameraLightControl = new Solenoid(RobotMap.autoAssistCameraPCMId,
+  private Solenoid m_autoassistCameraLightControl_autoAssistInitiated = new Solenoid(RobotMap.autoAssistCameraPCMId,
       RobotMap.autoAssistCameraSolenoidId);
+
+  private Solenoid m_autoassistCameraLightControl_robotInitiated = new Solenoid(RobotMap.autoAssistCameraPCMId,
+      RobotMap.autoAssistCameraRobotInitiatedSolenoidId);
 
   /*
    * Create a networktable entry called autoAssistConnectionTest for use by the
@@ -62,17 +65,28 @@ public class AutoAssist extends Subsystem {
   }
 
   public void disabledInit() {
+
+    /*
+     * Turn off the camera light any time the module enters disabled mode because we
+     * don't need the light when we're not capable of moving.
+     */
+    setAssistLightStateRobotInitiated(false);
   }
 
   public void autonomousInit() {
-    
-    /* Start Shuffleboard recording (if shuffleboard is running on a connected computer) to capture
-     * the goings-on of this game.
+
+    /*
+     * Start Shuffleboard recording (if shuffleboard is running on a connected
+     * computer) to capture the goings-on of this game.
      */
     Shuffleboard.startRecording();
+
+    setAssistLightStateRobotInitiated(true);
   }
 
   public void teleopInit() {
+
+    setAssistLightStateRobotInitiated(true);
   }
 
   @Override
@@ -81,38 +95,43 @@ public class AutoAssist extends Subsystem {
 
   public void setAssistStatus(boolean running) {
 
-    /* The autoassist status has changed. Take appropriate steps to support this
-     * command in its new state (either running [running = true] or stopped [running = false])
+    /*
+     * The autoassist status has changed. Take appropriate steps to support this
+     * command in its new state (either running [running = true] or stopped [running
+     * = false])
      */
-    
-    
+
     if (running) {
-      /* Record an event in the Shuffleboard logfile that the autoAssist was activated so
-       * it can be easily found later.
+      /*
+       * Record an event in the Shuffleboard logfile that the autoAssist was activated
+       * so it can be easily found later.
        */
       Shuffleboard.addEventMarker("autoAssist activated", EventImportance.kNormal);
-      
-      /* The autoassist is running. Enable the autoassist light because it helps
-       * the camera see the reflective tape targets.
+
+      /*
+       * The autoassist is running. Enable the autoassist light because it helps the
+       * camera see the reflective tape targets.
        */
       setAssistLightState(true);
-      
+
     } else {
-      
-      /* The autoassist isn't running. Disable the autoassist light, because we don't
-       * need it any longer, and it's very bright, which could confuse other robots' vision
-       * systems (if we're defending) or irritate the volunteers who have to look at it 
-       * when it's on.
+
+      /*
+       * The autoassist isn't running. Disable the autoassist light, because we don't
+       * need it any longer, and it's very bright, which could confuse other robots'
+       * vision systems (if we're defending) or irritate the volunteers who have to
+       * look at it when it's on.
        */
       setAssistLightState(false);
-      
-      /* Record an event in the Shuffleboard logfile that the autoAssist was deactivated so
-       * we can bookend its performance easily.
+
+      /*
+       * Record an event in the Shuffleboard logfile that the autoAssist was
+       * deactivated so we can bookend its performance easily.
        */
       Shuffleboard.addEventMarker("autoAssist deactivated", EventImportance.kNormal);
     }
   }
-  
+
   private void setAssistLightState(boolean state) {
 
     /*
@@ -124,9 +143,25 @@ public class AutoAssist extends Subsystem {
      * output's previous shorted state.
      */
     if (state == true) {
-      m_autoassistCameraLightControl.clearAllPCMStickyFaults();
+      m_autoassistCameraLightControl_autoAssistInitiated.clearAllPCMStickyFaults();
     }
 
-    m_autoassistCameraLightControl.set(state);
+    m_autoassistCameraLightControl_autoAssistInitiated.set(state);
+  }
+
+  private void setAssistLightStateRobotInitiated(boolean state) {
+
+    /*
+     * If we're activating the robot to a state that supports movement, clear any
+     * faults on this PCM. These faults might have been due to a temporary short on
+     * the PCM that's been cleared already. If we don't clear this sticky fault, the
+     * light might not turn on because the PCM will have placed it on its
+     * "black list" to keep the output driver from shorti
+     */
+    if (state == true) {
+      m_autoassistCameraLightControl_robotInitiated.clearAllPCMStickyFaults();
+    }
+
+    m_autoassistCameraLightControl_robotInitiated.set(state);
   }
 }
