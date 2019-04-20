@@ -236,7 +236,16 @@ public class autoassistAlignment extends Command {
      * However, retain the squaring of the throttle joystick to make it easier for
      * the driver to control their speed while driving with the autoassistAlignment.
      */
-    Robot.m_drive.driveDirectionLinear(
+
+     /* Add a limit to how fast the robot can drive forward when AA is on to avoid bouncing
+     off the hatch on pick up
+     */
+    if (throttleJoystick < -RobotMap.driveForwardLimitWhenAAisOn)
+    {
+      throttleJoystick = -RobotMap.driveForwardLimitWhenAAisOn;
+    }
+
+     Robot.m_drive.driveDirectionLinear(
         Math.pow(throttleJoystick, 2.0) * Math.signum(throttleJoystick) * RobotMap.detailDriveGain, m_output);
 
     SmartDashboard.putNumber("autoAssistdriveOutput", m_output);
