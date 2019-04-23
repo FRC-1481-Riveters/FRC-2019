@@ -48,12 +48,12 @@ public class Drive extends Subsystem {
 		 * This will cause the robot to slow down quickly when the joysticks are
 		 * released and will improve the drive team's ability to control the robot.
 		 */
-		m_frontLeft.setNeutralMode(NeutralMode.Brake);
+		m_frontLeft.setNeutralMode(NeutralMode.Coast);
 		m_midLeft.setNeutralMode(NeutralMode.Brake);
-		m_rearLeft.setNeutralMode(NeutralMode.Brake);
-		m_frontRight.setNeutralMode(NeutralMode.Brake);
+		m_rearLeft.setNeutralMode(NeutralMode.Coast);
+		m_frontRight.setNeutralMode(NeutralMode.Coast);
 		m_midRight.setNeutralMode(NeutralMode.Brake);
-		m_rearRight.setNeutralMode(NeutralMode.Brake);
+		m_rearRight.setNeutralMode(NeutralMode.Coast);
 
 		/*
 		 * Slow down the controllers' rate of change from Neutral to Full speed. This

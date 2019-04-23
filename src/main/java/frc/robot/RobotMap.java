@@ -49,7 +49,7 @@ public class RobotMap {
   public static int driverController = 0;
   public static int operatorController = 1;
 
-  public static double driveForwardLimitWhenAAisOn = 0.5;
+  public static double driveForwardLimitWhenAAisOn = 0.7;
   /*
    * Number of seconds from Neutral to Full speed on the drive talons/victors.
    * This limits how fast the drivers can change the speed of the robot and
